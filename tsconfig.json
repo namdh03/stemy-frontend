@@ -1,0 +1,32 @@
+{
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+  "compilerOptions": {
+    /* Paths */
+    "baseUrl": ".",
+    "paths": {
+      "~*": ["./src/*"],
+      "~apis/*": ["./src/apis/*"],
+      "~assets/*": ["./src/assets/*"],
+      "~components/*": ["./src/components/*"],
+      "~configs/*": ["./src/configs/*"],
+      "~contexts/*": ["./src/contexts/*"],
+      "~guards/*": ["./src/guards/*"],
+      "~hooks/*": ["./src/hooks/*"],
+      "~layouts/*": ["./src/layouts/*"],
+      "~lib/*": ["./src/lib/*"],
+      "~pages/*": ["./src/pages/*"],
+      "~routes/*": ["./src/routes/*"],
+      "~types/*": ["./src/types/*"],
+      "~utils/*": ["./src/utils/*"]
+    },
+
+    /* Config QraphQL-Codegen */
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "./schema.graphql"
+      }
+    ]
+  }
+}
