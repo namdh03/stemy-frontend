@@ -1,0 +1,89 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type AccessTokenResponse {
+  access_token: String!
+}
+
+type Feedback {
+  comment: String!
+  id: ID!
+  orderItem: OrderItem!
+  product: Product!
+  rating: Int!
+  user: User!
+}
+
+type Mutation {
+  getOauth2GoogleURL: String!
+  login(email: String!, password: String!): AccessTokenResponse!
+  loginWithGoogle(code: String!): AccessTokenResponse!
+  register(email: String!, password: String!): AccessTokenResponse!
+}
+
+type Order {
+  id: ID!
+}
+
+type OrderItem {
+  id: ID!
+  order: Order!
+  product: Product!
+  quantity: Int!
+  unitPrice: Int!
+}
+
+type Product {
+  category: ProductCategory!
+  description: String!
+  feedbacks: [Feedback!]!
+  id: ID!
+  name: String!
+  price: Float!
+}
+
+type ProductCategory {
+  id: ID!
+  name: String!
+}
+
+type ProductsPaginatedResponse {
+  items: [Product!]!
+  pageInfo: e!
+}
+
+type Query {
+  products(currentItem: Int! = 9, currentPage: Int! = 1): ProductsPaginatedResponse!
+  user(id: Int!): User
+  users(limit: Float!, offset: Float!): [User!]!
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+  MANAGER
+  STAFF
+}
+
+type User {
+  email: String
+  fullName: String
+  id: ID!
+  phone: String
+  role: Role!
+  status: UserStatus!
+}
+
+enum UserStatus {
+  ACTIVE
+  BAN
+}
+
+type e {
+  currentItem: Int!
+  currentPage: Int!
+  totalItem: Int!
+  totalPage: Int!
+}

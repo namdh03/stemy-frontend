@@ -29,6 +29,7 @@
       "~components/*": ["./src/components/*"],
       "~configs/*": ["./src/configs/*"],
       "~contexts/*": ["./src/contexts/*"],
+      "~graphql/*": ["./src/graphql/*"],
       "~guards/*": ["./src/guards/*"],
       "~hooks/*": ["./src/hooks/*"],
       "~layouts/*": ["./src/layouts/*"],
@@ -37,7 +38,15 @@
       "~routes/*": ["./src/routes/*"],
       "~types/*": ["./src/types/*"],
       "~utils/*": ["./src/utils/*"]
-    }
+    },
+
+    /* Config QraphQL-Codegen */
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "./schema.graphql"
+      }
+    ]
   },
   "include": ["src"]
 }
