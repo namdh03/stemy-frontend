@@ -3,8 +3,8 @@ import { RouterProvider } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
 import { graphql } from '~graphql';
-import execute from '~graphql/execute';
 import router from '~routes';
+import execute from '~utils/execute';
 
 const UserQuery = graphql(`
   query User($id: Int!) {

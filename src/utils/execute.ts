@@ -1,8 +1,8 @@
 import { SuccessResponse } from '~types/response.type';
 
-import http from '../utils/http';
+import type { TypedDocumentString } from '../graphql/graphql';
 
-import type { TypedDocumentString } from './graphql';
+import http from './http';
 
 const execute = <TResult, TVariables>(
   query: TypedDocumentString<TResult, TVariables>,
