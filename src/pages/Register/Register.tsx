@@ -12,7 +12,6 @@ import { Form } from '~components/ui/form';
 import configs from '~configs';
 import useDispatchAuth from '~hooks/useDispatchAuth';
 import useDocumentTitle from '~hooks/useDocumentTitle';
-import useTeddyAnimation from '~hooks/useTeddyAnimation';
 import { AUTH_MESSAGES, SYSTEM_MESSAGES } from '~utils/constants';
 import isAxiosError from '~utils/isAxiosError';
 
@@ -22,7 +21,7 @@ import registerSchema from './data/schema';
 export type RegisterFormType = z.infer<typeof registerSchema>;
 
 const registerFormDefaultValues: RegisterFormType = {
-  fullname: '',
+  fullName: '',
   email: '',
   phone: '',
   password: '',
@@ -31,9 +30,6 @@ const registerFormDefaultValues: RegisterFormType = {
 const Register = () => {
   useDocumentTitle('Stemy | Đăng ký');
   useDispatchAuth();
-
-  const { RiveComponent, observeInputText, observeInputPassword, observeInputEmail, teddySuccess, teddyFail } =
-    useTeddyAnimation();
 
   const form = useForm<RegisterFormType>({
     mode: 'onBlur',
@@ -51,7 +47,6 @@ const Register = () => {
     registerMutate(values, {
       onSuccess: () => {
         form.reset();
-        teddySuccess();
         toast.success(AUTH_MESSAGES.REGISTER_TITLE_SUCCESS);
       },
       onError: (error) => {
@@ -60,23 +55,16 @@ const Register = () => {
         } else {
           toast.error(SYSTEM_MESSAGES.SOMETHING_WENT_WRONG);
         }
-
-        teddyFail();
       },
     });
   };
 
   return (
-    <AuthForm animation={RiveComponent} title='Đăng ký' loading={isRegisterPending}>
+    <AuthForm title='Đăng ký' loading={isRegisterPending}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='relative pb-6 space-y-7'>
           <div className='grid grid-cols-[repeat(2,_1fr)] gap-x-4 gap-y-7'>
-            <FormItems
-              form={form}
-              observeInputText={observeInputText}
-              observeInputEmail={observeInputEmail}
-              observeInputPassword={observeInputPassword}
-            />
+            <FormItems form={form} />
           </div>
 
           <ButtonActionForm

@@ -5,15 +5,15 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 
-import { login } from '~apis/user.api';
 import AuthForm from '~components/common/AuthForm';
 import ButtonActionForm from '~components/common/AuthForm/components/ButtonActionForm';
 import { Form } from '~components/ui/form';
 import configs from '~configs';
 import useDispatchAuth from '~hooks/useDispatchAuth';
 import useDocumentTitle from '~hooks/useDocumentTitle';
-import useTeddyAnimation from '~hooks/useTeddyAnimation';
+import { LoginQuery } from '~services/user.services';
 import { AUTH_MESSAGES, SYSTEM_MESSAGES } from '~utils/constants';
+import execute from '~utils/execute';
 import isAxiosError from '~utils/isAxiosError';
 
 import FormItems from './components/FormItems';
@@ -30,7 +30,6 @@ const Login = () => {
   useDocumentTitle('Stemy | Đăng nhập');
   useDispatchAuth();
 
-  const { RiveComponent, observeInputText, observeInputPassword, teddySuccess, teddyFail } = useTeddyAnimation();
   const form = useForm<LoginFormType>({
     mode: 'onBlur',
     resolver: zodResolver(loginSchema),
@@ -39,7 +38,7 @@ const Login = () => {
 
   // Login with system account
   const { mutate: loginMutate, isPending: isLoginPending } = useMutation({
-    mutationFn: (body: LoginFormType) => login(body),
+    mutationFn: (values: LoginFormType) => execute(LoginQuery, values),
   });
 
   const onSubmit = (values: LoginFormType) => {
@@ -48,7 +47,6 @@ const Login = () => {
       onSuccess: () => {
         form.reset();
         toast.success(AUTH_MESSAGES.LOGIN_TITLE_SUCCESS);
-        teddySuccess();
       },
       onError: (error) => {
         if (isAxiosError<Error>(error)) {
@@ -56,17 +54,15 @@ const Login = () => {
         } else {
           toast.error(SYSTEM_MESSAGES.SOMETHING_WENT_WRONG);
         }
-
-        teddyFail();
       },
     });
   };
 
   return (
-    <AuthForm animation={RiveComponent} title='Welcome back' loading={isLoginPending}>
+    <AuthForm title='Welcome back' loading={isLoginPending}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='relative pb-6 space-y-7'>
-          <FormItems form={form} observeInputEmail={observeInputText} observeInputPassword={observeInputPassword} />
+          <FormItems form={form} />
 
           <ButtonActionForm
             mainTitle='Đăng nhập'

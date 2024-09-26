@@ -9,10 +9,10 @@ export interface TableRequestState {
 }
 
 export interface TableStateData<T> {
-  pageSize: number;
-  pageIndex: number;
-  itemTotal: number;
-  pageTotal: number;
+  currentPage: number;
+  currentIndex: number;
+  totalItem: number;
+  totalPage: number;
   data: T[];
 }
 

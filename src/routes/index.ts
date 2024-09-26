@@ -72,97 +72,23 @@ const router = createBrowserRouter([
       {
         path: configs.routes.home,
         lazy: async () => ({
-          Component: withRoleBasedGuard([Role.MODERATOR])((await import('~layouts/AdminLayout')).default),
+          Component: withRoleBasedGuard([Role.MANAGER])((await import('~layouts/AdminLayout')).default),
         }),
         children: [
           {
             index: true,
-            loader: () => redirect(configs.routes.recipeList),
+            loader: () => redirect(configs.routes.productList),
           },
           {
-            path: configs.routes.recipeList,
+            path: configs.routes.productList,
             lazy: async () => ({
-              Component: (await import('~pages/RecipeList')).default,
+              Component: (await import('~pages/ProductList')).default,
             }),
           },
           {
+            path: configs.routes.createProduct,
             lazy: async () => ({
-              Component: (await import('~contexts/recipe/RecipeContext')).RecipeProvider,
-            }),
-            children: [
-              {
-                path: configs.routes.createRecipe,
-                lazy: async () => ({
-                  Component: (await import('~pages/CreateRecipe')).default,
-                }),
-              },
-              {
-                path: configs.routes.updateRecipe,
-                lazy: async () => ({
-                  Component: (await import('~pages/UpdateRecipe')).default,
-                }),
-              },
-              {
-                path: configs.routes.updateMealKit,
-                lazy: async () => ({
-                  Component: (await import('~pages/UpdateRecipe')).default,
-                }),
-              },
-            ],
-          },
-          {
-            path: configs.routes.mealKitList,
-            lazy: async () => ({
-              Component: (await import('~pages/MealKitList')).default,
-            }),
-          },
-          {
-            path: configs.routes.ingredientList,
-            lazy: async () => ({
-              Component: (await import('~pages/IngredientList')).default,
-            }),
-          },
-          {
-            lazy: async () => ({
-              Component: (await import('~contexts/ingredient/IngredientContext')).IngredientProvider,
-            }),
-            children: [
-              {
-                path: configs.routes.createIngredient,
-                lazy: async () => ({
-                  Component: (await import('~pages/CreateIngredient')).default,
-                }),
-              },
-              {
-                path: configs.routes.updateIngredient,
-                lazy: async () => ({
-                  Component: (await import('~pages/UpdateIngredient')).default,
-                }),
-              },
-            ],
-          },
-          {
-            path: configs.routes.categoryList,
-            lazy: async () => ({
-              Component: (await import('~pages/CategoryList')).default,
-            }),
-          },
-          {
-            path: configs.routes.unitList,
-            lazy: async () => ({
-              Component: (await import('~pages/UnitList')).default,
-            }),
-          },
-          {
-            path: configs.routes.foodStyleList,
-            lazy: async () => ({
-              Component: (await import('~pages/FoodStyleList')).default,
-            }),
-          },
-          {
-            path: configs.routes.orderList,
-            lazy: async () => ({
-              Component: (await import('~pages/OrderList')).default,
+              Component: (await import('~pages/CreateProduct')).default,
             }),
           },
           {

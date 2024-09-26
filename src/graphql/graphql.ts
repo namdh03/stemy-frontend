@@ -9,11 +9,15 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format. */
+  DateTimeISO: { input: any; output: any; }
+  /** File upload scalar type */
+  File: { input: File; output: File; }
 };
 
 export type AccessTokenResponse = {
@@ -21,115 +25,264 @@ export type AccessTokenResponse = {
   access_token: Scalars['String']['output'];
 };
 
+export type Cart = {
+  __typename?: 'Cart';
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['ID']['output'];
+  product: Product;
+  quantity: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+  user: User;
+};
+
+export enum CategoryType {
+  Age = 'AGE',
+  Product = 'PRODUCT',
+  Topic = 'TOPIC'
+}
+
+export type CheckoutOrderInput = {
+  vnp_Amount: Scalars['String']['input'];
+  vnp_BankCode: Scalars['String']['input'];
+  vnp_BankTranNo: Scalars['String']['input'];
+  vnp_CardType: Scalars['String']['input'];
+  vnp_OrderInfo: Scalars['String']['input'];
+  vnp_PayDate: Scalars['String']['input'];
+  vnp_ResponseCode: Scalars['String']['input'];
+  vnp_SecureHash: Scalars['String']['input'];
+  vnp_TmnCode: Scalars['String']['input'];
+  vnp_TransactionNo: Scalars['String']['input'];
+  vnp_TransactionStatus: Scalars['String']['input'];
+  vnp_TxnRef: Scalars['String']['input'];
+};
+
 export type Feedback = {
   __typename?: 'Feedback';
   comment: Scalars['String']['output'];
+  createdAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
   orderItem: OrderItem;
   product: Product;
   rating: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
   user: User;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  getOauth2GoogleURL: Scalars['String']['output'];
+  addToCart: Cart;
+  checkoutOrder: Scalars['Boolean']['output'];
+  createOrder: Scalars['String']['output'];
+  createProduct: Product;
+  deleteCart: Scalars['String']['output'];
+  getTokenResetPassword: Scalars['String']['output'];
   login: AccessTokenResponse;
   loginWithGoogle: AccessTokenResponse;
   register: AccessTokenResponse;
+  resetPassword: Scalars['String']['output'];
+  sendResetPasswordOTP: Scalars['String']['output'];
+  updateCart: Cart;
 };
+
+
+export type MutationAddToCartArgs = {
+  productId: Scalars['Float']['input'];
+  quantity: Scalars['Float']['input'];
+};
+
+
+export type MutationCheckoutOrderArgs = {
+  input: CheckoutOrderInput;
+};
+
+
+export type MutationCreateOrderArgs = {
+  address: Scalars['String']['input'];
+  cartIds: Scalars['Int']['input'];
+  paymentProvider: PaymentProvider;
+  phone: Scalars['String']['input'];
+};
+
+
+export type MutationCreateProductArgs = {
+  images: Array<Scalars['File']['input']>;
+  input: ProductInput;
+  lab: Scalars['File']['input'];
+};
+
+
+export type MutationDeleteCartArgs = {
+  productId: Scalars['Float']['input'];
+};
+
+
+export type MutationGetTokenResetPasswordArgs = {
+  OTPCode: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+};
+
 
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
 
+
 export type MutationLoginWithGoogleArgs = {
   code: Scalars['String']['input'];
 };
 
+
 export type MutationRegisterArgs = {
   email: Scalars['String']['input'];
+  fullName: Scalars['String']['input'];
   password: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+};
+
+
+export type MutationResetPasswordArgs = {
+  password: Scalars['String']['input'];
+  token: Scalars['String']['input'];
+};
+
+
+export type MutationSendResetPasswordOtpArgs = {
+  email: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateCartArgs = {
+  productId: Scalars['Float']['input'];
+  quantity: Scalars['Float']['input'];
 };
 
 export type Order = {
   __typename?: 'Order';
+  createdAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
 };
 
 export type OrderItem = {
   __typename?: 'OrderItem';
+  createdAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
   order: Order;
   product: Product;
   quantity: Scalars['Int']['output'];
   unitPrice: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
 };
+
+export enum PaymentProvider {
+  Vnpay = 'VNPAY'
+}
 
 export type Product = {
   __typename?: 'Product';
-  category: ProductCategory;
+  categories: Array<ProductCategory>;
+  createdAt: Scalars['DateTimeISO']['output'];
   description: Scalars['String']['output'];
   feedbacks: Array<Feedback>;
   id: Scalars['ID']['output'];
+  images: Array<ProductImage>;
   name: Scalars['String']['output'];
-  price: Scalars['Float']['output'];
+  price: Scalars['Int']['output'];
+  rating: Scalars['Int']['output'];
+  sold: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
 };
 
 export type ProductCategory = {
   __typename?: 'ProductCategory';
+  createdAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  products: Array<Product>;
+  title: Scalars['String']['output'];
+  type: Array<CategoryType>;
+  updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type ProductsPaginatedResponse = {
-  __typename?: 'ProductsPaginatedResponse';
+export type ProductImage = {
+  __typename?: 'ProductImage';
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['ID']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+  url: Scalars['String']['output'];
+};
+
+export type ProductInput = {
+  categoryIds: Array<Scalars['Int']['input']>;
+  description: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  price: Scalars['Int']['input'];
+};
+
+export type ProductsWithPaginationResponse = {
+  __typename?: 'ProductsWithPaginationResponse';
   items: Array<Product>;
   pageInfo: E;
 };
 
 export type Query = {
   __typename?: 'Query';
-  products: ProductsPaginatedResponse;
+  carts?: Maybe<Array<Cart>>;
+  countCart: Scalars['Float']['output'];
+  me: User;
+  product: Product;
+  productCategories: Array<ProductCategory>;
+  products: ProductsWithPaginationResponse;
   user?: Maybe<User>;
   users: Array<User>;
 };
 
+
+export type QueryProductArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
 export type QueryProductsArgs = {
   currentItem?: Scalars['Int']['input'];
   currentPage?: Scalars['Int']['input'];
+  order?: SortOrder;
+  sort?: Scalars['String']['input'];
 };
+
 
 export type QueryUserArgs = {
   id: Scalars['Int']['input'];
-};
-
-export type QueryUsersArgs = {
-  limit: Scalars['Float']['input'];
-  offset: Scalars['Float']['input'];
 };
 
 export enum Role {
   Admin = 'ADMIN',
   Customer = 'CUSTOMER',
   Manager = 'MANAGER',
-  Staff = 'STAFF',
+  Staff = 'STAFF'
+}
+
+export enum SortOrder {
+  Asc = 'ASC',
+  Desc = 'DESC'
 }
 
 export type User = {
   __typename?: 'User';
-  email?: Maybe<Scalars['String']['output']>;
-  fullName?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTimeISO']['output'];
+  email: Scalars['String']['output'];
+  fullName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   phone?: Maybe<Scalars['String']['output']>;
   role: Role;
   status: UserStatus;
+  updatedAt: Scalars['DateTimeISO']['output'];
 };
 
 export enum UserStatus {
   Active = 'ACTIVE',
-  Ban = 'BAN',
+  Ban = 'BAN'
 }
 
 export type E = {
@@ -140,14 +293,42 @@ export type E = {
   totalPage: Scalars['Int']['output'];
 };
 
-export type UserQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
+export type GetTableProductsQueryVariables = Exact<{
+  currentPage: Scalars['Int']['input'];
+  currentItem: Scalars['Int']['input'];
+  sort: Scalars['String']['input'];
+  order: SortOrder;
 }>;
 
-export type UserQuery = {
-  __typename?: 'Query';
-  user?: { __typename?: 'User'; id: string; fullName?: string | null; email?: string | null } | null;
-};
+
+export type GetTableProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductsWithPaginationResponse', items: Array<{ __typename?: 'Product', id: string, name: string, price: number, description: string, images: Array<{ __typename?: 'ProductImage', id: string, url: string }>, categories: Array<{ __typename?: 'ProductCategory', id: string, name: string }> }>, pageInfo: { __typename?: 'e', totalItem: number, totalPage: number, currentItem: number, currentPage: number } } };
+
+export type CreateProductMutationVariables = Exact<{
+  input: ProductInput;
+  images: Array<Scalars['File']['input']> | Scalars['File']['input'];
+  lab: Scalars['File']['input'];
+}>;
+
+
+export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', id: string, name: string, price: number, description: string, categories: Array<{ __typename?: 'ProductCategory', id: string, name: string }> } };
+
+export type GetProductCategoriesQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProductCategoriesQueryQuery = { __typename?: 'Query', productCategories: Array<{ __typename?: 'ProductCategory', id: string, name: string, title: string }> };
+
+export type LoginMutationMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+}>;
+
+
+export type LoginMutationMutation = { __typename?: 'Mutation', login: { __typename?: 'AccessTokenResponse', access_token: string } };
+
+export type MeQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQueryQuery = { __typename?: 'Query', me: { __typename?: 'User', email: string, fullName: string, id: string, phone?: string | null, role: Role, status: UserStatus } };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -155,10 +336,7 @@ export class TypedDocumentString<TResult, TVariables>
 {
   __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
 
-  constructor(
-    private value: string,
-    public __meta__?: Record<string, any>,
-  ) {
+  constructor(private value: string, public __meta__?: Record<string, any>) {
     super(value);
   }
 
@@ -167,12 +345,76 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
-export const UserDocument = new TypedDocumentString(`
-    query User($id: Int!) {
-  user(id: $id) {
-    id
-    fullName
-    email
+export const GetTableProductsDocument = new TypedDocumentString(`
+    query GetTableProducts($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {
+  products(
+    currentPage: $currentPage
+    currentItem: $currentItem
+    sort: $sort
+    order: $order
+  ) {
+    items {
+      id
+      name
+      price
+      description
+      images {
+        id
+        url
+      }
+      categories {
+        id
+        name
+      }
+    }
+    pageInfo {
+      totalItem
+      totalPage
+      currentItem
+      currentPage
+    }
   }
 }
-    `) as unknown as TypedDocumentString<UserQuery, UserQueryVariables>;
+    `) as unknown as TypedDocumentString<GetTableProductsQuery, GetTableProductsQueryVariables>;
+export const CreateProductDocument = new TypedDocumentString(`
+    mutation CreateProduct($input: ProductInput!, $images: [File!]!, $lab: File!) {
+  createProduct(input: $input, images: $images, lab: $lab) {
+    id
+    name
+    price
+    description
+    categories {
+      id
+      name
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<CreateProductMutation, CreateProductMutationVariables>;
+export const GetProductCategoriesQueryDocument = new TypedDocumentString(`
+    query GetProductCategoriesQuery {
+  productCategories {
+    id
+    name
+    title
+  }
+}
+    `) as unknown as TypedDocumentString<GetProductCategoriesQueryQuery, GetProductCategoriesQueryQueryVariables>;
+export const LoginMutationDocument = new TypedDocumentString(`
+    mutation LoginMutation($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    access_token
+  }
+}
+    `) as unknown as TypedDocumentString<LoginMutationMutation, LoginMutationMutationVariables>;
+export const MeQueryDocument = new TypedDocumentString(`
+    query MeQuery {
+  me {
+    email
+    fullName
+    id
+    phone
+    role
+    status
+  }
+}
+    `) as unknown as TypedDocumentString<MeQueryQuery, MeQueryQueryVariables>;

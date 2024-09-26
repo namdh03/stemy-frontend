@@ -3,31 +3,31 @@ import { useNavigate } from 'react-router-dom';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { GET_ME_QUERY_KEY, getMe } from '~apis/user.api';
-import { signIn } from '~contexts/auth/auth.reducer';
+import constants from '~constants';
+import { GetMeQuery } from '~services/user.services';
+import { useAuthStore } from '~store';
 import { getAccessToken } from '~utils/cookies';
-
-import useAuth from './useAuth';
+import execute from '~utils/execute';
 
 const WAIT_TEDDY_TIME = 2000;
 
 const useDispatchAuth = () => {
   const idTimeOutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
-  const { dispatch } = useAuth();
+  const { authenticate } = useAuthStore();
 
-  // Get current user info
+  // Query for get user info
   const { data } = useQuery({
-    queryKey: [GET_ME_QUERY_KEY],
-    queryFn: () => getMe(),
+    queryKey: [constants.USER_QUERY_KEY.GET_ME_QUERY_KEY],
+    queryFn: () => execute(GetMeQuery),
     enabled: Boolean(getAccessToken()),
-    select: (data) => data.data.data.user,
+    select: (data) => data.data.me,
   });
 
   useEffect(() => {
     if (data) {
       idTimeOutRef.current = setTimeout(() => {
-        dispatch(signIn({ user: data }));
+        authenticate(data);
         // TODO: Not working as expected
         // if (!GUEST_URLS.includes(document.referrer)) navigate(-1);
       }, WAIT_TEDDY_TIME);
@@ -38,7 +38,7 @@ const useDispatchAuth = () => {
         clearTimeout(idTimeOutRef.current);
       }
     };
-  }, [data, dispatch, navigate]);
+  }, [data, authenticate, navigate]);
 };
 
 export default useDispatchAuth;

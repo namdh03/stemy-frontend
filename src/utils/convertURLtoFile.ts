@@ -1,4 +1,4 @@
-import { UploadedFile } from '~contexts/recipe/recipe.type';
+import { UploadedFile } from '~pages/CreateProduct/store/useCreateProductForm';
 
 const urlToFile = async (url: string, fileName: string): Promise<UploadedFile> => {
   const response = await fetch(url);

@@ -1,4 +1,3 @@
-import authBackground from './auth-background.png';
 import avatar from './avatar.png';
 import beef from './beef.png';
 import cartBanner from './cart-banner.png';
@@ -23,7 +22,6 @@ import suggest2nd from './suggest-example-02.png';
 import tomato from './tomato.png';
 
 const images = {
-  authBackground,
   avatar,
   beef,
   cartBanner,

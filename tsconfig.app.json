@@ -2,10 +2,13 @@
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
-
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -13,33 +16,57 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
     /* Paths */
     "baseUrl": ".",
     "paths": {
-      "~*": ["./src/*"],
-      "~apis/*": ["./src/apis/*"],
-      "~assets/*": ["./src/assets/*"],
-      "~components/*": ["./src/components/*"],
-      "~configs/*": ["./src/configs/*"],
-      "~contexts/*": ["./src/contexts/*"],
-      "~graphql/*": ["./src/graphql/*"],
-      "~guards/*": ["./src/guards/*"],
-      "~hooks/*": ["./src/hooks/*"],
-      "~layouts/*": ["./src/layouts/*"],
-      "~lib/*": ["./src/lib/*"],
-      "~pages/*": ["./src/pages/*"],
-      "~routes/*": ["./src/routes/*"],
-      "~types/*": ["./src/types/*"],
-      "~utils/*": ["./src/utils/*"]
+      "~*": [
+        "./src/*"
+      ],
+      "~apis/*": [
+        "./src/apis/*"
+      ],
+      "~assets/*": [
+        "./src/assets/*"
+      ],
+      "~components/*": [
+        "./src/components/*"
+      ],
+      "~configs/*": [
+        "./src/configs/*"
+      ],
+      "~graphql/*": [
+        "./src/graphql/*"
+      ],
+      "~guards/*": [
+        "./src/guards/*"
+      ],
+      "~hooks/*": [
+        "./src/hooks/*"
+      ],
+      "~layouts/*": [
+        "./src/layouts/*"
+      ],
+      "~lib/*": [
+        "./src/lib/*"
+      ],
+      "~pages/*": [
+        "./src/pages/*"
+      ],
+      "~routes/*": [
+        "./src/routes/*"
+      ],
+      "~types/*": [
+        "./src/types/*"
+      ],
+      "~utils/*": [
+        "./src/utils/*"
+      ]
     },
-
     /* Config QraphQL-Codegen */
     "plugins": [
       {
@@ -48,5 +75,7 @@
       }
     ]
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

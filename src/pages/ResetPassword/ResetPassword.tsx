@@ -12,7 +12,6 @@ import ButtonActionForm from '~components/common/AuthForm/components/ButtonActio
 import { Form } from '~components/ui/form';
 import configs from '~configs';
 import useDocumentTitle from '~hooks/useDocumentTitle';
-import useTeddyAnimation from '~hooks/useTeddyAnimation';
 import { cn } from '~lib/utils';
 import { SYSTEM_MESSAGES, USER_MESSAGES } from '~utils/constants';
 import isAxiosError from '~utils/isAxiosError';
@@ -35,7 +34,6 @@ const ResetPassword = () => {
   useDocumentTitle('Stemy | Đặt lại mật khẩu');
 
   const { token } = useOutletContext<ResetPasswordProps>();
-  const { RiveComponent, observeInputPassword, teddySuccess, teddyFail } = useTeddyAnimation();
   const form = useForm<ResetPasswordFormType>({
     mode: 'onBlur',
     resolver: zodResolver(resetPasswordSchema),
@@ -55,7 +53,6 @@ const ResetPassword = () => {
         onSuccess: () => {
           form.reset();
           toast.success(USER_MESSAGES.RESET_PASSWORD_SUCCESS);
-          teddySuccess();
         },
         onError: (error) => {
           if (isAxiosError<Error>(error)) {
@@ -63,14 +60,13 @@ const ResetPassword = () => {
           } else {
             toast.error(SYSTEM_MESSAGES.SOMETHING_WENT_WRONG);
           }
-          teddyFail();
         },
       },
     );
   };
 
   return (
-    <AuthForm animation={RiveComponent} title='Đặt lại mật khẩu' loading={isResetPasswordPending}>
+    <AuthForm title='Đặt lại mật khẩu' loading={isResetPasswordPending}>
       <div className='w-96 mb-4 font-normal leading-[26px]'>
         <p
           className={cn('text-slate-500', {
@@ -83,7 +79,7 @@ const ResetPassword = () => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='relative pb-3 space-y-6'>
-          <FormItems form={form} observeInputPassword={observeInputPassword} />
+          <FormItems form={form} />
 
           <div className='relative -top-3'>
             <ButtonActionForm

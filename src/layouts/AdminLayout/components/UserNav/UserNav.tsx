@@ -2,7 +2,6 @@ import { IoMdLogOut } from 'react-icons/io';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { GET_ME_QUERY_KEY } from '~apis/user.api';
 import { Avatar, AvatarFallback, AvatarImage } from '~components/ui/avatar';
 import {
   DropdownMenu,
@@ -13,17 +12,17 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '~components/ui/dropdown-menu';
-import { signOut } from '~contexts/auth/auth.reducer';
-import useAuth from '~hooks/useAuth';
+import { GET_ME_QUERY_KEY } from '~constants/user-query-key';
+import { useAuthStore } from '~store';
 
 import Button from '../Button';
 
 export default function UserNav() {
-  const { user, dispatch } = useAuth();
+  const { user, unAuthenticate } = useAuthStore();
   const queryClient = useQueryClient();
 
   const handleLogout = () => {
-    dispatch(signOut());
+    unAuthenticate();
     queryClient.removeQueries({
       queryKey: [GET_ME_QUERY_KEY],
     });
@@ -35,14 +34,14 @@ export default function UserNav() {
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
             <AvatarImage src={user?.image || ''} alt='@shadcn' />
-            <AvatarFallback>{user?.fullname.charAt(0)}</AvatarFallback>
+            <AvatarFallback>{user?.fullName}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm font-medium leading-none'>{user?.fullname}</p>
+            <p className='text-sm font-medium leading-none'>{user?.fullName}</p>
             <p className='text-xs leading-none text-muted-foreground'>{user?.email}</p>
           </div>
         </DropdownMenuLabel>

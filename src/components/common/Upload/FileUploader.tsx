@@ -7,8 +7,8 @@ import { Cross2Icon, UploadIcon } from '@radix-ui/react-icons';
 import { Button } from '~components/ui/button';
 import { Progress } from '~components/ui/progress';
 import { ScrollArea } from '~components/ui/scroll-area';
-import { UploadedFile } from '~contexts/recipe/recipe.type';
 import { cn } from '~lib/utils';
+import { UploadedFile } from '~pages/CreateProduct/store/useCreateProductForm';
 import { formatBytes } from '~utils/file';
 
 interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {

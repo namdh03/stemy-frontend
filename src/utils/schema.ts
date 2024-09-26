@@ -27,7 +27,7 @@ export const passwordSchema = (message: string = '') =>
       message: message,
     });
 
-export const fullnameSchema = z
+export const fullNameSchema = z
   .string({
     message: USER_MESSAGES.FULLNAME_MESSAGE,
   })

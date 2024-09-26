@@ -7,57 +7,142 @@ type AccessTokenResponse {
   access_token: String!
 }
 
+type Cart {
+  createdAt: DateTimeISO!
+  id: ID!
+  product: Product!
+  quantity: Int!
+  updatedAt: DateTimeISO!
+  user: User!
+}
+
+enum CategoryType {
+  AGE
+  PRODUCT
+  TOPIC
+}
+
+input CheckoutOrderInput {
+  vnp_Amount: String!
+  vnp_BankCode: String!
+  vnp_BankTranNo: String!
+  vnp_CardType: String!
+  vnp_OrderInfo: String!
+  vnp_PayDate: String!
+  vnp_ResponseCode: String!
+  vnp_SecureHash: String!
+  vnp_TmnCode: String!
+  vnp_TransactionNo: String!
+  vnp_TransactionStatus: String!
+  vnp_TxnRef: String!
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
 type Feedback {
   comment: String!
+  createdAt: DateTimeISO!
   id: ID!
   orderItem: OrderItem!
   product: Product!
   rating: Int!
+  updatedAt: DateTimeISO!
   user: User!
 }
 
+"""File upload scalar type"""
+scalar File
+
 type Mutation {
-  getOauth2GoogleURL: String!
+  addToCart(productId: Float!, quantity: Float!): Cart!
+  checkoutOrder(input: CheckoutOrderInput!): Boolean!
+  createOrder(address: String!, cartIds: Int!, paymentProvider: PaymentProvider!, phone: String!): String!
+  createProduct(images: [File!]!, input: ProductInput!, lab: File!): Product!
+  deleteCart(productId: Float!): String!
+  getTokenResetPassword(OTPCode: String!, email: String!): String!
   login(email: String!, password: String!): AccessTokenResponse!
   loginWithGoogle(code: String!): AccessTokenResponse!
-  register(email: String!, password: String!): AccessTokenResponse!
+  register(email: String!, fullName: String!, password: String!, phone: String!): AccessTokenResponse!
+  resetPassword(password: String!, token: String!): String!
+  sendResetPasswordOTP(email: String!): String!
+  updateCart(productId: Float!, quantity: Float!): Cart!
 }
 
 type Order {
+  createdAt: DateTimeISO!
   id: ID!
+  updatedAt: DateTimeISO!
 }
 
 type OrderItem {
+  createdAt: DateTimeISO!
   id: ID!
   order: Order!
   product: Product!
   quantity: Int!
   unitPrice: Int!
+  updatedAt: DateTimeISO!
+}
+
+enum PaymentProvider {
+  VNPAY
 }
 
 type Product {
-  category: ProductCategory!
+  categories: [ProductCategory!]!
+  createdAt: DateTimeISO!
   description: String!
   feedbacks: [Feedback!]!
   id: ID!
+  images: [ProductImage!]!
   name: String!
-  price: Float!
+  price: Int!
+  rating: Int!
+  sold: Int!
+  updatedAt: DateTimeISO!
 }
 
 type ProductCategory {
+  createdAt: DateTimeISO!
   id: ID!
   name: String!
+  products: [Product!]!
+  title: String!
+  type: [CategoryType!]!
+  updatedAt: DateTimeISO!
 }
 
-type ProductsPaginatedResponse {
+type ProductImage {
+  createdAt: DateTimeISO!
+  id: ID!
+  updatedAt: DateTimeISO!
+  url: String!
+}
+
+input ProductInput {
+  categoryIds: [Int!]!
+  description: String!
+  name: String!
+  price: Int!
+}
+
+type ProductsWithPaginationResponse {
   items: [Product!]!
   pageInfo: e!
 }
 
 type Query {
-  products(currentItem: Int! = 9, currentPage: Int! = 1): ProductsPaginatedResponse!
+  carts: [Cart!]
+  countCart: Float!
+  me: User!
+  product(id: Float!): Product!
+  productCategories: [ProductCategory!]!
+  products(currentItem: Int! = 9, currentPage: Int! = 1, order: SortOrder! = ASC, sort: String! = "id"): ProductsWithPaginationResponse!
   user(id: Int!): User
-  users(limit: Float!, offset: Float!): [User!]!
+  users: [User!]!
 }
 
 enum Role {
@@ -67,13 +152,20 @@ enum Role {
   STAFF
 }
 
+enum SortOrder {
+  ASC
+  DESC
+}
+
 type User {
-  email: String
-  fullName: String
+  createdAt: DateTimeISO!
+  email: String!
+  fullName: String!
   id: ID!
   phone: String
   role: Role!
   status: UserStatus!
+  updatedAt: DateTimeISO!
 }
 
 enum UserStatus {

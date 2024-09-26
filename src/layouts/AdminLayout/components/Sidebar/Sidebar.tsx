@@ -3,9 +3,9 @@ import { HiOutlineChevronDoubleLeft } from 'react-icons/hi';
 import { TbMenu, TbX } from 'react-icons/tb';
 
 import icons from '~assets/icons';
-import useAuth from '~hooks/useAuth';
-import { adminSideLinks, moderatorSideLinks } from '~layouts/AdminLayout/data/sideLinks';
+import { adminSideLinks, managerSideLinks } from '~layouts/AdminLayout/data/sideLinks';
 import { cn } from '~lib/utils';
+import { useAuthStore } from '~store';
 import { Role } from '~utils/enums';
 
 import Button from '../Button';
@@ -18,7 +18,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export default function Sidebar({ className, isCollapsed, setIsCollapsed }: SidebarProps) {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   const [navOpened, setNavOpened] = useState(false);
 
   /* Make body not scrollable when navBar is opened */
@@ -74,7 +74,7 @@ export default function Sidebar({ className, isCollapsed, setIsCollapsed }: Side
           className={`h-full flex-1 overflow-auto ${navOpened ? 'max-h-screen' : 'max-h-0 py-0 md:max-h-screen md:py-2'}`}
           closeNav={() => setNavOpened(false)}
           isCollapsed={isCollapsed}
-          links={user?.role === Role.ADMIN ? adminSideLinks : user?.role === Role.MODERATOR ? moderatorSideLinks : []}
+          links={user?.role === Role.ADMIN ? adminSideLinks : user?.role === Role.MANAGER ? managerSideLinks : []}
         />
 
         {/* Scrollbar width toggle button */}
