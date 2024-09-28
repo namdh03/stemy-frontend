@@ -4,14 +4,6 @@ import configs from '~configs';
 import { withRoleBasedGuard } from '~guards/RoleBasedGuard';
 import { Role } from '~utils/enums';
 
-// const mainLayoutLazy = async () => ({
-//   Component: (await import('~layouts/MainLayout')).default,
-// });
-
-// const customerGuardLazy = async () => ({
-//   Component: (await import('~guards/CustomerGuard')).default,
-// });
-
 const guestGuardLazy = async () => ({
   Component: (await import('~guards/GuestGuard')).default,
 });
@@ -89,6 +81,12 @@ const router = createBrowserRouter([
             path: configs.routes.createProduct,
             lazy: async () => ({
               Component: (await import('~pages/CreateProduct')).default,
+            }),
+          },
+          {
+            path: configs.routes.updateProduct,
+            lazy: async () => ({
+              Component: (await import('~pages/UpdateProduct')).default,
             }),
           },
           {

@@ -9,7 +9,7 @@ const getDefaultHomePath = (role?: Role) => {
     case Role.MODERATOR:
       return configs.routes.moderator;
     case Role.MANAGER:
-      return configs.routes.manager;
+      return configs.routes.home;
     case Role.CUSTOMER:
       return configs.routes.home;
     default:

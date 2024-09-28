@@ -3,36 +3,37 @@ import { create } from 'zustand';
 
 import { UploadedFile } from '~types/product.type';
 
-import { CreateProductFormType } from './useCreateProductForm';
+import { UpdateProductFormType } from './useUpdateProductForm';
 
-export type CreateProductState = {
-  formData: Partial<CreateProductFormType>;
+export type UpdateProductState = {
+  formData: Partial<UpdateProductFormType>;
   formStatus: 'idle' | 'submitting' | 'submitted';
   isLoading: boolean;
   images: UploadedFile[];
   labDocument: File | null;
 };
 
-export type CreateProductActions = {
+export type UpdateProductActions = {
   resetForm: () => void;
   setFormStatus: (status: 'idle' | 'submitting' | 'submitted') => void;
-  setFormData: (data: Partial<CreateProductFormType>) => void;
+  setFormData: (data: Partial<UpdateProductFormType>) => void;
   setLabDocument: (file: File) => void;
-  onUploadLabDocument: (file: File, field: ControllerRenderProps<CreateProductFormType, 'labDocument'>) => void;
-  onUploadImage: (files: UploadedFile[], field: ControllerRenderProps<CreateProductFormType, 'images'>) => void;
+  onUploadLabDocument: (file: File, field: ControllerRenderProps<UpdateProductFormType, 'labDocument'>) => void;
+  onUploadImage: (files: UploadedFile[], field: ControllerRenderProps<UpdateProductFormType, 'images'>) => void;
   handleRemoveImages: (images: string) => void;
   setImages: (images: UploadedFile[]) => void;
 };
 
-export type CreateProductSlice = CreateProductState & CreateProductActions;
+export type UpdateProductSlice = UpdateProductState & UpdateProductActions;
 
-const initialState: CreateProductState = {
+const initialState: UpdateProductState = {
   formData: {
     categories: [],
     images: [],
     labDocument: undefined,
     description: '',
     name: '',
+    price: 0,
   },
   formStatus: 'idle',
   isLoading: false,
@@ -40,7 +41,7 @@ const initialState: CreateProductState = {
   labDocument: null,
 };
 
-export const useCreateProductStore = create<CreateProductSlice>((set) => ({
+export const useUpdateProductStore = create<UpdateProductSlice>((set) => ({
   ...initialState,
   setFormData: (data) => set((state) => ({ formData: { ...state.formData, ...data } })),
   setFormStatus: (status) => set({ formStatus: status }),

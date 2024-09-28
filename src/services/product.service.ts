@@ -41,3 +41,30 @@ export const CreateProductMutation = graphql(`
     }
   }
 `);
+
+export const GetProductByIdQuery = graphql(`
+  query GetProductById($id: Float!) {
+    product(id: $id) {
+      id
+      name
+      price
+      description
+      images {
+        id
+        url
+      }
+      categories {
+        id
+        name
+      }
+    }
+  }
+`);
+
+export const DeleteProductMutation = graphql(`
+  mutation DeleteProduct($id: Float!) {
+    deleteProduct(id: $id) {
+      id
+    }
+  }
+`);

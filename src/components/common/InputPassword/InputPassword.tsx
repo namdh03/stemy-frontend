@@ -3,7 +3,6 @@ import { ControllerRenderProps, FieldPath, FieldValues } from 'react-hook-form';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 
 import { Input } from '~components/ui/input';
-import { ObserveInput } from '~hooks/useTeddyAnimation';
 
 interface InputPasswordProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -11,10 +10,9 @@ interface InputPasswordProps<
 > {
   field: ControllerRenderProps<TFieldValues, TName>;
   placeholder: string;
-  observeInput?: ObserveInput;
 }
 
-const InputPassword = ({ field, placeholder, observeInput }: InputPasswordProps) => {
+const InputPassword = ({ field, placeholder }: InputPasswordProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
@@ -26,7 +24,6 @@ const InputPassword = ({ field, placeholder, observeInput }: InputPasswordProps)
         type={showPassword ? 'text' : 'password'}
         placeholder={placeholder}
         className='h-10 bg-white'
-        observeInput={observeInput}
         {...field}
       />
       {showPassword ? (

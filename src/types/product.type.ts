@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export type ProductCategory = {
   id: string;
   name: string;
@@ -18,3 +20,14 @@ export type Product = {
   description: string;
   category: ProductCategory;
 };
+
+export class UploadedFile extends File {
+  preview: string;
+
+  constructor(fileBits: BlobPart[], fileName: string, preview: string, options?: FilePropertyBag) {
+    super(fileBits, fileName, options);
+    this.preview = preview;
+  }
+}
+
+export const UploadedFileSchema = z.instanceof(UploadedFile);

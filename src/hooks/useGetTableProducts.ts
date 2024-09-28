@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
-import { GET_TABLE_KITS_QUERY_KEY } from '~constants/user-query-key';
+import { GET_TABLE_PRODUCTS_QUERY_KEY } from '~constants/user-query-key';
 import { SortOrder } from '~graphql/graphql';
 import { GetProductTableQuery } from '~services/product.service';
 import { TableRequestState } from '~types/table.type';
@@ -8,7 +8,7 @@ import execute from '~utils/execute';
 
 const useGetTableProducts = ({ sorting, pagination }: TableRequestState) => {
   const { data, isLoading } = useQuery({
-    queryKey: [GET_TABLE_KITS_QUERY_KEY, sorting, pagination],
+    queryKey: [GET_TABLE_PRODUCTS_QUERY_KEY, sorting, pagination],
     queryFn: () =>
       execute(GetProductTableQuery, {
         currentPage: pagination.pageIndex * pagination.pageSize + 1, // offset

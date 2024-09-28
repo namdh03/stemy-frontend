@@ -4,7 +4,8 @@ import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
 import FileUploader from '~components/common/Upload/FileUploader';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~components/ui/form';
 import { useCreateProductStore } from '~pages/CreateProduct/store/createProduct.store';
-import { CreateProductFormType, UploadedFile } from '~pages/CreateProduct/store/useCreateProductForm';
+import { CreateProductFormType } from '~pages/CreateProduct/store/useCreateProductForm';
+import { UploadedFile } from '~types/product.type';
 
 // export interface UploadedFile extends File {
 //   preview: string;

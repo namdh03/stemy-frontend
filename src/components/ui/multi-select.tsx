@@ -10,9 +10,11 @@ interface MultiSelectorProps extends React.ComponentPropsWithoutRef<typeof Comma
   values: string[];
   onValuesChange: (value: string[]) => void;
   loop?: boolean;
+  dataSource: { value: string; name: string }[];
 }
 
 interface MultiSelectContextProps {
+  dataSource: { value: string; name: string }[];
   value: string[];
   onValueChange: (value: any) => void;
   open: boolean;
@@ -48,6 +50,7 @@ const MultiSelector = ({
   className,
   children,
   dir,
+  dataSource,
   ...props
 }: MultiSelectorProps) => {
   const [inputValue, setInputValue] = useState('');
@@ -59,7 +62,6 @@ const MultiSelector = ({
 
   const onValueChangeHandler = useCallback(
     (val: string) => {
-      console.log('🚀 ~ val:', val, value);
       if (value?.includes(val)) {
         onValueChange(value?.filter((item) => item !== val));
       } else {
@@ -165,6 +167,7 @@ const MultiSelector = ({
   return (
     <MultiSelectContext.Provider
       value={{
+        dataSource,
         value,
         onValueChange: onValueChangeHandler,
         open,
@@ -191,7 +194,7 @@ const MultiSelector = ({
 
 const MultiSelectorTrigger = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => {
-    const { value, onValueChange, activeIndex } = useMultiSelect();
+    const { value, onValueChange, activeIndex, dataSource } = useMultiSelect();
 
     const mousePreventDefault = useCallback((e: React.MouseEvent) => {
       e.preventDefault();
@@ -219,7 +222,7 @@ const MultiSelectorTrigger = forwardRef<HTMLDivElement, React.HTMLAttributes<HTM
             )}
             variant={'secondary'}
           >
-            <span className='text-xs'>{item}</span>
+            <span className='text-xs'>{dataSource.find((val) => val.value == item)?.name}</span>
             <button
               aria-label={`Remove ${item} option`}
               aria-roledescription='button to remove option'

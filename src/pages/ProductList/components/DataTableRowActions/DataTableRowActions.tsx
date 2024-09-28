@@ -3,6 +3,7 @@ import { FiEdit3 } from 'react-icons/fi';
 import { IoEyeOutline } from 'react-icons/io5';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Row } from '@tanstack/react-table';
@@ -25,8 +26,11 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '~components/ui/dropdown-menu';
+import configs from '~configs';
 import { Product } from '~graphql/graphql';
+import { useDeleteProduct } from '~hooks/useDeleteProduct';
 import Button from '~layouts/AdminLayout/components/Button';
+import isAxiosError from '~utils/isAxiosError';
 
 import Modal from '../Modal';
 
@@ -41,10 +45,7 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<Product>) {
     alert: false,
     modal: false,
   });
-  // const { mutate: deleteRecipeMutate } = useMutation({
-  //   mutationFn: () => deleteRecipe(row.original.id),
-  // });
-
+  const { mutate: deleteProductMutate } = useDeleteProduct();
   const handleOpenDialog = () => setOpen((prev) => ({ ...prev, alert: true }));
 
   const handleOpenModal = () => setOpen((prev) => ({ ...prev, modal: true }));
@@ -56,16 +57,16 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<Product>) {
   const handleCloseModal = () => setOpen((prev) => ({ ...prev, modal: false }));
 
   const handleDeleteRecipe = () => {
-    // deleteRecipeMutate(undefined, {
-    //   onSuccess: () => {
-    //     queryClient.invalidateQueries({ queryKey: [GET_TABLE_RECIPES_QUERY_KEY] });
-    //     toast.success(RECIPE_MESSAGES.DELETE_RECIPE_SUCCESS);
-    //   },
-    //   onError: (error) => {
-    //     if (isAxiosError<Error>(error)) toast.error(error.response?.data.message);
-    //     else toast.error(SYSTEM_MESSAGES.SOMETHING_WENT_WRONG);
-    //   },
-    // });
+    const productId = parseInt(row.original.id);
+    deleteProductMutate(productId, {
+      onSuccess: () => {
+        toast.success('Delete product successfully');
+      },
+      onError: (error) => {
+        if (isAxiosError<Error>(error)) toast.error('something went wrong');
+        else toast.error('something went wrong');
+      },
+    });
   };
 
   return (
@@ -99,19 +100,19 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<Product>) {
             <DropdownMenuShortcut className='ml-0 mr-2'>
               <IoEyeOutline size={16} />
             </DropdownMenuShortcut>
-            Xem Chi Tiết
+            View Detail
           </DropdownMenuItem>
 
           <DropdownMenuItem
             className='cursor-pointer'
-            // onClick={() => {
-            //   navigate(configs.routes.updateRecipe.replace(':recipeId', row.original.id));
-            // }}
+            onClick={() => {
+              navigate(configs.routes.updateProduct.replace(':productId', row.original.id));
+            }}
           >
             <DropdownMenuShortcut className='ml-0 mr-2'>
               <FiEdit3 size={16} />
             </DropdownMenuShortcut>
-            Chỉnh Sửa
+            Edit
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
@@ -120,7 +121,7 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<Product>) {
             <DropdownMenuShortcut className='ml-0 mr-2'>
               <RiDeleteBinLine size={16} />
             </DropdownMenuShortcut>
-            Xoá Công Thức
+            Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

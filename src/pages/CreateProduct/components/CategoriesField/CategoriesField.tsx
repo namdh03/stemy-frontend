@@ -30,10 +30,15 @@ const CategoriesField: React.FC<CategoriesFieldProps> = ({ form }) => {
             <MultiSelector
               values={field.value}
               onValuesChange={(value) => {
-                console.log('🚀 ~ value:', value);
                 field.onChange(value);
               }}
               loop={false}
+              dataSource={
+                categories?.map((category) => ({
+                  name: category.name,
+                  value: category.id,
+                })) || []
+              }
             >
               <MultiSelectorTrigger>
                 <MultiSelectorInput placeholder='Select category' />

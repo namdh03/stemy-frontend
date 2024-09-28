@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { GET_TABLE_KITS_QUERY_KEY } from '~constants/user-query-key';
+import { GET_TABLE_PRODUCTS_QUERY_KEY } from '~constants/user-query-key';
 import { CreateProductMutation } from '~services/product.service';
 import { executeWithFormData } from '~utils/execute';
 
@@ -10,6 +10,7 @@ interface UseCreateProductParams {
     categoryIds: number[];
     description: string;
     price: number;
+    labPrice: number;
   };
   images: File[];
   labDocument: File;
@@ -51,7 +52,7 @@ export const useCreateProduct = () => {
       return executeWithFormData(formData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [GET_TABLE_KITS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [GET_TABLE_PRODUCTS_QUERY_KEY] });
     },
   });
 };
