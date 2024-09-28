@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '~components/ui/button';
-import useAuth from '~hooks/useAuth';
 import useDocumentTitle from '~hooks/useDocumentTitle';
+import { useAuthStore } from '~store';
 import getDefaultHomePath from '~utils/getDefaultHomePath';
 
 const NotFound = () => {
   useDocumentTitle('Stemy | Không tìm thấy trang');
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   const navigate = useNavigate();
 
   return (

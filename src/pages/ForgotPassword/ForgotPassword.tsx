@@ -13,7 +13,6 @@ import { Form } from '~components/ui/form';
 import configs from '~configs';
 import useCountdown from '~hooks/useCountdown';
 import useDocumentTitle from '~hooks/useDocumentTitle';
-import useTeddyAnimation from '~hooks/useTeddyAnimation';
 import { SYSTEM_MESSAGES, USER_MESSAGES } from '~utils/constants';
 import isAxiosError from '~utils/isAxiosError';
 
@@ -33,7 +32,6 @@ const ForgotPassword = () => {
 
   const [count, { startCountdown, resetCountdown }] = useCountdown({ countStart: COUNT_START });
 
-  const { RiveComponent, observeInputText, teddySuccess, teddyFail } = useTeddyAnimation();
   const form = useForm<ForgotPasswordFormType>({
     mode: 'onBlur',
     resolver: zodResolver(forgotPasswordSchema),
@@ -55,7 +53,6 @@ const ForgotPassword = () => {
       onSuccess: () => {
         form.reset();
         toast.success(USER_MESSAGES.FORGOT_PASSWORD_SUCCESS);
-        teddySuccess();
         startCountdown();
       },
       onError: (error) => {
@@ -64,14 +61,12 @@ const ForgotPassword = () => {
         } else {
           toast.error(SYSTEM_MESSAGES.SOMETHING_WENT_WRONG);
         }
-
-        teddyFail();
       },
     });
   };
 
   return (
-    <AuthForm animation={RiveComponent} title='Quên mật khẩu ?' loading={isForgotPasswordPending}>
+    <AuthForm title='Quên mật khẩu ?' loading={isForgotPasswordPending}>
       <div className='w-96 mb-4 font-normal leading-[26px]'>
         <p className='mb-1 text-slate-500'>Nhập email của bạn bên dưới để nhận hướng dẫn đặt lại mật khẩu.</p>
         {count != COUNT_START && (
@@ -81,7 +76,7 @@ const ForgotPassword = () => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='relative pb-6 space-y-3'>
-          <FormItems form={form} observeInputEmail={observeInputText} />
+          <FormItems form={form} />
 
           <ButtonActionForm
             mainTitle='Lấy lại mật khẩu'

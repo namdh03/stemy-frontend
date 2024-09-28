@@ -13,15 +13,14 @@ import {
   DropdownMenuTrigger,
 } from '~components/ui/dropdown-menu';
 import configs from '~configs';
-import { signOut } from '~contexts/auth/auth.reducer';
-import useAuth from '~hooks/useAuth';
+import { useAuthStore } from '~store';
 
 const UserNav = () => {
-  const { user, dispatch } = useAuth();
+  const { user, unAuthenticate } = useAuthStore();
   const queryClient = useQueryClient();
 
   const handleLogout = () => {
-    dispatch(signOut());
+    unAuthenticate();
     queryClient.removeQueries({
       queryKey: [GET_ME_QUERY_KEY],
     });
@@ -31,8 +30,8 @@ const UserNav = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className='cursor-pointer'>
-          <AvatarImage className='object-cover' src={user?.image || ''} alt={user?.fullname} />
-          <AvatarFallback>{user?.fullname.charAt(0)}</AvatarFallback>
+          <AvatarImage className='object-cover' src={user?.image || ''} alt={user?.fullName} />
+          <AvatarFallback>{user?.fullName.charAt(0)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>

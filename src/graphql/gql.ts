@@ -1,6 +1,8 @@
 /* eslint-disable */
 import * as types from './graphql';
 
+
+
 /**
  * Map of all GraphQL operations in the project.
  *
@@ -12,16 +14,44 @@ import * as types from './graphql';
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n  query User($id: Int!) {\n    user(id: $id) {\n      id\n      fullName\n      email\n    }\n  }\n':
-    types.UserDocument,
+    "\n  query GetTableProducts($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {\n    products(currentPage: $currentPage, currentItem: $currentItem, sort: $sort, order: $order) {\n      items {\n        id\n        name\n        price\n        description\n        images {\n          id\n          url\n        }\n        categories {\n          id\n          name\n        }\n      }\n      pageInfo {\n        totalItem\n        totalPage\n        currentItem\n        currentPage\n      }\n    }\n  }\n": types.GetTableProductsDocument,
+    "\n  mutation CreateProduct($input: ProductInput!, $images: [File!]!, $lab: File!) {\n    createProduct(input: $input, images: $images, lab: $lab) {\n      id\n      name\n      price\n      description\n      categories {\n        id\n        name\n      }\n    }\n  }\n": types.CreateProductDocument,
+    "\n  query GetProductById($id: Float!) {\n    product(id: $id) {\n      id\n      name\n      price\n      description\n      images {\n        id\n        url\n      }\n      categories {\n        id\n        name\n      }\n    }\n  }\n": types.GetProductByIdDocument,
+    "\n  mutation DeleteProduct($id: Float!) {\n    deleteProduct(id: $id) {\n      id\n    }\n  }\n": types.DeleteProductDocument,
+    "\n  query GetProductCategoriesQuery {\n    productCategories {\n      id\n      name\n      title\n    }\n  }\n": types.GetProductCategoriesQueryDocument,
+    "\n  mutation LoginMutation($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      access_token\n    }\n  }\n": types.LoginMutationDocument,
+    "\n  query MeQuery {\n    me {\n      email\n      fullName\n      id\n      phone\n      role\n      status\n    }\n  }\n": types.MeQueryDocument,
 };
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-  source: '\n  query User($id: Int!) {\n    user(id: $id) {\n      id\n      fullName\n      email\n    }\n  }\n',
-): typeof import('./graphql').UserDocument;
+export function graphql(source: "\n  query GetTableProducts($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {\n    products(currentPage: $currentPage, currentItem: $currentItem, sort: $sort, order: $order) {\n      items {\n        id\n        name\n        price\n        description\n        images {\n          id\n          url\n        }\n        categories {\n          id\n          name\n        }\n      }\n      pageInfo {\n        totalItem\n        totalPage\n        currentItem\n        currentPage\n      }\n    }\n  }\n"): typeof import('./graphql').GetTableProductsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreateProduct($input: ProductInput!, $images: [File!]!, $lab: File!) {\n    createProduct(input: $input, images: $images, lab: $lab) {\n      id\n      name\n      price\n      description\n      categories {\n        id\n        name\n      }\n    }\n  }\n"): typeof import('./graphql').CreateProductDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetProductById($id: Float!) {\n    product(id: $id) {\n      id\n      name\n      price\n      description\n      images {\n        id\n        url\n      }\n      categories {\n        id\n        name\n      }\n    }\n  }\n"): typeof import('./graphql').GetProductByIdDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeleteProduct($id: Float!) {\n    deleteProduct(id: $id) {\n      id\n    }\n  }\n"): typeof import('./graphql').DeleteProductDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetProductCategoriesQuery {\n    productCategories {\n      id\n      name\n      title\n    }\n  }\n"): typeof import('./graphql').GetProductCategoriesQueryDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation LoginMutation($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      access_token\n    }\n  }\n"): typeof import('./graphql').LoginMutationDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query MeQuery {\n    me {\n      email\n      fullName\n      id\n      phone\n      role\n      status\n    }\n  }\n"): typeof import('./graphql').MeQueryDocument;
+
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

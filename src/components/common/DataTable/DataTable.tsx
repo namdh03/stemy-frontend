@@ -86,8 +86,8 @@ export default function DataTable<TData, TValue>({
     // pagination config
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
-    rowCount: paginatedTableData?.itemTotal || 0,
-    pageCount: paginatedTableData?.pageTotal || 0,
+    rowCount: paginatedTableData?.totalItem || 0,
+    pageCount: paginatedTableData?.totalPage || 0,
     manualPagination: true,
 
     // visibility config
@@ -150,7 +150,7 @@ export default function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      {paginatedTableData && paginatedTableData.pageTotal > 0 && <DataTablePagination table={table} />}
+      {paginatedTableData && paginatedTableData.totalPage > 0 && <DataTablePagination table={table} />}
     </div>
   );
 }

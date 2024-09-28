@@ -14,7 +14,7 @@ export interface User {
   email: string;
   dateOfBirth: string | null;
   phone: string | null;
-  fullname: string;
+  fullName: string;
   address: string | null;
   role: Role;
   image: string | null;
@@ -43,7 +43,7 @@ export type VerifyTokenForgotPasswordResponse = SuccessResponse<{
 export type TableAccountType = {
   id: string;
   avatar: string;
-  fullname: string;
+  fullName: string;
   role: Role;
   area: string;
   phone: string;
@@ -65,7 +65,7 @@ export type ChangePasswordBody = {
 };
 
 export type UpdateMeBody = {
-  fullname: string;
+  fullName: string;
   email: string;
   phone: string;
   areaId: string;

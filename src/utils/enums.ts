@@ -20,6 +20,7 @@ export enum Role {
   CUSTOMER = 'CUSTOMER',
   SHIPPER = 'SHIPPER',
   MODERATOR = 'MODERATOR',
+  MANAGER = 'MANAGER',
 }
 
 export enum SortEnum {

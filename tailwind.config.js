@@ -10,6 +10,9 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      fontFamily: {
+        jaro: ['Jaro', 'sans-serif'],
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -75,9 +78,6 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'collapsible-down': 'collapsible-down 0.2s ease-out',
         'collapsible-up': 'collapsible-up 0.2s ease-out',
-      },
-      backgroundImage: {
-        auth: "linear-gradient(0deg,rgba(34, 34, 34, 0.15) 0%,rgba(34, 34, 34, 0.15) 100%), url('/src/assets/imgs/auth-background.png')",
       },
     },
   },

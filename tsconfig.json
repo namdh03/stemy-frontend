@@ -1,25 +1,68 @@
 {
   "files": [],
-  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
   "compilerOptions": {
     /* Paths */
     "baseUrl": ".",
     "paths": {
-      "~*": ["./src/*"],
-      "~apis/*": ["./src/apis/*"],
-      "~assets/*": ["./src/assets/*"],
-      "~components/*": ["./src/components/*"],
-      "~configs/*": ["./src/configs/*"],
-      "~contexts/*": ["./src/contexts/*"],
-      "~graphql/*": ["./src/graphql/*"],
-      "~guards/*": ["./src/guards/*"],
-      "~hooks/*": ["./src/hooks/*"],
-      "~layouts/*": ["./src/layouts/*"],
-      "~lib/*": ["./src/lib/*"],
-      "~pages/*": ["./src/pages/*"],
-      "~routes/*": ["./src/routes/*"],
-      "~types/*": ["./src/types/*"],
-      "~utils/*": ["./src/utils/*"]
+      "~*": [
+        "./src/*"
+      ],
+      "~apis/*": [
+        "./src/apis/*"
+      ],
+      "~assets/*": [
+        "./src/assets/*"
+      ],
+      "~components/*": [
+        "./src/components/*"
+      ],
+      "~configs/*": [
+        "./src/configs/*"
+      ],
+      "~constants/*": [
+        "./src/constants/*"
+      ],
+      "~graphql/*": [
+        "./src/graphql/*"
+      ],
+      "~guards/*": [
+        "./src/guards/*"
+      ],
+      "~hooks/*": [
+        "./src/hooks/*"
+      ],
+      "~layouts/*": [
+        "./src/layouts/*"
+      ],
+      "~lib/*": [
+        "./src/lib/*"
+      ],
+      "~pages/*": [
+        "./src/pages/*"
+      ],
+      "~routes/*": [
+        "./src/routes/*"
+      ],
+      "~types/*": [
+        "./src/types/*"
+      ],
+      "~services": [
+        "./src/services/*"
+      ],
+      "~store": [
+        "./src/store/*"
+      ],
+      "~utils/*": [
+        "./src/utils/*"
+      ]
     }
   }
 }

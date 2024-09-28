@@ -15,4 +15,14 @@ const execute = <TResult, TVariables>(
     })
     .then((response) => response.data);
 
+export const executeWithFormData = <TResult>(formData: FormData): Promise<{ data: TResult }> => {
+  return http
+    .post<SuccessResponse<TResult>>('/graphql', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((response) => response.data);
+};
+
 export default execute;

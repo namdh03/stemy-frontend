@@ -1,7 +1,7 @@
 import { LoginFormType } from '~pages/Login/Login';
 import { RegisterFormType } from '~pages/Register/Register';
 import { AuthResponse } from '~types/auth.type';
-import { ChangePasswordBody, GoogleUrlResponse, UpdateMeBody, UserResponse } from '~types/user.type';
+import { ChangePasswordBody, GoogleUrlResponse, UpdateMeBody } from '~types/user.type';
 import { ImageType } from '~utils/enums';
 import http from '~utils/http';
 
@@ -13,7 +13,7 @@ export const register = (body: RegisterFormType) => http.post<AuthResponse>('/re
 
 export const login = (body: LoginFormType) => http.post<AuthResponse>('/login', body);
 
-export const getMe = () => http.get<UserResponse>('/me');
+// export const getMe = () => http.get<UserResponse>('/me');
 
 export const getGoogleAuthUrl = () => http.get<GoogleUrlResponse>('/login/google');
 

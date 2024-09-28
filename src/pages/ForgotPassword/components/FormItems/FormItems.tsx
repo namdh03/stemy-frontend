@@ -3,12 +3,10 @@ import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~components/ui/form';
 import { Input } from '~components/ui/input';
-import { ObserveInput } from '~hooks/useTeddyAnimation';
 import { ForgotPasswordFormType } from '~pages/ForgotPassword/ForgotPassword';
 
 interface FormItemsProps {
   form: UseFormReturn<ForgotPasswordFormType>;
-  observeInputEmail: ObserveInput;
 }
 
 type ForgotPasswordObjectType = {
@@ -17,24 +15,18 @@ type ForgotPasswordObjectType = {
   component: (field: ControllerRenderProps<ForgotPasswordFormType, keyof ForgotPasswordFormType>) => JSX.Element;
 };
 
-const FormItems = ({ form, observeInputEmail }: FormItemsProps) => {
+const FormItems = ({ form }: FormItemsProps) => {
   const forgotPasswordFields: ForgotPasswordObjectType[] = useMemo(
     () => [
       {
         name: 'email',
         label: 'Email',
         component: (field) => (
-          <Input
-            type='email'
-            placeholder='customer@example.com'
-            className='h-10 bg-white'
-            observeInput={observeInputEmail}
-            {...field}
-          />
+          <Input type='email' placeholder='customer@example.com' className='h-10 bg-white' {...field} />
         ),
       },
     ],
-    [observeInputEmail],
+    [],
   );
 
   return forgotPasswordFields.map(({ name, label, component }) => (

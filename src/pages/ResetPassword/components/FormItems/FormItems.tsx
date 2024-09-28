@@ -3,12 +3,10 @@ import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
 
 import InputPassword from '~components/common/InputPassword';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~components/ui/form';
-import { ObserveInput } from '~hooks/useTeddyAnimation';
 import { ResetPasswordFormType } from '~pages/ResetPassword/ResetPassword';
 
 interface FormItemsProps {
   form: UseFormReturn<ResetPasswordFormType>;
-  observeInputPassword: ObserveInput;
 }
 
 type ResetPasswordObjectType = {
@@ -17,25 +15,21 @@ type ResetPasswordObjectType = {
   component: (field: ControllerRenderProps<ResetPasswordFormType, keyof ResetPasswordFormType>) => JSX.Element;
 };
 
-const FormItems = ({ form, observeInputPassword }: FormItemsProps) => {
+const FormItems = ({ form }: FormItemsProps) => {
   const resetPasswordFields: ResetPasswordObjectType[] = useMemo(
     () => [
       {
         name: 'password',
         label: 'Mật khẩu',
-        component: (field) => (
-          <InputPassword placeholder='Mật khẩu' observeInput={observeInputPassword} field={{ ...field }} />
-        ),
+        component: (field) => <InputPassword placeholder='Mật khẩu' field={{ ...field }} />,
       },
       {
         name: 'confirmPassword',
         label: 'Nhập lại mật khẩu',
-        component: (field) => (
-          <InputPassword placeholder='Nhập lại mật khẩu' observeInput={observeInputPassword} field={{ ...field }} />
-        ),
+        component: (field) => <InputPassword placeholder='Nhập lại mật khẩu' field={{ ...field }} />,
       },
     ],
-    [observeInputPassword],
+    [],
   );
 
   return resetPasswordFields.map(({ name, label, component }) => (

@@ -4,14 +4,10 @@ import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
 import InputPassword from '~components/common/InputPassword';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~components/ui/form';
 import { Input } from '~components/ui/input';
-import { ObserveInput } from '~hooks/useTeddyAnimation';
 import { RegisterFormType } from '~pages/Register/Register';
 
 interface FormItemsProps {
   form: UseFormReturn<RegisterFormType>;
-  observeInputText: ObserveInput;
-  observeInputEmail: ObserveInput;
-  observeInputPassword: ObserveInput;
 }
 
 type RegisterObjectType = {
@@ -20,57 +16,33 @@ type RegisterObjectType = {
   component: (field: ControllerRenderProps<RegisterFormType, keyof RegisterFormType>) => JSX.Element;
 };
 
-const FormItems = memo(({ form, observeInputText, observeInputEmail, observeInputPassword }: FormItemsProps) => {
+const FormItems = memo(({ form }: FormItemsProps) => {
   const registerFields: RegisterObjectType[] = useMemo(
     () => [
       {
-        name: 'fullname',
+        name: 'fullName',
         label: 'Họ và tên',
-        component: (field) => (
-          <Input
-            type='text'
-            placeholder='Nguyen Van A'
-            className='h-10 bg-white'
-            observeInput={observeInputText}
-            {...field}
-          />
-        ),
+        component: (field) => <Input type='text' placeholder='Nguyen Van A' className='h-10 bg-white' {...field} />,
       },
       {
         name: 'email',
         label: 'Tài khoản',
         component: (field) => (
-          <Input
-            type='email'
-            placeholder='customer@example.com'
-            className='h-10 bg-white'
-            observeInput={observeInputEmail}
-            {...field}
-          />
+          <Input type='email' placeholder='customer@example.com' className='h-10 bg-white' {...field} />
         ),
       },
       {
         name: 'phone',
         label: 'Số điện thoại',
-        component: (field) => (
-          <Input
-            type='tel'
-            placeholder='Số điện thoại'
-            className='h-10 bg-white'
-            observeInput={observeInputText}
-            {...field}
-          />
-        ),
+        component: (field) => <Input type='tel' placeholder='Số điện thoại' className='h-10 bg-white' {...field} />,
       },
       {
         name: 'password',
         label: 'Mật khẩu',
-        component: (field) => (
-          <InputPassword placeholder='Mật khẩu' observeInput={observeInputPassword} field={{ ...field }} />
-        ),
+        component: (field) => <InputPassword placeholder='Mật khẩu' field={{ ...field }} />,
       },
     ],
-    [observeInputEmail, observeInputPassword, observeInputText],
+    [],
   );
 
   return registerFields.map(({ name, label, component }) => (
