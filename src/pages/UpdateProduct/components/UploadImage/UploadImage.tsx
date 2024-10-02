@@ -3,8 +3,8 @@ import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
 
 import FileUploader from '~components/common/Upload/FileUploader';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~components/ui/form';
-import { useCreateProductStore } from '~pages/CreateProduct/store/createProduct.store';
 import { CreateProductFormType } from '~pages/CreateProduct/store/useCreateProductForm';
+import { useUpdateProductStore } from '~pages/UpdateProduct/store/updateProduct.store';
 import { UploadedFile } from '~types/product.type';
 
 // export interface UploadedFile extends File {
@@ -19,7 +19,7 @@ interface UploadImageProps {
 }
 
 const UploadImage: React.FC<UploadImageProps> = ({ form }) => {
-  const { images, onUploadImage, handleRemoveImages } = useCreateProductStore();
+  const { images, onUploadImage, handleRemoveImages } = useUpdateProductStore();
 
   const handleUpload = (files: UploadedFile[], field: ControllerRenderProps<CreateProductFormType, 'images'>) => {
     onUploadImage(files, field);

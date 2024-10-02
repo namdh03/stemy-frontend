@@ -49,7 +49,7 @@ export default function Sidebar({ className, isCollapsed, setIsCollapsed }: Side
           <div className={`flex items-center ${!isCollapsed ? 'gap-2' : ''}`}>
             <img src={icons.logo} alt='' className='w-10 h-10' />
             <div className={`flex flex-col justify-end truncate ${isCollapsed ? 'invisible w-0' : 'visible w-auto'}`}>
-              <span className='font-medium'>Stemy</span>
+              <span className='font-jaro text-xl'>Stemy</span>
               <span className='text-xs'></span>
             </div>
           </div>

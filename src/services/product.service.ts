@@ -57,6 +57,11 @@ export const GetProductByIdQuery = graphql(`
         id
         name
       }
+      lab {
+        id
+        price
+        url
+      }
     }
   }
 `);

@@ -8,17 +8,19 @@ export const updateProductSchema = z.object({
   price: z.number().min(0),
   description: z.string().min(1),
   categories: z.array(z.string().min(1)),
-  labDocument: z.instanceof(File).refine(
-    (file) => {
-      console.log('🚀 ~ file:', file);
-      return file.type == 'application/pdf';
-    },
-    {
-      message: 'Lab document must be a PDF file',
-    },
-  ),
+  labDocument: z
+    .instanceof(File)
+    .refine(
+      (file) => {
+        return file.type == 'application/pdf';
+      },
+      {
+        message: 'Lab document must be a PDF file',
+      },
+    )
+    .nullable(),
   images: z.array(z.instanceof(UploadedFile)),
-  labPrice: z.number().min(0),
+  labPrice: z.number().min(0).nullable(),
 });
 
 export type UpdateProductFormType = z.infer<typeof updateProductSchema>;

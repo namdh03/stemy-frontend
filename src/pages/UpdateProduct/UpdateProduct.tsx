@@ -1,25 +1,24 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { toast } from 'sonner';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import Spinner from '~components/common/Spinner';
 import { Button } from '~components/ui/button';
 import { Form } from '~components/ui/form';
-import { useCreateProduct } from '~hooks/useCreateProduct';
 import useDocumentTitle from '~hooks/useDocumentTitle';
 import { useGetProductById } from '~hooks/useGetProductById';
 import { LayoutBody } from '~layouts/AdminLayout/components/Layout';
-import CategoriesField from '~pages/CreateProduct/components/CategoriesField';
-import InputDescription from '~pages/CreateProduct/components/InputDescription';
-import InputLabPrice from '~pages/CreateProduct/components/InputLabPrice';
-import InputName from '~pages/CreateProduct/components/InputName';
-import InputPrice from '~pages/CreateProduct/components/InputPrice';
-import UploadImage from '~pages/CreateProduct/components/UploadImage';
-import UploadLab from '~pages/CreateProduct/components/UploadLab';
+import { convertUrlsToFiles, convertUrlToFile } from '~utils/convertURLtoFile';
 
+import CategoriesField from './components/CategoriesField';
+import InputDescription from './components/InputDescription';
+import InputLabPrice from './components/InputLabPrice';
+import InputName from './components/InputName';
+import InputPrice from './components/InputPrice';
+import UploadImage from './components/UploadImage';
+import UploadLab from './components/UploadLab';
 import { useUpdateProductStore } from './store/updateProduct.store';
 import { UpdateProductFormType, updateProductSchema } from './store/useUpdateProductForm';
 
@@ -27,21 +26,33 @@ const UpdateProduct = () => {
   useDocumentTitle('Stemy | Update Product');
 
   const { productId } = useParams();
-  const { formData, isLoading, setImages, setFormData } = useUpdateProductStore();
-  const { mutate: handleCreateProduct } = useCreateProduct();
+  const { formData, isLoading, setImages, setFormData, setLabDocument } = useUpdateProductStore();
   const { data: product } = useGetProductById(productId ? parseInt(productId) : null);
 
   useEffect(() => {
+    const fetchData = async () => {
+      if (product) {
+        const imageFiles = await convertUrlsToFiles(product?.images?.map((image) => image.url) ?? []);
+        const labDocument: File | null = product?.lab ? await convertUrlToFile(product?.lab?.url) : null;
+        console.log('🚀 ~ fetchData ~ labDocument:', labDocument);
+        setFormData({
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          categories: product.categories.map((category) => category.id.toString()),
+          images: imageFiles,
+          labPrice: product.lab?.price,
+          labDocument: labDocument,
+        });
+        setImages(imageFiles);
+        setLabDocument(labDocument);
+      }
+    };
+
     if (product) {
-      setFormData({
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        categories: product.categories.map((category) => category.id.toString()),
-        // images: product.images.map((image) => image.url),
-      });
+      fetchData();
     }
-  }, [product, productId, setFormData]);
+  }, [product, productId, setFormData, setImages, setLabDocument]);
 
   // Initialize react-hook-form with Zod resolver and types from schema
   const form = useForm<UpdateProductFormType>({
@@ -54,26 +65,7 @@ const UpdateProduct = () => {
   }, [form, formData]);
 
   const onSubmit = (data: UpdateProductFormType) => {
-    handleCreateProduct(
-      {
-        input: {
-          name: data.name,
-          description: data.description,
-          categoryIds: data.categories.map((category) => parseInt(category)),
-          price: data.price,
-          labPrice: data.labPrice,
-        },
-        images: data.images,
-        labDocument: data.labDocument,
-      },
-      {
-        onSuccess: () => {
-          toast.success('Product created successfully');
-          setImages([]);
-          form.reset();
-        },
-      },
-    );
+    console.log('🚀 ~ file:', data);
   };
 
   return (

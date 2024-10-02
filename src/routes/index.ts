@@ -90,6 +90,12 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: configs.routes.ticketList,
+            lazy: async () => ({
+              Component: (await import('~pages/TicketList')).default,
+            }),
+          },
+          {
             path: configs.routes.moderatorSettings,
             lazy: async () => ({
               Component: (await import('~pages/ModSettings')).default,
