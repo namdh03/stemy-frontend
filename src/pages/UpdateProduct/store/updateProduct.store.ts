@@ -17,7 +17,7 @@ export type UpdateProductActions = {
   resetForm: () => void;
   setFormStatus: (status: 'idle' | 'submitting' | 'submitted') => void;
   setFormData: (data: Partial<UpdateProductFormType>) => void;
-  setLabDocument: (file: File) => void;
+  setLabDocument: (file: File | null) => void;
   onUploadLabDocument: (file: File, field: ControllerRenderProps<UpdateProductFormType, 'labDocument'>) => void;
   onUploadImage: (files: UploadedFile[], field: ControllerRenderProps<UpdateProductFormType, 'images'>) => void;
   handleRemoveImages: (images: string) => void;
@@ -30,7 +30,7 @@ const initialState: UpdateProductState = {
   formData: {
     categories: [],
     images: [],
-    labDocument: undefined,
+    labDocument: null,
     description: '',
     name: '',
     price: 0,

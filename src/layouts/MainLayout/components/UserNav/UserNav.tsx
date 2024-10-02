@@ -39,10 +39,6 @@ const UserNav = () => {
           <Link to={configs.routes.userProfile}>
             <DropdownMenuItem className='cursor-pointer'>Tài Khoản Của Tôi</DropdownMenuItem>
           </Link>
-
-          <Link to={configs.routes.userPurchase}>
-            <DropdownMenuItem className='cursor-pointer'>Đơn Mua</DropdownMenuItem>
-          </Link>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />

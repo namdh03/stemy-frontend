@@ -6,7 +6,6 @@ import classify from './classify.svg';
 import cuisine from './cuisine.svg';
 import diet from './diet.svg';
 import level from './level.svg';
-import logo from './logo.svg';
 import maps from './maps.svg';
 import occasion from './occasion.svg';
 import orderFail from './order-fail.svg';
@@ -26,7 +25,7 @@ const icons = {
   diet,
   level,
   time,
-  logo,
+  logo: '/logo.png',
   maps,
   occasion,
   orderFail,

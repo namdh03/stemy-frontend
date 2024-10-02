@@ -64,4 +64,18 @@ export const managerSideLinks: SideLink[] = [
       },
     ],
   },
+  {
+    title: 'Ticket Management',
+    label: '',
+    href: '',
+    icon: <VscAccount size={18} />,
+    sub: [
+      {
+        title: 'Ticket List',
+        label: '',
+        href: configs.routes.ticketList,
+        icon: <></>,
+      },
+    ],
+  },
 ];
