@@ -46,6 +46,7 @@ scalar DateTimeISO
 type Feedback {
   createdAt: DateTimeISO!
   id: ID!
+  images: [FeedbackImage!]
   note: String!
   orderItem: OrderItem!
   product: Product!
@@ -54,14 +55,21 @@ type Feedback {
   user: User!
 }
 
+type FeedbackImage {
+  createdAt: DateTimeISO!
+  id: ID!
+  updatedAt: DateTimeISO
+  url: String!
+}
+
 """File upload scalar type"""
 scalar File
 
 type Mutation {
   addToCart(hasLab: Boolean!, productId: Float!, quantity: Float!): Cart!
   checkoutOrder(input: CheckoutOrderInput!): Boolean!
-  createFeedback(note: String!, orderItemId: Int!, rating: Float!): Feedback!
-  createOrder(address: String!, cartIds: [Int!]!, paymentProvider: PaymentProvider!, phone: String!): String!
+  createFeedback(images: [File!], note: String!, orderItemId: Int!, rating: Float!): Feedback!
+  createOrder(address: String!, cartIds: [Int!]!, fullName: String!, paymentProvider: PaymentProvider!, phone: String!): String!
   createProduct(images: [File!]!, input: ProductInput!, lab: File!): Product!
   createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Ticket!
   deleteCarts(cartId: [Int!]!): String!
@@ -74,12 +82,15 @@ type Mutation {
   replyTicket(comment: String!, images: [File!]! = [], ticketId: Float!): Ticket!
   resetPassword(password: String!, token: String!): String!
   sendResetPasswordOTP(email: String!): String!
+  updateAvatar(image: File!): User!
   updateCart(cartId: Float!, quantity: Float!): Cart!
+  updateUser(email: String, fullName: String, phone: String): User!
 }
 
 type Order {
   address: String!
   createdAt: DateTimeISO!
+  fullName: String!
   id: ID!
   orderItems: [OrderItem!]!
   payment: OrderPaymentEmbeddable!
@@ -111,13 +122,6 @@ enum OrderStatus {
   DELIVERING
   PAID
   UNPAID
-}
-
-type PageInfo {
-  currentItem: Int!
-  currentPage: Int!
-  totalItem: Int!
-  totalPage: Int!
 }
 
 enum PaymentProvider {
@@ -174,7 +178,7 @@ type ProductLab {
 
 type ProductsWithPaginationResponse {
   items: [Product!]!
-  pageInfo: PageInfo!
+  pageInfo: e!
 }
 
 type Query {
@@ -183,7 +187,7 @@ type Query {
   me: User!
   product(id: Float!): Product!
   productCategories: [ProductCategory!]!
-  products(categoryIds: [Int!]! = [], currentItem: Int! = 9, currentPage: Int! = 1, maxPrice: Int! = 10000000, maxRating: Int! = 5, minPrice: Int! = 0, minRating: Int! = 0, order: SortOrder! = ASC, search: String! = "", sort: String! = "id"): ProductsWithPaginationResponse!
+  products(categoryIds: [Int!] = [], currentItem: Int! = 9, currentPage: Int! = 1, maxPrice: Int = 10000000, maxRating: Int = 5, minPrice: Int = 0, minRating: Int = 0, order: SortOrder! = ASC, search: String! = "", sort: String! = "id"): ProductsWithPaginationResponse!
   searchOrder(search: String!): [Order!]!
   tickets(currentItem: Int! = 9, currentPage: Int! = 1, order: SortOrder! = ASC, sort: String! = "id"): TicketsWithPaginationResponse!
   user(id: Int!): User
@@ -242,11 +246,12 @@ enum TicketStatus {
 
 type TicketsWithPaginationResponse {
   items: [Ticket!]!
-  pageInfo: PageInfo!
+  pageInfo: e!
 }
 
 type User {
   address: String
+  avatar: String
   createdAt: DateTimeISO!
   email: String!
   fullName: String!
@@ -260,4 +265,11 @@ type User {
 enum UserStatus {
   ACTIVE
   BAN
+}
+
+type e {
+  currentItem: Int!
+  currentPage: Int!
+  totalItem: Int!
+  totalPage: Int!
 }

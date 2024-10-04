@@ -6,6 +6,7 @@ export const GetProductCategories = graphql(`
       id
       name
       title
+      type
     }
   }
 `);

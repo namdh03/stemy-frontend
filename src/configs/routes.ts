@@ -12,6 +12,7 @@ const routes = {
   updateProduct: '/manager/update-product/:productId',
   categoryList: '/manager/category-list',
   ticketList: '/manager/ticket-list',
+  ticketDashboard: '/manager/ticket-dashboard',
   moderatorSettings: '/manager/settings',
   login: '/login',
   loginGoogle: '/login/google',
