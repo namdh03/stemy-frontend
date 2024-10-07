@@ -47,7 +47,10 @@ export default function DataTableViewOptions<TData>({ table, className }: DataTa
                 key={column.id}
                 className='capitalize cursor-pointer'
                 checked={column.getIsVisible()}
-                onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                onCheckedChange={(value) => {
+                  console.log('column', column);
+                  column.toggleVisibility(!!value);
+                }}
               >
                 {column.columnDef.meta?.title ?? column.id}
               </DropdownMenuCheckboxItem>

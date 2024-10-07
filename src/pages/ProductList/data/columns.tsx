@@ -42,6 +42,7 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'price',
+    enableHiding: true,
     header: ({ column }) => <DataTableColumnHeader column={column} title='Price' />,
     cell: ({ row }) => {
       const price = row.original.price;

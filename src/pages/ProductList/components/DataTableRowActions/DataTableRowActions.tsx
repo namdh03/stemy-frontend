@@ -56,7 +56,7 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<Product>) {
 
   const handleCloseModal = () => setOpen((prev) => ({ ...prev, modal: false }));
 
-  const handleDeleteRecipe = () => {
+  const handleDeleteProduct = () => {
     const productId = parseInt(row.original.id);
     deleteProductMutate(productId, {
       onSuccess: () => {
@@ -71,7 +71,7 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<Product>) {
 
   return (
     <>
-      <Modal open={open.modal} onOpen={handleOpenModalChange} onClose={handleCloseModal} />
+      <Modal row={row} open={open.modal} onOpen={handleOpenModalChange} onClose={handleCloseModal} />
       <AlertDialog open={open.alert} onOpenChange={handleOpenDialogChange}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -82,7 +82,7 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<Product>) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteRecipe}>Tiếp tục</AlertDialogCancel>
+            <AlertDialogCancel onClick={handleDeleteProduct}>Tiếp tục</AlertDialogCancel>
             <AlertDialogAction>Hủy</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

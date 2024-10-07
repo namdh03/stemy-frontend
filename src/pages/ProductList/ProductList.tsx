@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { ColumnFiltersState, PaginationState, SortingState, Table } from '@tanstack/react-table';
+import { ColumnFiltersState, PaginationState, SortingState, Table, VisibilityState } from '@tanstack/react-table';
 
 import DataTable from '~components/common/DataTable';
 import { Product } from '~graphql/graphql';
@@ -35,31 +35,43 @@ function ProductList() {
     pagination,
   });
 
-  const handleRenderToolbar = useCallback((table: Table<Product>) => <DataTableToolbar table={table} />, []);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    price: true,
+    description: true,
+    categories: true,
+  });
+
+  const handleRenderToolbar = useCallback((table: Table<Product>) => {
+    return <DataTableToolbar table={table} />;
+  }, []);
 
   return (
-    <LayoutBody className='flex flex-col' fixedHeight>
-      <div className='mb-2 flex items-center justify-between space-y-2'>
-        <div>
-          <h2 className='text-2xl font-bold tracking-tight'>Product List</h2>
-          <p className='text-muted-foreground'>These are all products created</p>
+    data && (
+      <LayoutBody className='flex flex-col' fixedHeight>
+        <div className='mb-2 flex items-center justify-between space-y-2'>
+          <div>
+            <h2 className='text-2xl font-bold tracking-tight'>Product List</h2>
+            <p className='text-muted-foreground'>These are all products created</p>
+          </div>
         </div>
-      </div>
-      <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
-        <DataTable
-          isTableDataLoading={isLoading}
-          paginatedTableData={data}
-          columns={columns}
-          pagination={pagination}
-          setPagination={setPagination}
-          sorting={sorting}
-          setSorting={setSorting}
-          columnFilters={columnFilters}
-          setColumnFilters={setColumnFilters}
-          toolbar={handleRenderToolbar}
-        />
-      </div>
-    </LayoutBody>
+        <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
+          <DataTable
+            isTableDataLoading={isLoading}
+            paginatedTableData={data}
+            columns={columns}
+            pagination={pagination}
+            setPagination={setPagination}
+            sorting={sorting}
+            setSorting={setSorting}
+            columnFilters={columnFilters}
+            columnVisibility={columnVisibility}
+            setColumnVisibility={setColumnVisibility}
+            setColumnFilters={setColumnFilters}
+            toolbar={handleRenderToolbar}
+          />
+        </div>
+      </LayoutBody>
+    )
   );
 }
 

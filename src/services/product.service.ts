@@ -49,6 +49,8 @@ export const GetProductByIdQuery = graphql(`
       name
       price
       description
+      rating
+      sold
       images {
         id
         url
