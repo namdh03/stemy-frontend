@@ -1,11 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table';
 
 import DataTableColumnHeader from '~components/common/DataTableColumnHeader';
-import { Avatar, AvatarFallback, AvatarImage } from '~components/ui/avatar';
 import { Badge } from '~components/ui/badge';
 import { Ticket } from '~graphql/graphql';
 
 import DataTableRowActions from '../components/DataTableRowActions';
+import { formatDate } from '~utils/date.util';
 
 export const columns: ColumnDef<Ticket>[] = [
   {
@@ -27,10 +27,6 @@ export const columns: ColumnDef<Ticket>[] = [
 
       return (
         <article className='flex items-center gap-3'>
-          <Avatar className='w-8 h-8'>
-            <AvatarImage src='https://dummyimage.com/32x32' />
-            <AvatarFallback>{title}</AvatarFallback>
-          </Avatar>
           <span className='text-sm font-normal leading-5'>{title}</span>
         </article>
       );
@@ -44,7 +40,7 @@ export const columns: ColumnDef<Ticket>[] = [
     accessorKey: 'orderId',
     header: ({ column }) => <DataTableColumnHeader column={column} title='Order ID' />,
     cell: ({ row }) => {
-      const orderId = row.original.order.id;
+      const orderId = row.original.orderItem.order.id;
 
       return (
         <article className='flex items-center gap-2'>
@@ -75,6 +71,58 @@ export const columns: ColumnDef<Ticket>[] = [
     },
   },
   {
+    accessorKey: 'category',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Category' />,
+    cell: ({ row }) => {
+      const category = row.original.category?.name;
+
+      return (
+        <article className='flex items-center gap-2'>
+          <Badge variant='secondary'>{category}</Badge>
+        </article>
+      );
+    },
+  },
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Created At' />,
+    cell: ({ row }) => {
+      const createdAt = row.original.createdAt;
+
+      return (
+        <article className='flex items-center gap-2'>
+          <span className='text-sm font-normal leading-5'>{formatDate(createdAt)}</span>
+        </article>
+      );
+    },
+  },
+  {
+    accessorKey: 'sender',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Sender' />,
+    cell: ({ row }) => {
+      const sender = row.original.sender?.fullName;
+
+      return (
+        <article className='flex items-center gap-2'>
+          <span className='text-sm font-normal leading-5'>{sender}</span>
+        </article>
+      );
+    },
+  },
+  {
+    accessorKey: 'closedAt',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Closed At' />,
+    cell: ({ row }) => {
+      const closedAt = row.original.closedAt;
+
+      return (
+        <article className='flex items-center gap-2'>
+          <span className='text-sm font-normal leading-5'>{formatDate(closedAt)}</span>
+        </article>
+      );
+    },
+  },
+  {
     accessorKey: 'replier',
     header: ({ column }) => <DataTableColumnHeader column={column} title='Replier' />,
     cell: ({ row }) => {
@@ -86,18 +134,14 @@ export const columns: ColumnDef<Ticket>[] = [
       title: 'Replier',
     },
   },
-  // {
-  //   accessorKey: 'totalFeedbacks',
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title='Tổng số gói nguyên liệu' />,
-  //   cell: ({ row }) => {
-  //     const total = row.original.totalFeedbacks;
-  //     return <span className='text-sm font-normal leading-5 block ml-16'>{total || 0} gói</span>;
-  //   },
-  //   meta: {
-  //     title: 'Tổng số feedback',
-  //   },
-  //   enableSorting: false,
-  // },
+  {
+    accessorKey: 'rating',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Rating' />,
+    cell: ({ row }) => {
+      const rating = row.original.rating;
+      return <span className='text-sm font-normal leading-5'>{rating}</span>;
+    },
+  },
   {
     id: 'actions',
     cell: ({ row }) => <DataTableRowActions row={row} />,

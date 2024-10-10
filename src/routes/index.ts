@@ -90,9 +90,21 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: configs.routes.categoryList,
+            lazy: async () => ({
+              Component: (await import('~pages/CategoryList')).default,
+            }),
+          },
+          {
             path: configs.routes.ticketList,
             lazy: async () => ({
               Component: (await import('~pages/TicketList')).default,
+            }),
+          },
+          {
+            path: configs.routes.ticketDashboard,
+            lazy: async () => ({
+              Component: (await import('~pages/TicketDashboard')).default,
             }),
           },
           {

@@ -38,6 +38,22 @@ input CheckoutOrderInput {
   vnp_TxnRef: String!
 }
 
+type CountOrderResponse {
+  delivered: Float!
+  delivering: Float!
+  paid: Float!
+  rated: Float!
+  received: Float!
+  unpaid: Float!
+}
+
+input CreateFeedbackInput {
+  images: [File!]
+  note: String
+  orderItemId: Int!
+  rating: Float!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
 """
@@ -46,12 +62,20 @@ scalar DateTimeISO
 type Feedback {
   createdAt: DateTimeISO!
   id: ID!
-  note: String!
+  images: [FeedbackImage!]
+  note: String
   orderItem: OrderItem!
   product: Product!
   rating: Float!
   updatedAt: DateTimeISO
   user: User!
+}
+
+type FeedbackImage {
+  createdAt: DateTimeISO!
+  id: ID!
+  updatedAt: DateTimeISO
+  url: String!
 }
 
 """File upload scalar type"""
@@ -60,30 +84,38 @@ scalar File
 type Mutation {
   addToCart(hasLab: Boolean!, productId: Float!, quantity: Float!): Cart!
   checkoutOrder(input: CheckoutOrderInput!): Boolean!
-  createFeedback(note: String!, orderItemId: Int!, rating: Float!): Feedback!
-  createOrder(address: String!, cartIds: [Int!]!, paymentProvider: PaymentProvider!, phone: String!): String!
+  createFeedback(input: [CreateFeedbackInput!]!, orderId: Float!): Boolean!
+  createOrder(address: String!, cartIds: [Int!]!, fullName: String!, paymentProvider: PaymentProvider!, phone: String!): String!
   createProduct(images: [File!]!, input: ProductInput!, lab: File!): Product!
-  createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Ticket!
+  createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Boolean!
   deleteCarts(cartId: [Int!]!): String!
   deleteProduct(id: Float!): Product!
   getTokenResetPassword(OTPCode: String!, email: String!): String!
   login(email: String!, password: String!): AccessTokenResponse!
   loginWithGoogle(code: String!): AccessTokenResponse!
+  ratingTicket(rating: Float!, ticketId: Float!): Ticket!
+  reOrder(orderId: Float!): [Cart!]!
+  receiveOrder(orderId: Float!): Order!
   register(email: String!, fullName: String!, password: String!, phone: String!): AccessTokenResponse!
   repayOrder(orderId: Float!): String!
   replyTicket(comment: String!, images: [File!]! = [], ticketId: Float!): Ticket!
   resetPassword(password: String!, token: String!): String!
   sendResetPasswordOTP(email: String!): String!
+  updateAvatar(image: File!): User!
   updateCart(cartId: Float!, quantity: Float!): Cart!
+  updateUser(address: String, email: String, fullName: String, phone: String): User!
 }
 
 type Order {
   address: String!
   createdAt: DateTimeISO!
+  fullName: String!
   id: ID!
   orderItems: [OrderItem!]!
   payment: OrderPaymentEmbeddable!
   phone: String!
+  receiveTime: DateTimeISO
+  shipTime: DateTimeISO
   status: OrderStatus!
   totalPrice: Int!
   updatedAt: DateTimeISO
@@ -98,26 +130,25 @@ type OrderItem {
   product: Product!
   productPrice: Int!
   quantity: Int!
+  tickets: [Ticket!]!
   updatedAt: DateTimeISO
+  userLab: UserLab
 }
 
 type OrderPaymentEmbeddable {
-  id: String!
+  id: String
   provider: PaymentProvider!
+  time: DateTimeISO
 }
 
 enum OrderStatus {
   DELIVERED
   DELIVERING
   PAID
+  RATED
+  RECEIVED
   UNPAID
-}
-
-type PageInfo {
-  currentItem: Int!
-  currentPage: Int!
-  totalItem: Int!
-  totalPage: Int!
+  UNRATED
 }
 
 enum PaymentProvider {
@@ -174,19 +205,24 @@ type ProductLab {
 
 type ProductsWithPaginationResponse {
   items: [Product!]!
-  pageInfo: PageInfo!
+  pageInfo: e!
 }
 
 type Query {
   carts: [Cart!]!
   countCart: Float!
+  countOrder: CountOrderResponse!
   me: User!
+  myTickets: [Ticket!]!
   product(id: Float!): Product!
   productCategories: [ProductCategory!]!
-  products(categoryIds: [Int!]! = [], currentItem: Int! = 9, currentPage: Int! = 1, maxPrice: Int! = 10000000, maxRating: Int! = 5, minPrice: Int! = 0, minRating: Int! = 0, order: SortOrder! = ASC, search: String! = "", sort: String! = "id"): ProductsWithPaginationResponse!
-  searchOrder(search: String!): [Order!]!
+  productCategory(id: Float!): ProductCategory
+  products(categoryIds: [Int!] = [], currentItem: Int! = 9, currentPage: Int! = 1, maxPrice: Int = 10000000, maxRating: Int = 5, minPrice: Int = 0, minRating: Int = 0, order: SortOrder! = ASC, search: String! = "", sort: String! = "id"): ProductsWithPaginationResponse!
+  searchOrder(search: String!, status: OrderStatus): [Order!]!
+  ticket(ticketId: Float!): Ticket!
   tickets(currentItem: Int! = 9, currentPage: Int! = 1, order: SortOrder! = ASC, sort: String! = "id"): TicketsWithPaginationResponse!
   user(id: Int!): User
+  userLabs: [UserLab!]!
   users: [User!]!
 }
 
@@ -209,6 +245,7 @@ type Ticket {
   id: ID!
   images: [TicketImage!]!
   orderItem: OrderItem!
+  rating: Float
   replier: User
   replierComment: String
   sender: User!
@@ -242,22 +279,42 @@ enum TicketStatus {
 
 type TicketsWithPaginationResponse {
   items: [Ticket!]!
-  pageInfo: PageInfo!
+  pageInfo: e!
 }
 
 type User {
   address: String
+  avatar: String
   createdAt: DateTimeISO!
   email: String!
   fullName: String!
   id: ID!
+  numberOfOpenTicket: Float!
   phone: String
+  rating: Float!
   role: Role!
   status: UserStatus!
   updatedAt: DateTimeISO
 }
 
+type UserLab {
+  createdAt: DateTimeISO!
+  id: ID!
+  isActive: Boolean!
+  orderItem: OrderItem!
+  productLab: ProductLab!
+  updatedAt: DateTimeISO
+  user: User!
+}
+
 enum UserStatus {
   ACTIVE
   BAN
+}
+
+type e {
+  currentItem: Int!
+  currentPage: Int!
+  totalItem: Int!
+  totalPage: Int!
 }

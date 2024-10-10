@@ -1,3 +1,4 @@
+import { ChartBarStackedIcon, TicketIcon } from 'lucide-react';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { VscAccount } from 'react-icons/vsc';
 
@@ -65,15 +66,35 @@ export const managerSideLinks: SideLink[] = [
     ],
   },
   {
+    title: 'Category Management',
+    label: '',
+    href: '',
+    icon: <ChartBarStackedIcon size={18} />,
+    sub: [
+      {
+        title: 'Category List',
+        label: '',
+        href: configs.routes.categoryList,
+        icon: <></>,
+      },
+    ],
+  },
+  {
     title: 'Ticket Management',
     label: '',
     href: '',
-    icon: <VscAccount size={18} />,
+    icon: <TicketIcon size={18} />,
     sub: [
       {
         title: 'Ticket List',
         label: '',
         href: configs.routes.ticketList,
+        icon: <></>,
+      },
+      {
+        title: 'Ticket Dashboard',
+        label: '',
+        href: configs.routes.ticketDashboard,
         icon: <></>,
       },
     ],
