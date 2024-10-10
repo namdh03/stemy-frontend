@@ -11,7 +11,6 @@ const routes = {
   createProduct: '/manager/create-product',
   updateProduct: '/manager/update-product/:productId',
   categoryList: '/manager/category-list',
-  createCategory: '/manager/create-category',
   ticketList: '/manager/ticket-list',
   ticketDashboard: '/manager/ticket-dashboard',
   moderatorSettings: '/manager/settings',

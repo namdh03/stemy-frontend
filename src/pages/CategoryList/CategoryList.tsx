@@ -3,7 +3,7 @@ import { ProductCategory } from '~graphql/graphql';
 import { LayoutBody } from '~layouts/AdminLayout/components/Layout';
 import DataTableToolbar from './components/DataTableToolbar';
 import useDocumentTitle from '~hooks/useDocumentTitle';
-import { ColumnFiltersState, SortingState, Table } from '@tanstack/react-table';
+import { ColumnFiltersState, SortingState, Table, VisibilityState } from '@tanstack/react-table';
 import useDebounce from '~hooks/useDebounce';
 import DataTable from '~components/common/DataTable';
 import { columns } from './data/columns';
@@ -19,7 +19,11 @@ const CategoryList = () => {
   // column filters state of the table
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const debouncedColumnFilters: ColumnFiltersState = useDebounce(columnFilters, DEFAULT_DEBOUNCE_TIME);
-
+  
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    title: true,
+    name: true
+  });
   const { data, isLoading } = useProductCategories();
 
   useEffect(() => {
@@ -48,6 +52,8 @@ const CategoryList = () => {
           columnFilters={columnFilters}
           setColumnFilters={setColumnFilters}
           toolbar={handleRenderToolbar}
+          columnVisibility={columnVisibility}
+          setColumnVisibility={setColumnVisibility}
         />
       </div>
     </LayoutBody>

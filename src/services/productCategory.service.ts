@@ -10,3 +10,14 @@ export const GetProductCategories = graphql(`
     }
   }
 `);
+
+export const GetProductCategoryById = graphql(`
+  query GetProductCategoryById($categoryId: Float!) {
+    productCategory(id: $categoryId) {
+      id
+      name
+      title
+      type
+    }
+  }
+`);

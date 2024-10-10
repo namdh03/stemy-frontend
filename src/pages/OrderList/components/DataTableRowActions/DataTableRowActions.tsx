@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
 import { IoEyeOutline } from 'react-icons/io5';
 import { RiDeleteBinLine } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Row } from '@tanstack/react-table';
@@ -24,52 +26,52 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '~components/ui/dropdown-menu';
-import { ProductCategory } from '~graphql/graphql';
+import configs from '~configs';
+import { Product } from '~graphql/graphql';
+import { useDeleteProduct } from '~hooks/useDeleteProduct';
 import Button from '~layouts/AdminLayout/components/Button';
+import isAxiosError from '~utils/isAxiosError';
 
-import CreateCategoryModal from '../CreateCategoryModal';
-import UpdateCategoryModal from '../UpdateCategoryModal';
+import Modal from '../Modal';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
 
-function DataTableRowActions({ row }: DataTableRowActionsProps<ProductCategory>) {
+function DataTableRowActions({ row }: DataTableRowActionsProps<Product>) {
   // const queryClient = useQueryClient();
-  const productCategoryId = parseInt(row.original.id);
+  const navigate = useNavigate();
   const [open, setOpen] = useState({
     alert: false,
-    createCategoryModal: false,
-    updateCategoryModal: false,
+    modal: false,
   });
+  const { mutate: deleteProductMutate } = useDeleteProduct();
   const handleOpenDialog = () => setOpen((prev) => ({ ...prev, alert: true }));
+
+  const handleOpenModal = () => setOpen((prev) => ({ ...prev, modal: true }));
+
   const handleOpenDialogChange = (value: boolean) => setOpen((prev) => ({ ...prev, alert: value }));
 
-  const handleOpenCreateCategoryModal = () => setOpen((prev) => ({ ...prev, createCategoryModal: true }));
-  const handleOpenCreateCategoryModalChange = (value: boolean) =>
-    setOpen((prev) => ({ ...prev, createCategoryModal: value }));
-  const handleCloseCreateCategoryModal = () => setOpen((prev) => ({ ...prev, createCategoryModal: false }));
+  const handleOpenModalChange = (value: boolean) => setOpen((prev) => ({ ...prev, modal: value }));
 
-  const handleOpenUpdateCategoryModal = () => setOpen((prev) => ({ ...prev, updateCategoryModal: true }));
-  const handleOpenUpdateCategoryModalChange = (value: boolean) =>
-    setOpen((prev) => ({ ...prev, updateCategroyModal: value }));
-  const handleCloseUpdateCategoryModal = () => setOpen((prev) => ({ ...prev, updateCategroyModal: false }));
+  const handleCloseModal = () => setOpen((prev) => ({ ...prev, modal: false }));
 
-  const handleDeleteCategory = () => {};
+  const handleDeleteProduct = () => {
+    const productId = parseInt(row.original.id);
+    deleteProductMutate(productId, {
+      onSuccess: () => {
+        toast.success('Delete product successfully');
+      },
+      onError: (error) => {
+        if (isAxiosError<Error>(error)) toast.error('something went wrong');
+        else toast.error('something went wrong');
+      },
+    });
+  };
 
   return (
     <>
-      <CreateCategoryModal
-        open={open.createCategoryModal}
-        onOpen={handleOpenCreateCategoryModalChange}
-        onClose={handleCloseCreateCategoryModal}
-      />
-      <UpdateCategoryModal
-        open={open.updateCategoryModal}
-        onOpen={handleOpenUpdateCategoryModalChange}
-        onClose={handleCloseUpdateCategoryModal}
-        productCategoryId={productCategoryId}
-      />
+      <Modal row={row} open={open.modal} onOpen={handleOpenModalChange} onClose={handleCloseModal} />
       <AlertDialog open={open.alert} onOpenChange={handleOpenDialogChange}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -80,7 +82,7 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<ProductCategory>)
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteCategory}>Tiếp tục</AlertDialogCancel>
+            <AlertDialogCancel onClick={handleDeleteProduct}>Tiếp tục</AlertDialogCancel>
             <AlertDialogAction>Hủy</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -94,14 +96,19 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<ProductCategory>)
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end' className='w-[160px]'>
-          <DropdownMenuItem className='cursor-pointer' onClick={handleOpenCreateCategoryModal}>
+          <DropdownMenuItem className='cursor-pointer' onClick={handleOpenModal}>
             <DropdownMenuShortcut className='ml-0 mr-2'>
               <IoEyeOutline size={16} />
             </DropdownMenuShortcut>
-            Create
+            View Detail
           </DropdownMenuItem>
 
-          <DropdownMenuItem className='cursor-pointer' onClick={handleOpenUpdateCategoryModal}>
+          <DropdownMenuItem
+            className='cursor-pointer'
+            onClick={() => {
+              navigate(configs.routes.updateProduct.replace(':productId', row.original.id));
+            }}
+          >
             <DropdownMenuShortcut className='ml-0 mr-2'>
               <FiEdit3 size={16} />
             </DropdownMenuShortcut>

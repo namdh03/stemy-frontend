@@ -57,22 +57,6 @@ export const columns: ColumnDef<ProductCategory>[] = [
     },
   },
   {
-    accessorKey: 'type',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Type' />,
-    cell: ({ row }) => {
-      const type = row.original.type;
-
-      return (
-        <article className='flex items-center gap-2'>
-          <span className='text-sm font-normal leading-5'>{type}</span>
-        </article>
-      );
-    },
-    meta: {
-      title: 'Type',
-    },
-  },
-  {
     id: 'actions',
     cell: ({ row }) => <DataTableRowActions row={row} />, enableSorting: false, enableHiding: false,
   },

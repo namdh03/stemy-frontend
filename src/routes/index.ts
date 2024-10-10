@@ -96,12 +96,6 @@ const router = createBrowserRouter([
             }),
           },
           {
-            path: configs.routes.createCategory,
-            lazy: async () => ({
-              Component: (await import('~pages/CreateCategory')).default,
-            }),
-          },
-          {
             path: configs.routes.ticketList,
             lazy: async () => ({
               Component: (await import('~pages/TicketList')).default,

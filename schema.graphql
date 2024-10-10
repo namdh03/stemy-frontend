@@ -38,6 +38,15 @@ input CheckoutOrderInput {
   vnp_TxnRef: String!
 }
 
+type CountOrderResponse {
+  delivered: Float!
+  delivering: Float!
+  paid: Float!
+  rated: Float!
+  received: Float!
+  unpaid: Float!
+}
+
 input CreateFeedbackInput {
   images: [File!]
   note: String
@@ -78,12 +87,15 @@ type Mutation {
   createFeedback(input: [CreateFeedbackInput!]!, orderId: Float!): Boolean!
   createOrder(address: String!, cartIds: [Int!]!, fullName: String!, paymentProvider: PaymentProvider!, phone: String!): String!
   createProduct(images: [File!]!, input: ProductInput!, lab: File!): Product!
-  createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Ticket!
+  createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Boolean!
   deleteCarts(cartId: [Int!]!): String!
   deleteProduct(id: Float!): Product!
   getTokenResetPassword(OTPCode: String!, email: String!): String!
   login(email: String!, password: String!): AccessTokenResponse!
   loginWithGoogle(code: String!): AccessTokenResponse!
+  ratingTicket(rating: Float!, ticketId: Float!): Ticket!
+  reOrder(orderId: Float!): [Cart!]!
+  receiveOrder(orderId: Float!): Order!
   register(email: String!, fullName: String!, password: String!, phone: String!): AccessTokenResponse!
   repayOrder(orderId: Float!): String!
   replyTicket(comment: String!, images: [File!]! = [], ticketId: Float!): Ticket!
@@ -99,10 +111,10 @@ type Order {
   createdAt: DateTimeISO!
   fullName: String!
   id: ID!
-  isAllowRating: Boolean!
   orderItems: [OrderItem!]!
   payment: OrderPaymentEmbeddable!
   phone: String!
+  receiveTime: DateTimeISO
   shipTime: DateTimeISO
   status: OrderStatus!
   totalPrice: Int!
@@ -118,7 +130,9 @@ type OrderItem {
   product: Product!
   productPrice: Int!
   quantity: Int!
+  tickets: [Ticket!]!
   updatedAt: DateTimeISO
+  userLab: UserLab
 }
 
 type OrderPaymentEmbeddable {
@@ -132,7 +146,9 @@ enum OrderStatus {
   DELIVERING
   PAID
   RATED
+  RECEIVED
   UNPAID
+  UNRATED
 }
 
 enum PaymentProvider {
@@ -195,13 +211,18 @@ type ProductsWithPaginationResponse {
 type Query {
   carts: [Cart!]!
   countCart: Float!
+  countOrder: CountOrderResponse!
   me: User!
+  myTickets: [Ticket!]!
   product(id: Float!): Product!
   productCategories: [ProductCategory!]!
+  productCategory(id: Float!): ProductCategory
   products(categoryIds: [Int!] = [], currentItem: Int! = 9, currentPage: Int! = 1, maxPrice: Int = 10000000, maxRating: Int = 5, minPrice: Int = 0, minRating: Int = 0, order: SortOrder! = ASC, search: String! = "", sort: String! = "id"): ProductsWithPaginationResponse!
   searchOrder(search: String!, status: OrderStatus): [Order!]!
+  ticket(ticketId: Float!): Ticket!
   tickets(currentItem: Int! = 9, currentPage: Int! = 1, order: SortOrder! = ASC, sort: String! = "id"): TicketsWithPaginationResponse!
   user(id: Int!): User
+  userLabs: [UserLab!]!
   users: [User!]!
 }
 
@@ -224,6 +245,7 @@ type Ticket {
   id: ID!
   images: [TicketImage!]!
   orderItem: OrderItem!
+  rating: Float
   replier: User
   replierComment: String
   sender: User!
@@ -267,10 +289,22 @@ type User {
   email: String!
   fullName: String!
   id: ID!
+  numberOfOpenTicket: Float!
   phone: String
+  rating: Float!
   role: Role!
   status: UserStatus!
   updatedAt: DateTimeISO
+}
+
+type UserLab {
+  createdAt: DateTimeISO!
+  id: ID!
+  isActive: Boolean!
+  orderItem: OrderItem!
+  productLab: ProductLab!
+  updatedAt: DateTimeISO
+  user: User!
 }
 
 enum UserStatus {

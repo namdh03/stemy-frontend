@@ -77,12 +77,6 @@ export const managerSideLinks: SideLink[] = [
         href: configs.routes.categoryList,
         icon: <></>,
       },
-      {
-        title: 'Create Category',
-        label: '',
-        href: configs.routes.createCategory,
-        icon: <></>,
-      },
     ],
   },
   {

@@ -57,6 +57,16 @@ export type CheckoutOrderInput = {
   vnp_TxnRef: Scalars['String']['input'];
 };
 
+export type CountOrderResponse = {
+  __typename?: 'CountOrderResponse';
+  delivered: Scalars['Float']['output'];
+  delivering: Scalars['Float']['output'];
+  paid: Scalars['Float']['output'];
+  rated: Scalars['Float']['output'];
+  received: Scalars['Float']['output'];
+  unpaid: Scalars['Float']['output'];
+};
+
 export type CreateFeedbackInput = {
   images?: InputMaybe<Array<Scalars['File']['input']>>;
   note?: InputMaybe<Scalars['String']['input']>;
@@ -92,12 +102,15 @@ export type Mutation = {
   createFeedback: Scalars['Boolean']['output'];
   createOrder: Scalars['String']['output'];
   createProduct: Product;
-  createTicket: Ticket;
+  createTicket: Scalars['Boolean']['output'];
   deleteCarts: Scalars['String']['output'];
   deleteProduct: Product;
   getTokenResetPassword: Scalars['String']['output'];
   login: AccessTokenResponse;
   loginWithGoogle: AccessTokenResponse;
+  ratingTicket: Ticket;
+  reOrder: Array<Cart>;
+  receiveOrder: Order;
   register: AccessTokenResponse;
   repayOrder: Scalars['String']['output'];
   replyTicket: Ticket;
@@ -179,6 +192,22 @@ export type MutationLoginWithGoogleArgs = {
 };
 
 
+export type MutationRatingTicketArgs = {
+  rating: Scalars['Float']['input'];
+  ticketId: Scalars['Float']['input'];
+};
+
+
+export type MutationReOrderArgs = {
+  orderId: Scalars['Float']['input'];
+};
+
+
+export type MutationReceiveOrderArgs = {
+  orderId: Scalars['Float']['input'];
+};
+
+
 export type MutationRegisterArgs = {
   email: Scalars['String']['input'];
   fullName: Scalars['String']['input'];
@@ -234,10 +263,10 @@ export type Order = {
   createdAt: Scalars['DateTimeISO']['output'];
   fullName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  isAllowRating: Scalars['Boolean']['output'];
   orderItems: Array<OrderItem>;
   payment: OrderPaymentEmbeddable;
   phone: Scalars['String']['output'];
+  receiveTime?: Maybe<Scalars['DateTimeISO']['output']>;
   shipTime?: Maybe<Scalars['DateTimeISO']['output']>;
   status: OrderStatus;
   totalPrice: Scalars['Int']['output'];
@@ -254,7 +283,9 @@ export type OrderItem = {
   product: Product;
   productPrice: Scalars['Int']['output'];
   quantity: Scalars['Int']['output'];
+  tickets: Array<Ticket>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  userLab?: Maybe<UserLab>;
 };
 
 export type OrderPaymentEmbeddable = {
@@ -269,7 +300,9 @@ export enum OrderStatus {
   Delivering = 'DELIVERING',
   Paid = 'PAID',
   Rated = 'RATED',
-  Unpaid = 'UNPAID'
+  Received = 'RECEIVED',
+  Unpaid = 'UNPAID',
+  Unrated = 'UNRATED'
 }
 
 export enum PaymentProvider {
@@ -338,18 +371,28 @@ export type Query = {
   __typename?: 'Query';
   carts: Array<Cart>;
   countCart: Scalars['Float']['output'];
+  countOrder: CountOrderResponse;
   me: User;
+  myTickets: Array<Ticket>;
   product: Product;
   productCategories: Array<ProductCategory>;
+  productCategory?: Maybe<ProductCategory>;
   products: ProductsWithPaginationResponse;
   searchOrder: Array<Order>;
+  ticket: Ticket;
   tickets: TicketsWithPaginationResponse;
   user?: Maybe<User>;
+  userLabs: Array<UserLab>;
   users: Array<User>;
 };
 
 
 export type QueryProductArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
+export type QueryProductCategoryArgs = {
   id: Scalars['Float']['input'];
 };
 
@@ -371,6 +414,11 @@ export type QueryProductsArgs = {
 export type QuerySearchOrderArgs = {
   search: Scalars['String']['input'];
   status?: InputMaybe<OrderStatus>;
+};
+
+
+export type QueryTicketArgs = {
+  ticketId: Scalars['Float']['input'];
 };
 
 
@@ -406,6 +454,7 @@ export type Ticket = {
   id: Scalars['ID']['output'];
   images: Array<TicketImage>;
   orderItem: OrderItem;
+  rating?: Maybe<Scalars['Float']['output']>;
   replier?: Maybe<User>;
   replierComment?: Maybe<Scalars['String']['output']>;
   sender: User;
@@ -453,10 +502,23 @@ export type User = {
   email: Scalars['String']['output'];
   fullName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  numberOfOpenTicket: Scalars['Float']['output'];
   phone?: Maybe<Scalars['String']['output']>;
+  rating: Scalars['Float']['output'];
   role: Role;
   status: UserStatus;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type UserLab = {
+  __typename?: 'UserLab';
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['ID']['output'];
+  isActive: Scalars['Boolean']['output'];
+  orderItem: OrderItem;
+  productLab: ProductLab;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  user: User;
 };
 
 export enum UserStatus {
@@ -510,6 +572,13 @@ export type GetProductCategoriesQueryQueryVariables = Exact<{ [key: string]: nev
 
 export type GetProductCategoriesQueryQuery = { __typename?: 'Query', productCategories: Array<{ __typename?: 'ProductCategory', id: string, name: string, title: string, type: CategoryType }> };
 
+export type GetProductCategoryByIdQueryVariables = Exact<{
+  categoryId: Scalars['Float']['input'];
+}>;
+
+
+export type GetProductCategoryByIdQuery = { __typename?: 'Query', productCategory?: { __typename?: 'ProductCategory', id: string, name: string, title: string, type: CategoryType } | null };
+
 export type GetTicketsQueryVariables = Exact<{
   currentPage: Scalars['Int']['input'];
   currentItem: Scalars['Int']['input'];
@@ -518,7 +587,14 @@ export type GetTicketsQueryVariables = Exact<{
 }>;
 
 
-export type GetTicketsQuery = { __typename?: 'Query', tickets: { __typename?: 'TicketsWithPaginationResponse', items: Array<{ __typename?: 'Ticket', id: string, replierComment?: string | null, senderComment: string, status: TicketStatus, title: string, orderItem: { __typename?: 'OrderItem', id: string }, category: { __typename?: 'TicketCategory', name: string, id: string } }>, pageInfo: { __typename?: 'e', totalItem: number, totalPage: number, currentItem: number, currentPage: number } } };
+export type GetTicketsQuery = { __typename?: 'Query', tickets: { __typename?: 'TicketsWithPaginationResponse', items: Array<{ __typename?: 'Ticket', id: string, status: TicketStatus, createdAt: any, closedAt?: any | null, title: string, rating?: number | null, orderItem: { __typename?: 'OrderItem', order: { __typename?: 'Order', id: string } }, sender: { __typename?: 'User', email: string, fullName: string }, replier?: { __typename?: 'User', email: string, fullName: string } | null, category: { __typename?: 'TicketCategory', name: string } }>, pageInfo: { __typename?: 'e', totalItem: number, totalPage: number, currentItem: number, currentPage: number } } };
+
+export type GetTicketByidQueryVariables = Exact<{
+  ticketId: Scalars['Float']['input'];
+}>;
+
+
+export type GetTicketByidQuery = { __typename?: 'Query', ticket: { __typename?: 'Ticket', id: string, replierComment?: string | null, senderComment: string, status: TicketStatus, updatedAt?: any | null, title: string, createdAt: any, closedAt?: any | null, rating?: number | null, orderItem: { __typename?: 'OrderItem', product: { __typename?: 'Product', name: string }, order: { __typename?: 'Order', id: string } }, sender: { __typename?: 'User', fullName: string, email: string }, category: { __typename?: 'TicketCategory', id: string, name: string }, replier?: { __typename?: 'User', fullName: string, email: string } | null, images: Array<{ __typename?: 'TicketImage', id: string, url: string }> } };
 
 export type LoginMutationMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -635,6 +711,16 @@ export const GetProductCategoriesQueryDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<GetProductCategoriesQueryQuery, GetProductCategoriesQueryQueryVariables>;
+export const GetProductCategoryByIdDocument = new TypedDocumentString(`
+    query GetProductCategoryById($categoryId: Float!) {
+  productCategory(id: $categoryId) {
+    id
+    name
+    title
+    type
+  }
+}
+    `) as unknown as TypedDocumentString<GetProductCategoryByIdQuery, GetProductCategoryByIdQueryVariables>;
 export const GetTicketsDocument = new TypedDocumentString(`
     query GetTickets($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {
   tickets(
@@ -645,17 +731,27 @@ export const GetTicketsDocument = new TypedDocumentString(`
   ) {
     items {
       id
-      replierComment
-      senderComment
       status
       orderItem {
-        id
+        order {
+          id
+        }
       }
-      category {
-        name
-        id
+      createdAt
+      closedAt
+      sender {
+        email
+        fullName
+      }
+      replier {
+        email
+        fullName
       }
       title
+      category {
+        name
+      }
+      rating
     }
     pageInfo {
       totalItem
@@ -666,6 +762,45 @@ export const GetTicketsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<GetTicketsQuery, GetTicketsQueryVariables>;
+export const GetTicketByidDocument = new TypedDocumentString(`
+    query GetTicketByid($ticketId: Float!) {
+  ticket(ticketId: $ticketId) {
+    id
+    replierComment
+    senderComment
+    status
+    orderItem {
+      product {
+        name
+      }
+      order {
+        id
+      }
+    }
+    sender {
+      fullName
+      email
+    }
+    category {
+      id
+      name
+    }
+    updatedAt
+    title
+    createdAt
+    closedAt
+    rating
+    replier {
+      fullName
+      email
+    }
+    images {
+      id
+      url
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetTicketByidQuery, GetTicketByidQueryVariables>;
 export const LoginMutationDocument = new TypedDocumentString(`
     mutation LoginMutation($email: String!, $password: String!) {
   login(email: $email, password: $password) {
