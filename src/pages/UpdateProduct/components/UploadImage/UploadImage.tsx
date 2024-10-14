@@ -3,8 +3,8 @@ import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
 
 import FileUploader from '~components/common/Upload/FileUploader';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '~components/ui/form';
-import { CreateProductFormType } from '~pages/CreateProduct/store/useCreateProductForm';
 import { useUpdateProductStore } from '~pages/UpdateProduct/store/updateProduct.store';
+import { UpdateProductFormType } from '~pages/UpdateProduct/store/useUpdateProductForm';
 import { UploadedFile } from '~types/product.type';
 
 // export interface UploadedFile extends File {
@@ -15,13 +15,13 @@ const MAX_FILES = 4;
 const MAX_SIZE = 4 * 1024 * 1024;
 
 interface UploadImageProps {
-  form: UseFormReturn<CreateProductFormType>;
+  form: UseFormReturn<UpdateProductFormType>;
 }
 
 const UploadImage: React.FC<UploadImageProps> = ({ form }) => {
   const { images, onUploadImage, handleRemoveImages } = useUpdateProductStore();
 
-  const handleUpload = (files: UploadedFile[], field: ControllerRenderProps<CreateProductFormType, 'images'>) => {
+  const handleUpload = (files: UploadedFile[], field: ControllerRenderProps<UpdateProductFormType, 'images'>) => {
     onUploadImage(files, field);
   };
 

@@ -58,7 +58,6 @@ const UploadLab: React.FC<UploadLabProps> = ({ form }) => {
             <FormControl>
               <Input
                 placeholder='Upload lab document'
-                required
                 type='file'
                 name={field.name}
                 ref={field.ref}

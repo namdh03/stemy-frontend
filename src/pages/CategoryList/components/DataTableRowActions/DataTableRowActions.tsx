@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { FiEdit3 } from 'react-icons/fi';
-import { IoEyeOutline } from 'react-icons/io5';
 import { RiDeleteBinLine } from 'react-icons/ri';
+import { toast } from 'sonner';
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Row } from '@tanstack/react-table';
@@ -25,9 +24,9 @@ import {
   DropdownMenuTrigger,
 } from '~components/ui/dropdown-menu';
 import { ProductCategory } from '~graphql/graphql';
+import { useDeleteProductCategoryById } from '~hooks/useDeleteProductCategoryById';
 import Button from '~layouts/AdminLayout/components/Button';
 
-import CreateCategoryModal from '../CreateCategoryModal';
 import UpdateCategoryModal from '../UpdateCategoryModal';
 
 interface DataTableRowActionsProps<TData> {
@@ -39,49 +38,44 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<ProductCategory>)
   const productCategoryId = parseInt(row.original.id);
   const [open, setOpen] = useState({
     alert: false,
-    createCategoryModal: false,
-    updateCategoryModal: false,
   });
+
+  const { mutate: deleteProductCategory } = useDeleteProductCategoryById();
+
   const handleOpenDialog = () => setOpen((prev) => ({ ...prev, alert: true }));
   const handleOpenDialogChange = (value: boolean) => setOpen((prev) => ({ ...prev, alert: value }));
 
-  const handleOpenCreateCategoryModal = () => setOpen((prev) => ({ ...prev, createCategoryModal: true }));
-  const handleOpenCreateCategoryModalChange = (value: boolean) =>
-    setOpen((prev) => ({ ...prev, createCategoryModal: value }));
-  const handleCloseCreateCategoryModal = () => setOpen((prev) => ({ ...prev, createCategoryModal: false }));
-
-  const handleOpenUpdateCategoryModal = () => setOpen((prev) => ({ ...prev, updateCategoryModal: true }));
-  const handleOpenUpdateCategoryModalChange = (value: boolean) =>
-    setOpen((prev) => ({ ...prev, updateCategroyModal: value }));
-  const handleCloseUpdateCategoryModal = () => setOpen((prev) => ({ ...prev, updateCategroyModal: false }));
-
-  const handleDeleteCategory = () => {};
+  const handleDeleteCategory = () => {
+    deleteProductCategory(
+      {
+        id: productCategoryId,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Category deleted successfully');
+          handleOpenDialogChange(false);
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      },
+    );
+  };
 
   return (
     <>
-      <CreateCategoryModal
-        open={open.createCategoryModal}
-        onOpen={handleOpenCreateCategoryModalChange}
-        onClose={handleCloseCreateCategoryModal}
-      />
-      <UpdateCategoryModal
-        open={open.updateCategoryModal}
-        onOpen={handleOpenUpdateCategoryModalChange}
-        onClose={handleCloseUpdateCategoryModal}
-        productCategoryId={productCategoryId}
-      />
       <AlertDialog open={open.alert} onOpenChange={handleOpenDialogChange}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Bạn có chắc chắn không?</AlertDialogTitle>
+            <AlertDialogTitle>Are you sure to delete this category?</AlertDialogTitle>
             <AlertDialogDescription>
-              Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn{' '}
-              <strong className='text-primary'>công thức</strong> của bạn và xóa dữ liệu của bạn khỏi máy chủ.
+              This action cannot be undone. This will permanently delete the{' '}
+              <strong className='text-primary'>category</strong> and remove your data from the server.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleDeleteCategory}>Tiếp tục</AlertDialogCancel>
-            <AlertDialogAction>Hủy</AlertDialogAction>
+            <AlertDialogAction>Cancel</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -94,18 +88,12 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<ProductCategory>)
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end' className='w-[160px]'>
-          <DropdownMenuItem className='cursor-pointer' onClick={handleOpenCreateCategoryModal}>
-            <DropdownMenuShortcut className='ml-0 mr-2'>
-              <IoEyeOutline size={16} />
-            </DropdownMenuShortcut>
-            Create
-          </DropdownMenuItem>
-
-          <DropdownMenuItem className='cursor-pointer' onClick={handleOpenUpdateCategoryModal}>
-            <DropdownMenuShortcut className='ml-0 mr-2'>
+          <DropdownMenuItem className='cursor-pointer'>
+            {/* <DropdownMenuShortcut className='ml-0 mr-2'>
               <FiEdit3 size={16} />
             </DropdownMenuShortcut>
-            Edit
+            Edit */}
+            <UpdateCategoryModal productCategoryId={productCategoryId} />
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />

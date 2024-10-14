@@ -12,7 +12,7 @@ export const updateProductSchema = z.object({
     .instanceof(File)
     .refine(
       (file) => {
-        return file.type == 'application/pdf';
+        return file.type == 'application/pdf' || file.type == 'application/octet-stream';
       },
       {
         message: 'Lab document must be a PDF file',

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { ColumnFiltersState, PaginationState, SortingState, Table } from '@tanstack/react-table';
+import { ColumnFiltersState, PaginationState, SortingState, Table, VisibilityState } from '@tanstack/react-table';
 
 import DataTable from '~components/common/DataTable';
 import { Ticket } from '~graphql/graphql';
@@ -17,7 +17,12 @@ function TicketList() {
   useDocumentTitle('Stemy | Ticket List');
 
   // sorting state of the table
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    {
+      id: 'createdAt',
+      desc: true,
+    },
+  ]);
 
   // column filters state of the table
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -33,6 +38,17 @@ function TicketList() {
     sorting,
     columnFilters: debouncedColumnFilters,
     pagination,
+  });
+
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    orderId: true,
+    status: true,
+    category: true,
+    createdAt: true,
+    sender: true,
+    closedAt: true,
+    replier: true,
+    rating: true,
   });
 
   const handleRenderToolbar = useCallback((table: Table<Ticket>) => <DataTableToolbar table={table} />, []);
@@ -55,6 +71,8 @@ function TicketList() {
           sorting={sorting}
           setSorting={setSorting}
           columnFilters={columnFilters}
+          columnVisibility={columnVisibility}
+          setColumnVisibility={setColumnVisibility}
           setColumnFilters={setColumnFilters}
           toolbar={handleRenderToolbar}
         />

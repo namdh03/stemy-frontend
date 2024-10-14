@@ -75,3 +75,18 @@ export const DeleteProductMutation = graphql(`
     }
   }
 `);
+
+export const UpdateProductMutation = graphql(`
+  mutation UpdateProduct($id: Float!, $input: ProductInput!, $images: [File!]!, $lab: File) {
+    updateProduct(id: $id, input: $input, images: $images, lab: $lab) {
+      id
+      name
+      price
+      description
+      categories {
+        id
+        name
+      }
+    }
+  }
+`);

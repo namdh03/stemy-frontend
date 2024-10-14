@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -9,6 +10,7 @@ import { Button } from '~components/ui/button';
 import { Form } from '~components/ui/form';
 import useDocumentTitle from '~hooks/useDocumentTitle';
 import { useGetProductById } from '~hooks/useGetProductById';
+import { useUpdateProduct } from '~hooks/useUpdateProduct';
 import { LayoutBody } from '~layouts/AdminLayout/components/Layout';
 import { convertUrlsToFiles, convertUrlToFile } from '~utils/convertURLtoFile';
 
@@ -28,25 +30,23 @@ const UpdateProduct = () => {
   const { productId } = useParams();
   const { formData, isLoading, setImages, setFormData, setLabDocument } = useUpdateProductStore();
   const { data: product } = useGetProductById(productId ? parseInt(productId) : null);
+  const { mutate: updateProduct } = useUpdateProduct();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (product) {
-        const imageFiles = await convertUrlsToFiles(product?.images?.map((image) => image.url) ?? []);
-        const labDocument: File | null = product?.lab ? await convertUrlToFile(product?.lab?.url) : null;
-        console.log('🚀 ~ fetchData ~ labDocument:', labDocument);
-        setFormData({
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          categories: product.categories.map((category) => category.id.toString()),
-          images: imageFiles,
-          labPrice: product.lab?.price,
-          labDocument: labDocument,
-        });
-        setImages(imageFiles);
-        setLabDocument(labDocument);
-      }
+      const imageFiles = await convertUrlsToFiles(product?.images?.map((image) => image.url) ?? []);
+      const labDocument: File | null = product?.lab ? await convertUrlToFile(product?.lab?.url) : null;
+      setFormData({
+        name: product!.name,
+        description: product!.description,
+        price: product!.price,
+        categories: product!.categories.map((category) => category.id.toString()),
+        images: imageFiles,
+        labPrice: product!.lab?.price,
+        labDocument: labDocument,
+      });
+      setImages(imageFiles);
+      setLabDocument(labDocument);
     };
 
     if (product) {
@@ -65,7 +65,31 @@ const UpdateProduct = () => {
   }, [form, formData]);
 
   const onSubmit = (data: UpdateProductFormType) => {
-    console.log('🚀 ~ file:', data);
+    console.log('🚀 ~ update file:', data);
+    if (!productId) return;
+
+    updateProduct(
+      {
+        id: parseInt(productId),
+        input: {
+          name: data.name,
+          description: data.description,
+          categoryIds: data.categories.map((category) => parseInt(category)),
+          price: data.price,
+          labPrice: data.labPrice ?? 0,
+        },
+        images: data.images,
+        labDocument: data.labDocument,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Product updated successfully');
+        },
+        onError: () => {
+          toast.error('Failed to update product');
+        },
+      },
+    );
   };
 
   return (
