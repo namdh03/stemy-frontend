@@ -28,7 +28,7 @@ const UpdateProduct = () => {
   useDocumentTitle('Stemy | Update Product');
 
   const { productId } = useParams();
-  const { formData, isLoading, setImages, setFormData, setLabDocument } = useUpdateProductStore();
+  const { formData, isLoading, setImages, setFormData, setLabDocument, labChanged, setLabChanged } = useUpdateProductStore();
   const { data: product } = useGetProductById(productId ? parseInt(productId) : null);
   const { mutate: updateProduct } = useUpdateProduct();
 
@@ -80,10 +80,12 @@ const UpdateProduct = () => {
         },
         images: data.images,
         labDocument: data.labDocument,
+        labChanged: labChanged,
       },
       {
         onSuccess: () => {
           toast.success('Product updated successfully');
+          setLabChanged(false);
         },
         onError: () => {
           toast.error('Failed to update product');

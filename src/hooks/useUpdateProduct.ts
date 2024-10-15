@@ -15,12 +15,13 @@ interface UseUpdateProductParams {
   };
   images: File[];
   labDocument: File | null;
+  labChanged: boolean;
 }
 
 export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, input, images, labDocument }: UseUpdateProductParams) => {
+    mutationFn: async ({ id, input, images, labDocument, labChanged }: UseUpdateProductParams) => {
       const formData = new FormData();
       formData.append(
         'operations',
@@ -30,7 +31,7 @@ export const useUpdateProduct = () => {
             id,
             input,
             images: images.map(() => null),
-            lab: null,
+            lab: labChanged ? labDocument : null,
           },
         }),
       );
@@ -47,7 +48,7 @@ export const useUpdateProduct = () => {
       formData.append('map', JSON.stringify(filesMap));
 
       images.forEach((image, index) => formData.append(`${index}`, image));
-      if (labDocument) {
+      if (labChanged && labDocument) {
         formData.append(images.length.toString(), labDocument);
       }
 

@@ -40,7 +40,7 @@ interface UploadLabProps {
 }
 
 const UploadLab: React.FC<UploadLabProps> = ({ form }) => {
-  const { labDocument, setLabDocument } = useUpdateProductStore();
+  const { labDocument, setLabDocument, setLabChanged } = useUpdateProductStore();
 
   const handleRemoveFile = () => {
     form.setValue('labDocument', null);
@@ -61,7 +61,10 @@ const UploadLab: React.FC<UploadLabProps> = ({ form }) => {
                 type='file'
                 name={field.name}
                 ref={field.ref}
-                onChange={(e) => field.onChange(e.target.files && e.target.files[0])}
+                onChange={(e) => {
+                  field.onChange(e.target.files && e.target.files[0]);
+                  setLabChanged(true);
+                }}
                 onBlur={field.onBlur}
                 accept='application/pdf'
               />
