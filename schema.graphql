@@ -87,9 +87,11 @@ type Mutation {
   createFeedback(input: [CreateFeedbackInput!]!, orderId: Float!): Boolean!
   createOrder(address: String!, cartIds: [Int!]!, fullName: String!, paymentProvider: PaymentProvider!, phone: String!): String!
   createProduct(images: [File!]!, input: ProductInput!, lab: File!): Product!
+  createProductCategory(input: ProductCategoryInput!): ProductCategory!
   createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Boolean!
   deleteCarts(cartId: [Int!]!): String!
   deleteProduct(id: Float!): Product!
+  deleteProductCategory(id: Float!): ProductCategory!
   getTokenResetPassword(OTPCode: String!, email: String!): String!
   login(email: String!, password: String!): AccessTokenResponse!
   loginWithGoogle(code: String!): AccessTokenResponse!
@@ -103,6 +105,8 @@ type Mutation {
   sendResetPasswordOTP(email: String!): String!
   updateAvatar(image: File!): User!
   updateCart(cartId: Float!, quantity: Float!): Cart!
+  updateProduct(id: Float!, images: [File!], input: ProductInput!, lab: File): Product!
+  updateProductCategory(id: Float!, input: ProductCategoryInput!): ProductCategory!
   updateUser(address: String, email: String, fullName: String, phone: String): User!
 }
 
@@ -185,6 +189,12 @@ type ProductCategory {
   updatedAt: DateTimeISO
 }
 
+input ProductCategoryInput {
+  name: String!
+  title: String!
+  type: CategoryType!
+}
+
 type ProductImage {
   createdAt: DateTimeISO!
   id: ID!
@@ -218,7 +228,7 @@ type Query {
   countCart: Float!
   countOrder: CountOrderResponse!
   me: User!
-  myTickets: [Ticket!]!
+  myTickets(status: TicketStatus): [Ticket!]!
   order(id: Float!): Order!
   orders(currentItem: Int! = 9, currentPage: Int! = 1, order: SortOrder! = ASC, sort: String! = "id"): OrdersWithPaginationResponse!
   product(id: Float!): Product!
@@ -231,6 +241,15 @@ type Query {
   user(id: Int!): User
   userLabs: [UserLab!]!
   users: [User!]!
+}
+
+type ReplyTicketImage {
+  createdAt: DateTimeISO!
+  id: ID!
+  owner: Role!
+  ticket: Ticket!
+  updatedAt: DateTimeISO
+  url: String!
 }
 
 enum Role {
@@ -253,8 +272,9 @@ type Ticket {
   images: [TicketImage!]!
   orderItem: OrderItem!
   rating: Float
-  replier: User
+  replier: User!
   replierComment: String
+  replyImages: [ReplyTicketImage!]!
   sender: User!
   senderComment: String!
   status: TicketStatus!

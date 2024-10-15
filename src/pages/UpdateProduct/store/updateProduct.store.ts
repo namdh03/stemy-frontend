@@ -11,6 +11,7 @@ export type UpdateProductState = {
   isLoading: boolean;
   images: UploadedFile[];
   labDocument: File | null;
+  labChanged: boolean;
 };
 
 export type UpdateProductActions = {
@@ -22,6 +23,7 @@ export type UpdateProductActions = {
   onUploadImage: (files: UploadedFile[], field: ControllerRenderProps<UpdateProductFormType, 'images'>) => void;
   handleRemoveImages: (images: string) => void;
   setImages: (images: UploadedFile[]) => void;
+  setLabChanged: (changed: boolean) => void;
 };
 
 export type UpdateProductSlice = UpdateProductState & UpdateProductActions;
@@ -39,6 +41,7 @@ const initialState: UpdateProductState = {
   isLoading: false,
   images: [],
   labDocument: null,
+  labChanged: false,
 };
 
 export const useUpdateProductStore = create<UpdateProductSlice>((set) => ({
@@ -69,4 +72,5 @@ export const useUpdateProductStore = create<UpdateProductSlice>((set) => ({
     field.onChange(file); // Update the form field value
   },
   setImages: (images) => set({ images }),
+  setLabChanged: (changed) => set({ labChanged: changed }),
 }));

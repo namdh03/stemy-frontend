@@ -20,8 +20,12 @@ const documents = {
     "\n  mutation CreateProduct($input: ProductInput!, $images: [File!]!, $lab: File!) {\n    createProduct(input: $input, images: $images, lab: $lab) {\n      id\n      name\n      price\n      description\n      categories {\n        id\n        name\n      }\n    }\n  }\n": types.CreateProductDocument,
     "\n  query GetProductById($id: Float!) {\n    product(id: $id) {\n      id\n      name\n      price\n      description\n      rating\n      sold\n      images {\n        id\n        url\n      }\n      categories {\n        id\n        name\n      }\n      lab {\n        id\n        price\n        url\n      }\n    }\n  }\n": types.GetProductByIdDocument,
     "\n  mutation DeleteProduct($id: Float!) {\n    deleteProduct(id: $id) {\n      id\n    }\n  }\n": types.DeleteProductDocument,
+    "\n  mutation UpdateProduct($id: Float!, $input: ProductInput!, $images: [File!]!, $lab: File) {\n    updateProduct(id: $id, input: $input, images: $images, lab: $lab) {\n      id\n      name\n      price\n      description\n      categories {\n        id\n        name\n      }\n    }\n  }\n": types.UpdateProductDocument,
     "\n  query GetProductCategoriesQuery {\n    productCategories {\n      id\n      name\n      title\n      type\n    }\n  }\n": types.GetProductCategoriesQueryDocument,
     "\n  query GetProductCategoryById($categoryId: Float!) {\n    productCategory(id: $categoryId) {\n      id\n      name\n      title\n      type\n    }\n  }\n": types.GetProductCategoryByIdDocument,
+    "\n  mutation CreateProductCategory($input: ProductCategoryInput!) {\n    createProductCategory(input: $input) {\n      id\n      name\n      title\n      type\n    }\n  }\n": types.CreateProductCategoryDocument,
+    "\n  mutation UpdateProductCategory($id: Float!, $input: ProductCategoryInput!) {\n    updateProductCategory(id: $id, input: $input) {\n      id\n    }\n  }\n": types.UpdateProductCategoryDocument,
+    "\n  mutation DeleteProductCategory($id: Float!) {\n    deleteProductCategory(id: $id) {\n      id\n    }\n  }\n": types.DeleteProductCategoryDocument,
     "\n  query GetTickets($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {\n    tickets(currentItem: $currentItem, currentPage: $currentPage, order: $order, sort: $sort) {\n      items {\n        id\n        status\n        orderItem {\n          order {\n            id\n          }\n        }\n        createdAt\n        closedAt\n        sender {\n          email\n          fullName\n        }\n        replier {\n          email\n          fullName\n        }\n        title\n        category {\n          name\n        }\n        rating\n      }\n      pageInfo {\n        totalItem\n        totalPage\n        currentItem\n        currentPage\n      }\n    }\n  }\n": types.GetTicketsDocument,
     "\n  query GetTicketByid($ticketId: Float!) {\n    ticket(ticketId: $ticketId) {\n      id\n      replierComment\n      senderComment\n      status\n      orderItem {\n        product {\n          name\n        }\n        order {\n          id\n        }\n      }\n      sender {\n        fullName\n        email\n      }\n      category {\n        id\n        name\n      }\n      updatedAt\n      title\n      createdAt\n      closedAt\n      rating\n      replier {\n        fullName\n        email\n      }\n      images {\n        id\n        url\n      }\n    }\n  }\n": types.GetTicketByidDocument,
     "\n  mutation LoginMutation($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      access_token\n    }\n  }\n": types.LoginMutationDocument,
@@ -55,11 +59,27 @@ export function graphql(source: "\n  mutation DeleteProduct($id: Float!) {\n    
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation UpdateProduct($id: Float!, $input: ProductInput!, $images: [File!]!, $lab: File) {\n    updateProduct(id: $id, input: $input, images: $images, lab: $lab) {\n      id\n      name\n      price\n      description\n      categories {\n        id\n        name\n      }\n    }\n  }\n"): typeof import('./graphql').UpdateProductDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query GetProductCategoriesQuery {\n    productCategories {\n      id\n      name\n      title\n      type\n    }\n  }\n"): typeof import('./graphql').GetProductCategoriesQueryDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetProductCategoryById($categoryId: Float!) {\n    productCategory(id: $categoryId) {\n      id\n      name\n      title\n      type\n    }\n  }\n"): typeof import('./graphql').GetProductCategoryByIdDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreateProductCategory($input: ProductCategoryInput!) {\n    createProductCategory(input: $input) {\n      id\n      name\n      title\n      type\n    }\n  }\n"): typeof import('./graphql').CreateProductCategoryDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UpdateProductCategory($id: Float!, $input: ProductCategoryInput!) {\n    updateProductCategory(id: $id, input: $input) {\n      id\n    }\n  }\n"): typeof import('./graphql').UpdateProductCategoryDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeleteProductCategory($id: Float!) {\n    deleteProductCategory(id: $id) {\n      id\n    }\n  }\n"): typeof import('./graphql').DeleteProductCategoryDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
