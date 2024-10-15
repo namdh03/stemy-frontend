@@ -87,9 +87,11 @@ type Mutation {
   createFeedback(input: [CreateFeedbackInput!]!, orderId: Float!): Boolean!
   createOrder(address: String!, cartIds: [Int!]!, fullName: String!, paymentProvider: PaymentProvider!, phone: String!): String!
   createProduct(images: [File!]!, input: ProductInput!, lab: File!): Product!
+  createProductCategory(input: ProductCategoryInput!): ProductCategory!
   createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Boolean!
   deleteCarts(cartId: [Int!]!): String!
   deleteProduct(id: Float!): Product!
+  deleteProductCategory(id: Float!): ProductCategory!
   getTokenResetPassword(OTPCode: String!, email: String!): String!
   login(email: String!, password: String!): AccessTokenResponse!
   loginWithGoogle(code: String!): AccessTokenResponse!
@@ -103,6 +105,8 @@ type Mutation {
   sendResetPasswordOTP(email: String!): String!
   updateAvatar(image: File!): User!
   updateCart(cartId: Float!, quantity: Float!): Cart!
+  updateProduct(id: Float!, images: [File!], input: ProductInput!, lab: File): Product!
+  updateProductCategory(id: Float!, input: ProductCategoryInput!): ProductCategory!
   updateUser(address: String, email: String, fullName: String, phone: String): User!
 }
 
@@ -151,6 +155,13 @@ enum OrderStatus {
   UNRATED
 }
 
+type PageInfo {
+  currentItem: Int!
+  currentPage: Int!
+  totalItem: Int!
+  totalPage: Int!
+}
+
 enum PaymentProvider {
   VNPAY
 }
@@ -180,6 +191,12 @@ type ProductCategory {
   updatedAt: DateTimeISO
 }
 
+input ProductCategoryInput {
+  name: String!
+  title: String!
+  type: CategoryType!
+}
+
 type ProductImage {
   createdAt: DateTimeISO!
   id: ID!
@@ -205,7 +222,7 @@ type ProductLab {
 
 type ProductsWithPaginationResponse {
   items: [Product!]!
-  pageInfo: e!
+  pageInfo: PageInfo!
 }
 
 type Query {
@@ -279,7 +296,7 @@ enum TicketStatus {
 
 type TicketsWithPaginationResponse {
   items: [Ticket!]!
-  pageInfo: e!
+  pageInfo: PageInfo!
 }
 
 type User {
@@ -310,11 +327,4 @@ type UserLab {
 enum UserStatus {
   ACTIVE
   BAN
-}
-
-type e {
-  currentItem: Int!
-  currentPage: Int!
-  totalItem: Int!
-  totalPage: Int!
 }

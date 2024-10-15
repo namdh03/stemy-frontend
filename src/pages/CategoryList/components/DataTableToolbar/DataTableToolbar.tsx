@@ -8,6 +8,8 @@ import { Input } from '~components/ui/input';
 import useProductCategories from '~hooks/useProductCategories';
 import Button from '~layouts/AdminLayout/components/Button';
 
+import CreateCategoryModal from '../CreateCategoryModal';
+
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
 }
@@ -45,12 +47,15 @@ export default function DataTableToolbar<TData>({ table }: DataTableToolbarProps
             onClick={() => table.resetColumnFilters()}
             className='flex items-end gap-1 h-8 px-2 lg:px-3'
           >
-            Xóa bộ lọc
+            Remove filter
             <RxCross2 size={16} className='mb-[1px]' />
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} className='w-60' />
+      <div className='flex flex-row space-x-2'>
+        <CreateCategoryModal />
+        <DataTableViewOptions table={table} className='w-60' />
+      </div>
     </div>
   );
 }

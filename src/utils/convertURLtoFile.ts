@@ -3,7 +3,7 @@ import { UploadedFile } from '~types/product.type';
 const urlToFile = async (url: string, fileName: string): Promise<UploadedFile> => {
   const response = await fetch(url);
   const blob = await response.blob();
-  const file = new UploadedFile([blob], fileName, url);
+  const file = new UploadedFile([blob], fileName, url, { type: blob.type });
   return file;
 };
 export const convertUrlsToFiles = async (urls: string[]): Promise<UploadedFile[]> => {

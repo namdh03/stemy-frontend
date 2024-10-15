@@ -1,23 +1,29 @@
+import { CirclePlusIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Button } from '~components/ui/button';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~components/ui/dialog';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '~components/ui/dialog';
 import { Form } from '~components/ui/form';
+import { useCreateProductCategory } from '~hooks/useCreateProductCategory';
 import { useCategoryListStore } from '~pages/CategoryList/store/categoryList.store';
 import { CreateCategoryFormType, createCategorySchema } from '~pages/CategoryList/store/useCategoryListForm';
 
 import InputName from './InputName';
 import InputTitle from './InputTitle';
-import InputType from './InputType';
+import SelectType from './SelectType';
 
-interface CreateCategoryModalProps {
-  open: boolean;
-  onOpen: (value: boolean) => void;
-  onClose: () => void;
-}
-const CreateCategoryModal = ({ open, onOpen, onClose }: CreateCategoryModalProps) => {
+const CreateCategoryModal = () => {
   const { createCategoryFormData: formData } = useCategoryListStore();
 
   // Initialize react-hook-form with Zod resolver and types from schema
@@ -26,9 +32,31 @@ const CreateCategoryModal = ({ open, onOpen, onClose }: CreateCategoryModalProps
     defaultValues: formData,
   });
 
-  const onSubmit = (data: CreateCategoryFormType) => {};
+  const { mutate: createProductCategory } = useCreateProductCategory();
+
+  const onSubmit = (data: CreateCategoryFormType) => {
+    createProductCategory(
+      {
+        input: data,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Category created successfully');
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      },
+    );
+  };
   return (
-    <Dialog open={open} onOpenChange={onOpen}>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant='outline' className='hidden h-8 lg:flex'>
+          <CirclePlusIcon className='mr-2 h-4 w-4' />
+          New
+        </Button>
+      </DialogTrigger>
       <DialogContent className='max-w-[calc(100%-48px)] max-h-[calc(100%-48px)] overflow-y-scroll'>
         <DialogHeader>
           <DialogTitle className='mb-3'>Create Category</DialogTitle>
@@ -39,7 +67,7 @@ const CreateCategoryModal = ({ open, onOpen, onClose }: CreateCategoryModalProps
               <div className='flex-1 flex-col gap-2'>
                 <h2 className='text-2xl font-bold text-primary'>Category Information</h2>
                 <InputName form={form} />
-                <InputType form={form} />
+                <SelectType form={form} />
               </div>
               <div className='flex-1'>
                 <div className='mb-14'>
@@ -55,7 +83,9 @@ const CreateCategoryModal = ({ open, onOpen, onClose }: CreateCategoryModalProps
         </Form>
 
         <DialogFooter>
-          <Button onClick={onClose}>Close</Button>
+          <DialogClose>
+            <Button>Close</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
