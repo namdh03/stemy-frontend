@@ -3,10 +3,10 @@ import { useCallback, useState } from 'react';
 import { ColumnFiltersState, PaginationState, SortingState, Table, VisibilityState } from '@tanstack/react-table';
 
 import DataTable from '~components/common/DataTable';
-import { Product } from '~graphql/graphql';
+import { Order } from '~graphql/graphql';
 import useDebounce from '~hooks/useDebounce';
 import useDocumentTitle from '~hooks/useDocumentTitle';
-import useGetTableProducts from '~hooks/useGetTableProducts';
+import useGetOrders from '~hooks/useGetOrders';
 import { LayoutBody } from '~layouts/AdminLayout/components/Layout';
 import { DEFAULT_DEBOUNCE_TIME, PAGE, TABLE_LIMIT } from '~utils/constants';
 
@@ -29,7 +29,7 @@ function OrderList() {
     pageSize: TABLE_LIMIT, //default page size
   });
 
-  const { data, isLoading } = useGetTableProducts({
+  const { data, isLoading } = useGetOrders({
     sorting,
     columnFilters: debouncedColumnFilters,
     pagination,
@@ -41,7 +41,7 @@ function OrderList() {
     categories: true,
   });
 
-  const handleRenderToolbar = useCallback((table: Table<Product>) => {
+  const handleRenderToolbar = useCallback((table: Table<Order>) => {
     return <DataTableToolbar table={table} />;
   }, []);
 
@@ -50,8 +50,8 @@ function OrderList() {
       <LayoutBody className='flex flex-col' fixedHeight>
         <div className='mb-2 flex items-center justify-between space-y-2'>
           <div>
-            <h2 className='text-2xl font-bold tracking-tight'>Product List</h2>
-            <p className='text-muted-foreground'>These are all products created</p>
+            <h2 className='text-2xl font-bold tracking-tight'>Order List</h2>
+            <p className='text-muted-foreground'>These are all orders</p>
           </div>
         </div>
         <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>

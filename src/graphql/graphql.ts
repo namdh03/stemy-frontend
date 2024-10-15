@@ -305,6 +305,12 @@ export enum OrderStatus {
   Unrated = 'UNRATED'
 }
 
+export type OrdersWithPaginationResponse = {
+  __typename?: 'OrdersWithPaginationResponse';
+  items: Array<Order>;
+  pageInfo: E;
+};
+
 export enum PaymentProvider {
   Vnpay = 'VNPAY'
 }
@@ -374,6 +380,8 @@ export type Query = {
   countOrder: CountOrderResponse;
   me: User;
   myTickets: Array<Ticket>;
+  order: Order;
+  orders: OrdersWithPaginationResponse;
   product: Product;
   productCategories: Array<ProductCategory>;
   productCategory?: Maybe<ProductCategory>;
@@ -384,6 +392,19 @@ export type Query = {
   user?: Maybe<User>;
   userLabs: Array<UserLab>;
   users: Array<User>;
+};
+
+
+export type QueryOrderArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
+export type QueryOrdersArgs = {
+  currentItem?: Scalars['Int']['input'];
+  currentPage?: Scalars['Int']['input'];
+  order?: SortOrder;
+  sort?: Scalars['String']['input'];
 };
 
 
@@ -534,6 +555,23 @@ export type E = {
   totalPage: Scalars['Int']['output'];
 };
 
+export type GetOrdersQueryVariables = Exact<{
+  currentPage: Scalars['Int']['input'];
+  currentItem: Scalars['Int']['input'];
+  sort: Scalars['String']['input'];
+  order: SortOrder;
+}>;
+
+
+export type GetOrdersQuery = { __typename?: 'Query', orders: { __typename?: 'OrdersWithPaginationResponse', items: Array<{ __typename?: 'Order', id: string, phone: string, receiveTime?: any | null, shipTime?: any | null, status: OrderStatus, totalPrice: number, fullName: string, address: string, createdAt: any, orderItems: Array<{ __typename?: 'OrderItem', id: string, quantity: number, productPrice: number, hasLab: boolean, labPrice: number, product: { __typename?: 'Product', name: string } }>, payment: { __typename?: 'OrderPaymentEmbeddable', time?: any | null, provider: PaymentProvider } }>, pageInfo: { __typename?: 'e', currentItem: number, currentPage: number, totalItem: number, totalPage: number } } };
+
+export type GetOrderByIdQueryVariables = Exact<{
+  id: Scalars['Float']['input'];
+}>;
+
+
+export type GetOrderByIdQuery = { __typename?: 'Query', order: { __typename?: 'Order', id: string, phone: string, receiveTime?: any | null, shipTime?: any | null, status: OrderStatus, totalPrice: number, fullName: string, address: string, createdAt: any, orderItems: Array<{ __typename?: 'OrderItem', id: string, quantity: number, productPrice: number, hasLab: boolean, labPrice: number, product: { __typename?: 'Product', name: string } }>, payment: { __typename?: 'OrderPaymentEmbeddable', time?: any | null, provider: PaymentProvider } } };
+
 export type GetTableProductsQueryVariables = Exact<{
   currentPage: Scalars['Int']['input'];
   currentItem: Scalars['Int']['input'];
@@ -624,6 +662,77 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const GetOrdersDocument = new TypedDocumentString(`
+    query GetOrders($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {
+  orders(
+    currentPage: $currentPage
+    currentItem: $currentItem
+    sort: $sort
+    order: $order
+  ) {
+    items {
+      id
+      phone
+      receiveTime
+      shipTime
+      status
+      totalPrice
+      orderItems {
+        id
+        quantity
+        productPrice
+        hasLab
+        labPrice
+        product {
+          name
+        }
+      }
+      payment {
+        time
+        provider
+      }
+      fullName
+      address
+      createdAt
+    }
+    pageInfo {
+      currentItem
+      currentPage
+      totalItem
+      totalPage
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetOrdersQuery, GetOrdersQueryVariables>;
+export const GetOrderByIdDocument = new TypedDocumentString(`
+    query GetOrderById($id: Float!) {
+  order(id: $id) {
+    id
+    phone
+    receiveTime
+    shipTime
+    status
+    totalPrice
+    orderItems {
+      id
+      quantity
+      productPrice
+      hasLab
+      labPrice
+      product {
+        name
+      }
+    }
+    payment {
+      time
+      provider
+    }
+    fullName
+    address
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<GetOrderByIdQuery, GetOrderByIdQueryVariables>;
 export const GetTableProductsDocument = new TypedDocumentString(`
     query GetTableProducts($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {
   products(

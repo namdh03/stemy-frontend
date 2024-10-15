@@ -13,6 +13,7 @@ const routes = {
   categoryList: '/manager/category-list',
   ticketList: '/manager/ticket-list',
   ticketDashboard: '/manager/ticket-dashboard',
+  orderList: '/manager/order-list',
   moderatorSettings: '/manager/settings',
   login: '/login',
   loginGoogle: '/login/google',

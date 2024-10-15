@@ -1,110 +1,141 @@
-import { useState } from 'react';
-import { Clock, ShoppingCart, Star } from 'lucide-react';
+import { Clock, CreditCard, MapPin, Package, ShoppingBag, Truck, User } from 'lucide-react';
 
-import { Row } from '@tanstack/react-table';
+import { Badge } from '~/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/components/ui/dialog';
+import { ScrollArea } from '~/components/ui/scroll-area';
+import { useGetOrderById } from '~hooks/useGetOrderById';
 
-import { Badge } from '~components/ui/badge';
-import { Button } from '~components/ui/button';
-import { Card, CardContent } from '~components/ui/card';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~components/ui/dialog';
-import { Separator } from '~components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '~components/ui/tabs';
-import { Product } from '~graphql/graphql';
-import { useGetProductById } from '~hooks/useGetProductById';
-
-interface ModalProps {
-  row: Row<Product>;
-  open: boolean;
-  onOpen: (value: boolean) => void;
+export default function OrderDetailModal({
+  orderId,
+  isOpen,
+  onClose,
+}: {
+  orderId: number;
+  isOpen: boolean;
   onClose: () => void;
-}
+}) {
+  const { data: order, isLoading } = useGetOrderById(orderId);
 
-const Modal = ({ row, open, onOpen, onClose }: ModalProps) => {
-  const [currentImage, setCurrentImage] = useState(0);
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
-  const { data: product } = useGetProductById(parseInt(row.original.id));
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'shipped':
+        return 'bg-blue-100 text-blue-800';
+      case 'delivered':
+        return 'bg-green-100 text-green-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
-    product && (
-      <Dialog open={open} onOpenChange={onOpen}>
-        <DialogContent className='max-w-[calc(100%-48px)] max-h-[calc(100%-48px)] overflow-y-scroll'>
-          <DialogHeader>
-            <DialogTitle className='mb-3'>Product Detail</DialogTitle>
-          </DialogHeader>
-          <Tabs defaultValue='details' className='w-full'>
-            <TabsList>
-              <TabsTrigger value='details'>Details</TabsTrigger>
-              <TabsTrigger value='images'>Images</TabsTrigger>
-            </TabsList>
-            <TabsContent value='details'>
-              <Card>
-                <CardContent className='space-y-4 pt-4'>
-                  <div className='flex items-center justify-between'>
-                    <div className='text-3xl font-bold'>${product.price.toLocaleString()}</div>
-                    <div className='flex items-center space-x-2'>
-                      <Star className='w-5 h-5 text-yellow-400 fill-current' />
-                      <span className='font-semibold'>{product.rating.toFixed(1)}</span>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className='sm:max-w-[625px]'>
+        <DialogHeader>
+          <DialogTitle className='text-2xl font-bold'>Order Details</DialogTitle>
+        </DialogHeader>
+        <ScrollArea className='max-h-[80vh] pr-4'>
+          <div className='space-y-6'>
+            <div className='flex justify-between items-center'>
+              <div className='flex items-center space-x-2'>
+                <Package className='h-5 w-5 text-gray-500' />
+                <span className='font-semibold'>Order ID:</span>
+                <span>{order!.id}</span>
+              </div>
+              <Badge className={`${getStatusColor(order!.status)} px-2 py-1 rounded-full text-xs font-semibold`}>
+                {order!.status}
+              </Badge>
+            </div>
+
+            <div className='space-y-2'>
+              <div className='flex items-center space-x-2'>
+                <User className='h-5 w-5 text-gray-500' />
+                <span className='font-semibold'>Customer:</span>
+                <span>{order!.fullName}</span>
+              </div>
+              <div className='flex items-center space-x-2'>
+                <MapPin className='h-5 w-5 text-gray-500' />
+                <span className='font-semibold'>Address:</span>
+                <span>{order!.address}</span>
+              </div>
+              <div className='flex items-center space-x-2'>
+                <ShoppingBag className='h-5 w-5 text-gray-500' />
+                <span className='font-semibold'>Phone:</span>
+                <span>{order!.phone}</span>
+              </div>
+            </div>
+
+            <div className='space-y-2'>
+              <div className='flex items-center space-x-2'>
+                <Clock className='h-5 w-5 text-gray-500' />
+                <span className='font-semibold'>Order Created:</span>
+                <span>{formatDate(order!.createdAt)}</span>
+              </div>
+              <div className='flex items-center space-x-2'>
+                <Truck className='h-5 w-5 text-gray-500' />
+                <span className='font-semibold'>Ship Time:</span>
+                <span>{formatDate(order!.shipTime)}</span>
+              </div>
+              <div className='flex items-center space-x-2'>
+                <Package className='h-5 w-5 text-gray-500' />
+                <span className='font-semibold'>Receive Time:</span>
+                <span>{formatDate(order!.receiveTime)}</span>
+              </div>
+            </div>
+
+            <div>
+              <h3 className='font-semibold mb-2'>Order Items:</h3>
+              <ul className='space-y-2'>
+                {order!.orderItems.map((item) => (
+                  <li key={item.id} className='bg-gray-50 p-2 rounded-md'>
+                    <div className='flex justify-between'>
+                      <span>{item.product.name}</span>
+                      <span>x{item.quantity}</span>
                     </div>
-                  </div>
-
-                  <div className='flex items-center space-x-2 text-sm text-gray-500'>
-                    <ShoppingCart className='w-4 h-4' />
-                    <span>{product.sold} sold</span>
-                    <Separator orientation='vertical' className='h-4' />
-                    <Clock className='w-4 h-4' />
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h3 className='font-semibold mb-2'>Description</h3>
-                    <p className='text-sm text-gray-600'>{product.description}</p>
-                  </div>
-
-                  <Separator />
-                  <div className='flex flex-wrap gap-2'>
-                    {product.categories.map((category, index) => (
-                      <Badge key={index} variant='secondary' className='text-sm py-1 px-2'>
-                        {category.name}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value='images'>
-              <Card>
-                <CardContent className='pt-4'>
-                  <div className='space-y-4'>
-                    <div className='relative aspect-square overflow-hidden rounded-lg'>
-                      <img src={product.images[currentImage]?.url} alt={product.name} />
+                    <div className='flex justify-between text-sm text-gray-500'>
+                      <span>Price: ${item.productPrice.toFixed(2)}</span>
+                      {item.hasLab && <span>Lab Price: ${item.labPrice.toFixed(2)}</span>}
                     </div>
-                    <div className='flex space-x-2 overflow-x-auto pb-2'>
-                      {product.images.map((image, index) => (
-                        <button
-                          key={index}
-                          type='button'
-                          className={`relative w-20 h-20 rounded-md overflow-hidden ${
-                            index === currentImage ? 'ring-2 ring-primary' : ''
-                          }`}
-                          onClick={() => setCurrentImage(index)}
-                        >
-                          <img src={image?.url} alt={`${product.name} ${index + 1}`} />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-          <DialogFooter>
-            <Button onClick={onClose}>Close</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    )
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className='space-y-2'>
+              <div className='flex items-center space-x-2'>
+                <CreditCard className='h-5 w-5 text-gray-500' />
+                <span className='font-semibold'>Payment Provider:</span>
+                <Badge className='px-2 py-1 rounded-full text-xs font-semibold'>{order!.payment.provider}</Badge>
+              </div>
+              <div className='flex items-center space-x-2'>
+                <Clock className='h-5 w-5 text-gray-500' />
+                <span className='font-semibold'>Payment Time:</span>
+                <span>{formatDate(order!.payment.time)}</span>
+              </div>
+            </div>
+
+            <div className='flex items-center justify-between border-t pt-4'>
+              <span className='font-semibold text-lg'>Total Price:</span>
+              <span className='text-lg text-green-600 font-bold'>${order!.totalPrice.toFixed(2)}</span>
+            </div>
+          </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
   );
-};
-
-export default Modal;
+}

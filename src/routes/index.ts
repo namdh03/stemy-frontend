@@ -108,6 +108,12 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: configs.routes.orderList,
+            lazy: async () => ({
+              Component: (await import('~pages/OrderList')).default,
+            }),
+          },
+          {
             path: configs.routes.moderatorSettings,
             lazy: async () => ({
               Component: (await import('~pages/ModSettings')).default,

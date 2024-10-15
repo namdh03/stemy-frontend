@@ -14,6 +14,8 @@ import * as types from './graphql';
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n  query GetOrders($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {\n    orders(currentPage: $currentPage, currentItem: $currentItem, sort: $sort, order: $order) {\n      items {\n        id\n        phone\n        receiveTime\n        shipTime\n        status\n        totalPrice\n        orderItems {\n          id\n          quantity\n          productPrice\n          hasLab\n          labPrice\n          product {\n            name\n          }\n        }\n        payment {\n          time\n          provider\n        }\n        fullName\n        address\n        createdAt\n      }\n      pageInfo {\n        currentItem\n        currentPage\n        totalItem\n        totalPage\n      }\n    }\n  }\n": types.GetOrdersDocument,
+    "\n  query GetOrderById($id: Float!) {\n    order(id: $id) {\n      id\n      phone\n      receiveTime\n      shipTime\n      status\n      totalPrice\n      orderItems {\n        id\n        quantity\n        productPrice\n        hasLab\n        labPrice\n        product {\n          name\n        }\n      }\n      payment {\n        time\n        provider\n      }\n      fullName\n      address\n      createdAt\n    }\n  }\n": types.GetOrderByIdDocument,
     "\n  query GetTableProducts($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {\n    products(currentPage: $currentPage, currentItem: $currentItem, sort: $sort, order: $order) {\n      items {\n        id\n        name\n        price\n        description\n        images {\n          id\n          url\n        }\n        categories {\n          id\n          name\n        }\n      }\n      pageInfo {\n        totalItem\n        totalPage\n        currentItem\n        currentPage\n      }\n    }\n  }\n": types.GetTableProductsDocument,
     "\n  mutation CreateProduct($input: ProductInput!, $images: [File!]!, $lab: File!) {\n    createProduct(input: $input, images: $images, lab: $lab) {\n      id\n      name\n      price\n      description\n      categories {\n        id\n        name\n      }\n    }\n  }\n": types.CreateProductDocument,
     "\n  query GetProductById($id: Float!) {\n    product(id: $id) {\n      id\n      name\n      price\n      description\n      rating\n      sold\n      images {\n        id\n        url\n      }\n      categories {\n        id\n        name\n      }\n      lab {\n        id\n        price\n        url\n      }\n    }\n  }\n": types.GetProductByIdDocument,
@@ -26,6 +28,14 @@ const documents = {
     "\n  query MeQuery {\n    me {\n      email\n      fullName\n      id\n      phone\n      role\n      status\n    }\n  }\n": types.MeQueryDocument,
 };
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetOrders($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {\n    orders(currentPage: $currentPage, currentItem: $currentItem, sort: $sort, order: $order) {\n      items {\n        id\n        phone\n        receiveTime\n        shipTime\n        status\n        totalPrice\n        orderItems {\n          id\n          quantity\n          productPrice\n          hasLab\n          labPrice\n          product {\n            name\n          }\n        }\n        payment {\n          time\n          provider\n        }\n        fullName\n        address\n        createdAt\n      }\n      pageInfo {\n        currentItem\n        currentPage\n        totalItem\n        totalPage\n      }\n    }\n  }\n"): typeof import('./graphql').GetOrdersDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetOrderById($id: Float!) {\n    order(id: $id) {\n      id\n      phone\n      receiveTime\n      shipTime\n      status\n      totalPrice\n      orderItems {\n        id\n        quantity\n        productPrice\n        hasLab\n        labPrice\n        product {\n          name\n        }\n      }\n      payment {\n        time\n        provider\n      }\n      fullName\n      address\n      createdAt\n    }\n  }\n"): typeof import('./graphql').GetOrderByIdDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

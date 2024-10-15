@@ -1,4 +1,4 @@
-import { ChartBarStackedIcon, TicketIcon } from 'lucide-react';
+import { ChartBarStackedIcon, CircleDollarSignIcon, TicketIcon } from 'lucide-react';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { VscAccount } from 'react-icons/vsc';
 
@@ -95,6 +95,20 @@ export const managerSideLinks: SideLink[] = [
         title: 'Ticket Dashboard',
         label: '',
         href: configs.routes.ticketDashboard,
+        icon: <></>,
+      },
+    ],
+  },
+  {
+    title: 'Order Management',
+    label: '',
+    href: '',
+    icon: <CircleDollarSignIcon size={18} />,
+    sub: [
+      {
+        title: 'Order List',
+        label: '',
+        href: configs.routes.orderList,
         icon: <></>,
       },
     ],
