@@ -88,7 +88,7 @@ type Mutation {
   createOrder(address: String!, cartIds: [Int!]!, fullName: String!, paymentProvider: PaymentProvider!, phone: String!): String!
   createProduct(images: [File!]!, input: ProductInput!, lab: File!): Product!
   createProductCategory(input: ProductCategoryInput!): ProductCategory!
-  createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Boolean!
+  createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Ticket!
   deleteCarts(cartId: [Int!]!): String!
   deleteProduct(id: Float!): Product!
   deleteProductCategory(id: Float!): ProductCategory!
@@ -230,6 +230,7 @@ type Query {
   me: User!
   myTickets(status: TicketStatus): [Ticket!]!
   order(id: Float!): Order!
+  orderItem(id: Float!): OrderItem!
   orders(currentItem: Int! = 9, currentPage: Int! = 1, order: SortOrder! = ASC, sort: String! = "id"): OrdersWithPaginationResponse!
   product(id: Float!): Product!
   productCategories: [ProductCategory!]!
@@ -237,6 +238,7 @@ type Query {
   products(categoryIds: [Int!] = [], currentItem: Int! = 9, currentPage: Int! = 1, maxPrice: Int = 10000000, maxRating: Int = 5, minPrice: Int = 0, minRating: Int = 0, order: SortOrder! = ASC, search: String! = "", sort: String! = "id"): ProductsWithPaginationResponse!
   searchOrder(search: String!, status: OrderStatus): [Order!]!
   ticket(ticketId: Float!): Ticket!
+  ticketCategorys: [TicketCategory!]!
   tickets(currentItem: Int! = 9, currentPage: Int! = 1, order: SortOrder! = ASC, sort: String! = "id"): TicketsWithPaginationResponse!
   user(id: Int!): User
   userLabs: [UserLab!]!

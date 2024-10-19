@@ -76,3 +76,25 @@ export const GetTicketByIdQuery = graphql(`
     }
   }
 `);
+
+export const GetAllTicketsQuery = graphql(`
+  query GetAllTickets {
+    tickets {
+      items {
+        id
+        category {
+          name
+        }
+        replier {
+          id
+          fullName
+        }
+        status
+        updatedAt
+        closedAt
+        createdAt
+        rating
+      }
+    }
+  }
+`);

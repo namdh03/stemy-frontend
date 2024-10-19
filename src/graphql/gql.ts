@@ -28,6 +28,7 @@ const documents = {
     "\n  mutation DeleteProductCategory($id: Float!) {\n    deleteProductCategory(id: $id) {\n      id\n    }\n  }\n": types.DeleteProductCategoryDocument,
     "\n  query GetTickets($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {\n    tickets(currentItem: $currentItem, currentPage: $currentPage, order: $order, sort: $sort) {\n      items {\n        id\n        status\n        orderItem {\n          order {\n            id\n          }\n        }\n        createdAt\n        closedAt\n        sender {\n          email\n          fullName\n        }\n        replier {\n          email\n          fullName\n        }\n        title\n        category {\n          name\n        }\n        rating\n      }\n      pageInfo {\n        totalItem\n        totalPage\n        currentItem\n        currentPage\n      }\n    }\n  }\n": types.GetTicketsDocument,
     "\n  query GetTicketByid($ticketId: Float!) {\n    ticket(ticketId: $ticketId) {\n      id\n      replierComment\n      senderComment\n      status\n      orderItem {\n        product {\n          name\n        }\n        order {\n          id\n        }\n      }\n      sender {\n        fullName\n        email\n      }\n      category {\n        id\n        name\n      }\n      updatedAt\n      title\n      createdAt\n      closedAt\n      rating\n      replier {\n        fullName\n        email\n      }\n      images {\n        id\n        url\n      }\n    }\n  }\n": types.GetTicketByidDocument,
+    "\n  query GetAllTickets {\n    tickets {\n      items {\n        id\n        category {\n          name\n        }\n        replier {\n          id\n          fullName\n        }\n        status\n        updatedAt\n        closedAt\n        createdAt\n        rating\n      }\n    }\n  }\n": types.GetAllTicketsDocument,
     "\n  mutation LoginMutation($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      access_token\n    }\n  }\n": types.LoginMutationDocument,
     "\n  query MeQuery {\n    me {\n      email\n      fullName\n      id\n      phone\n      role\n      status\n    }\n  }\n": types.MeQueryDocument,
 };
@@ -88,6 +89,10 @@ export function graphql(source: "\n  query GetTickets($currentPage: Int!, $curre
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetTicketByid($ticketId: Float!) {\n    ticket(ticketId: $ticketId) {\n      id\n      replierComment\n      senderComment\n      status\n      orderItem {\n        product {\n          name\n        }\n        order {\n          id\n        }\n      }\n      sender {\n        fullName\n        email\n      }\n      category {\n        id\n        name\n      }\n      updatedAt\n      title\n      createdAt\n      closedAt\n      rating\n      replier {\n        fullName\n        email\n      }\n      images {\n        id\n        url\n      }\n    }\n  }\n"): typeof import('./graphql').GetTicketByidDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetAllTickets {\n    tickets {\n      items {\n        id\n        category {\n          name\n        }\n        replier {\n          id\n          fullName\n        }\n        status\n        updatedAt\n        closedAt\n        createdAt\n        rating\n      }\n    }\n  }\n"): typeof import('./graphql').GetAllTicketsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
