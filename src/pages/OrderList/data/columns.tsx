@@ -91,23 +91,21 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
-    accessorKey: 'orderItems',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Order Items' />,
+    accessorKey: 'totalPrice',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Total Price' />,
     cell: ({ row }) => {
-      const orderItems = row.original.orderItems;
+      const totalPrice = row.original.totalPrice;
       return (
         <div>
-          {orderItems.map((orderItem) => (
-            <div key={orderItem.id} className='text-sm font-normal leading-5 block'>
-              {orderItem.product.name} x {orderItem.quantity}
-            </div>
-          ))}
+          <span className='text-sm font-normal leading-5'>
+            {totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+          </span>
         </div>
       );
     },
     enableSorting: false,
     meta: {
-      title: 'Order Items',
+      title: 'Total Price',
     },
   },
   {
