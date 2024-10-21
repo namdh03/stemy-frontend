@@ -46,6 +46,26 @@ export const adminSideLinks: SideLink[] = [
 
 export const managerSideLinks: SideLink[] = [
   {
+    title: 'Order Management',
+    label: '',
+    href: '',
+    icon: <CircleDollarSignIcon size={18} />,
+    sub: [
+      {
+        title: 'Order Dashboard',
+        label: '',
+        href: configs.routes.orderDashboard,
+        icon: <></>,
+      },
+      {
+        title: 'Order List',
+        label: '',
+        href: configs.routes.orderList,
+        icon: <></>,
+      },
+    ],
+  },
+  {
     title: 'Product Management',
     label: '',
     href: '',
@@ -95,20 +115,6 @@ export const managerSideLinks: SideLink[] = [
         title: 'Ticket Dashboard',
         label: '',
         href: configs.routes.ticketDashboard,
-        icon: <></>,
-      },
-    ],
-  },
-  {
-    title: 'Order Management',
-    label: '',
-    href: '',
-    icon: <CircleDollarSignIcon size={18} />,
-    sub: [
-      {
-        title: 'Order List',
-        label: '',
-        href: configs.routes.orderList,
         icon: <></>,
       },
     ],

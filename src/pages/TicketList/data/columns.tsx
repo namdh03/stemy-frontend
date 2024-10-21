@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import DataTableColumnHeader from '~components/common/DataTableColumnHeader';
 import { Badge } from '~components/ui/badge';
-import { Ticket } from '~graphql/graphql';
+import { Ticket, TicketStatus } from '~graphql/graphql';
 
 import DataTableRowActions from '../components/DataTableRowActions';
 import { formatDate } from '~utils/date.util';
@@ -60,7 +60,7 @@ export const columns: ColumnDef<Ticket>[] = [
 
       return (
         <article className='flex items-center gap-2'>
-          <Badge color='blue' className='mr-2'>
+          <Badge variant={status === TicketStatus.Open ? 'default' : 'destructive'} className='mr-2'>
             <span className='text-sm font-normal leading-5 block'>{status}</span>
           </Badge>
         </article>

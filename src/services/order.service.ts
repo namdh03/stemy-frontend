@@ -67,3 +67,24 @@ export const GetOrderByIdQuery = graphql(`
     }
   }
 `);
+
+export const GetAllOrdersQuery = graphql(`
+  query GetAllOrders {
+    orders {
+      items {
+        id
+        fullName
+        status
+        totalPrice
+        createdAt
+        orderItems {
+          product {
+            name
+          }
+          quantity
+          productPrice
+        }
+      }
+    }
+  }
+`);

@@ -629,6 +629,11 @@ export type GetOrderByIdQueryVariables = Exact<{
 
 export type GetOrderByIdQuery = { __typename?: 'Query', order: { __typename?: 'Order', id: string, phone: string, receiveTime?: any | null, shipTime?: any | null, status: OrderStatus, totalPrice: number, fullName: string, address: string, createdAt: any, orderItems: Array<{ __typename?: 'OrderItem', id: string, quantity: number, productPrice: number, hasLab: boolean, labPrice: number, product: { __typename?: 'Product', name: string } }>, payment: { __typename?: 'OrderPaymentEmbeddable', time?: any | null, provider: PaymentProvider } } };
 
+export type GetAllOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllOrdersQuery = { __typename?: 'Query', orders: { __typename?: 'OrdersWithPaginationResponse', items: Array<{ __typename?: 'Order', id: string, fullName: string, status: OrderStatus, totalPrice: number, createdAt: any, orderItems: Array<{ __typename?: 'OrderItem', quantity: number, productPrice: number, product: { __typename?: 'Product', name: string } }> }> } };
+
 export type GetTableProductsQueryVariables = Exact<{
   currentPage: Scalars['Int']['input'];
   currentItem: Scalars['Int']['input'];
@@ -827,6 +832,26 @@ export const GetOrderByIdDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<GetOrderByIdQuery, GetOrderByIdQueryVariables>;
+export const GetAllOrdersDocument = new TypedDocumentString(`
+    query GetAllOrders {
+  orders {
+    items {
+      id
+      fullName
+      status
+      totalPrice
+      createdAt
+      orderItems {
+        product {
+          name
+        }
+        quantity
+        productPrice
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetAllOrdersQuery, GetAllOrdersQueryVariables>;
 export const GetTableProductsDocument = new TypedDocumentString(`
     query GetTableProducts($currentPage: Int!, $currentItem: Int!, $sort: String!, $order: SortOrder!) {
   products(
