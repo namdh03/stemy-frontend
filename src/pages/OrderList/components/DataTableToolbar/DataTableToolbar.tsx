@@ -5,20 +5,17 @@ import { Table } from '@tanstack/react-table';
 import DataTableFacetedFilter from '~components/common/DataTableFacetedFilter';
 import DataTableViewOptions from '~components/common/DataTableViewOptions';
 import { Input } from '~components/ui/input';
-import useProductCategories from '~hooks/useProductCategories';
 import Button from '~layouts/AdminLayout/components/Button';
-import { Product } from '~graphql/graphql';
+import { Order } from '~graphql/graphql';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
 }
 
-export default function DataTableToolbar({ table }: DataTableToolbarProps<Product>) {
+export default function DataTableToolbar({ table }: DataTableToolbarProps<Order>) {
   const isFiltered = table.getState().columnFilters.length > 0;
   const columnName = table.getAllColumns().find((column) => column.id === 'name');
   const columnCategory = table.getAllColumns().find((column) => column.id === 'categories');
-
-  const { data } = useProductCategories();
 
   return (
     <div className='flex items-center justify-between'>

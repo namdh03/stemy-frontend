@@ -1,13 +1,12 @@
 import { ColumnDef } from '@tanstack/react-table';
 
 import DataTableColumnHeader from '~components/common/DataTableColumnHeader';
-import { Avatar, AvatarFallback, AvatarImage } from '~components/ui/avatar';
 import { Badge } from '~components/ui/badge';
-import { Product } from '~graphql/graphql';
+import { Order } from '~graphql/graphql';
 
 import DataTableRowActions from '../components/DataTableRowActions';
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<Order>[] = [
   {
     id: 'index',
     header: 'No.',
@@ -20,93 +19,95 @@ export const columns: ColumnDef<Product>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'name',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Product Name' />,
+    accessorKey: 'orderId',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Order ID' />,
     cell: ({ row }) => {
-      const name = row.original.name;
+      const orderId = row.original.id;
 
       return (
         <article className='flex items-center gap-3'>
-          <Avatar className='w-8 h-8'>
-            <AvatarImage src='https://dummyimage.com/32x32' />
-            <AvatarFallback>{name}</AvatarFallback>
-          </Avatar>
-          <span className='text-sm font-normal leading-5'>{name}</span>
+          <span className='text-sm font-normal leading-5'>{orderId}</span>
         </article>
       );
     },
     meta: {
-      title: 'Product Name',
+      title: 'Order ID',
     },
     enableHiding: false,
   },
   {
-    accessorKey: 'price',
+    accessorKey: 'user',
     enableHiding: true,
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Price' />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title='User' />,
     cell: ({ row }) => {
-      const price = row.original.price;
+      const user = row.original.fullName;
 
       return (
         <article className='flex items-center gap-2'>
-          <span className='text-sm font-normal leading-5'>{price} VNĐ</span>
+          <span className='text-sm font-normal leading-5'>{user}</span>
         </article>
       );
     },
     meta: {
-      title: 'Price',
+      title: 'User',
     },
   },
   {
-    accessorKey: 'description',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Description' />,
+    accessorKey: 'createdAt',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Created At' />,
     cell: ({ row }) => {
-      const description = row.original.description;
+      const createdAt = row.original.createdAt;
+      return <span className='text-sm font-normal leading-5'>{createdAt}</span>;
+    },
+    meta: {
+      title: 'Created At',
+    },
+  },
+  {
+    accessorKey: 'status',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Status' />,
+    cell: ({ row }) => {
+      const status = row.original.status;
+      return <Badge className='px-2 py-1 rounded-full text-xs font-semibold'>{status}</Badge>;
+    },
+    meta: {
+      title: 'Status',
+    },
+  },
+  {
+    accessorKey: 'address',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Address' />,
+    cell: ({ row }) => {
+      const address = row.original.address;
 
       return (
         <article className='flex items-center gap-2'>
-          <span className='text-sm font-normal leading-5'>{description}</span>
+          <span className='text-sm font-normal leading-5'>{address}</span>
         </article>
       );
     },
     meta: {
-      title: 'Description',
+      title: 'Address',
     },
   },
   {
-    accessorKey: 'categories',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Categories' />,
+    accessorKey: 'totalPrice',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Total Price' />,
     cell: ({ row }) => {
-      const categories = row.original.categories;
+      const totalPrice = row.original.totalPrice;
       return (
         <div>
-          {categories.map((category) => (
-            <Badge key={category.id} color='blue' className='mr-2'>
-              <span key={category.id} className='text-sm font-normal leading-5 block'>
-                {category.name}
-              </span>
-            </Badge>
-          ))}
+          <span className='text-sm font-normal leading-5'>
+            {totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+          </span>
         </div>
       );
     },
     enableSorting: false,
     meta: {
-      title: 'Categories',
+      title: 'Total Price',
     },
   },
-  // {
-  //   accessorKey: 'totalFeedbacks',
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title='Tổng số gói nguyên liệu' />,
-  //   cell: ({ row }) => {
-  //     const total = row.original.totalFeedbacks;
-  //     return <span className='text-sm font-normal leading-5 block ml-16'>{total || 0} gói</span>;
-  //   },
-  //   meta: {
-  //     title: 'Tổng số feedback',
-  //   },
-  //   enableSorting: false,
-  // },
   {
     id: 'actions',
     cell: ({ row }) => <DataTableRowActions row={row} />,

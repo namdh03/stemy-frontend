@@ -57,7 +57,7 @@ const CreateCategoryModal = () => {
           New
         </Button>
       </DialogTrigger>
-      <DialogContent className='max-w-[calc(100%-48px)] max-h-[calc(100%-48px)] overflow-y-scroll'>
+      <DialogContent className='w-fit min-w-[500px] max-h-[calc(100%-48px)] overflow-y-scroll'>
         <DialogHeader>
           <DialogTitle className='mb-3'>Create Category</DialogTitle>
         </DialogHeader>
@@ -68,13 +68,13 @@ const CreateCategoryModal = () => {
                 <h2 className='text-2xl font-bold text-primary'>Category Information</h2>
                 <InputName form={form} />
                 <SelectType form={form} />
+                  <InputTitle form={form} />
               </div>
-              <div className='flex-1'>
+              {/* <div className='flex-1'>
                 <div className='mb-14'>
                   <h2 className='text-2xl font-bold text-primary mb-7'>Category</h2>
-                  <InputTitle form={form} />
                 </div>
-              </div>
+              </div> */}
             </div>
             <Button type='submit' className='mt-4'>
               Create Category

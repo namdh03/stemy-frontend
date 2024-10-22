@@ -1,7 +1,7 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
-const baseURL = 'http://localhost:8081' + '/graphql';
-// const baseURL = 'https://stemyb.thanhf.dev' + '/graphql';
+// const baseURL = 'http://localhost:8081' + '/graphql';
+const baseURL = 'https://stemyb.thanhf.dev' + '/graphql';
 
 const config: CodegenConfig = {
   schema: baseURL,

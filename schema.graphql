@@ -88,7 +88,7 @@ type Mutation {
   createOrder(address: String!, cartIds: [Int!]!, fullName: String!, paymentProvider: PaymentProvider!, phone: String!): String!
   createProduct(images: [File!]!, input: ProductInput!, lab: File!): Product!
   createProductCategory(input: ProductCategoryInput!): ProductCategory!
-  createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Boolean!
+  createTicket(categoryId: Float!, comment: String!, images: [File!]! = [], orderItemId: Float!, title: String!): Ticket!
   deleteCarts(cartId: [Int!]!): String!
   deleteProduct(id: Float!): Product!
   deleteProductCategory(id: Float!): ProductCategory!
@@ -155,11 +155,9 @@ enum OrderStatus {
   UNRATED
 }
 
-type PageInfo {
-  currentItem: Int!
-  currentPage: Int!
-  totalItem: Int!
-  totalPage: Int!
+type OrdersWithPaginationResponse {
+  items: [Order!]!
+  pageInfo: e!
 }
 
 enum PaymentProvider {
@@ -222,7 +220,7 @@ type ProductLab {
 
 type ProductsWithPaginationResponse {
   items: [Product!]!
-  pageInfo: PageInfo!
+  pageInfo: e!
 }
 
 type Query {
@@ -230,17 +228,30 @@ type Query {
   countCart: Float!
   countOrder: CountOrderResponse!
   me: User!
-  myTickets: [Ticket!]!
+  myTickets(status: TicketStatus): [Ticket!]!
+  order(id: Float!): Order!
+  orderItem(id: Float!): OrderItem!
+  orders(currentItem: Int! = 9, currentPage: Int! = 1, order: SortOrder! = ASC, sort: String! = "id"): OrdersWithPaginationResponse!
   product(id: Float!): Product!
   productCategories: [ProductCategory!]!
   productCategory(id: Float!): ProductCategory
   products(categoryIds: [Int!] = [], currentItem: Int! = 9, currentPage: Int! = 1, maxPrice: Int = 10000000, maxRating: Int = 5, minPrice: Int = 0, minRating: Int = 0, order: SortOrder! = ASC, search: String! = "", sort: String! = "id"): ProductsWithPaginationResponse!
   searchOrder(search: String!, status: OrderStatus): [Order!]!
   ticket(ticketId: Float!): Ticket!
+  ticketCategorys: [TicketCategory!]!
   tickets(currentItem: Int! = 9, currentPage: Int! = 1, order: SortOrder! = ASC, sort: String! = "id"): TicketsWithPaginationResponse!
   user(id: Int!): User
   userLabs: [UserLab!]!
   users: [User!]!
+}
+
+type ReplyTicketImage {
+  createdAt: DateTimeISO!
+  id: ID!
+  owner: Role!
+  ticket: Ticket!
+  updatedAt: DateTimeISO
+  url: String!
 }
 
 enum Role {
@@ -263,8 +274,9 @@ type Ticket {
   images: [TicketImage!]!
   orderItem: OrderItem!
   rating: Float
-  replier: User
+  replier: User!
   replierComment: String
+  replyImages: [ReplyTicketImage!]!
   sender: User!
   senderComment: String!
   status: TicketStatus!
@@ -296,7 +308,7 @@ enum TicketStatus {
 
 type TicketsWithPaginationResponse {
   items: [Ticket!]!
-  pageInfo: PageInfo!
+  pageInfo: e!
 }
 
 type User {
@@ -327,4 +339,11 @@ type UserLab {
 enum UserStatus {
   ACTIVE
   BAN
+}
+
+type e {
+  currentItem: Int!
+  currentPage: Int!
+  totalItem: Int!
+  totalPage: Int!
 }
