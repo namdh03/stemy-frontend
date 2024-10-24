@@ -11,7 +11,7 @@ const useGetTableProducts = ({ sorting, pagination }: TableRequestState) => {
     queryKey: [GET_TABLE_PRODUCTS_QUERY_KEY, sorting, pagination],
     queryFn: () =>
       execute(GetProductTableQuery, {
-        currentPage: pagination.pageIndex * pagination.pageSize + 1, // offset
+        currentPage: pagination.pageIndex + 1, // offset
         currentItem: pagination.pageSize, // limit
         sort: sorting[0]?.id ?? 'id',
         order: sorting[0]?.desc ? SortOrder.Desc : SortOrder.Asc,

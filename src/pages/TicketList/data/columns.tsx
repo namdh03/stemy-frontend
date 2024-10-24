@@ -3,9 +3,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import DataTableColumnHeader from '~components/common/DataTableColumnHeader';
 import { Badge } from '~components/ui/badge';
 import { Ticket, TicketStatus } from '~graphql/graphql';
+import { formatDate } from '~utils/date.util';
 
 import DataTableRowActions from '../components/DataTableRowActions';
-import { formatDate } from '~utils/date.util';
 
 export const columns: ColumnDef<Ticket>[] = [
   {

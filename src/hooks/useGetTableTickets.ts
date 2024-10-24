@@ -11,7 +11,7 @@ const useGetTableTickets = ({ sorting, pagination }: TableRequestState) => {
     queryKey: [GET_TABLE_TICKETS_QUERY_KEY, sorting, pagination],
     queryFn: () =>
       execute(GetTicketsQuery, {
-        currentPage: pagination.pageIndex * pagination.pageSize + 1,
+        currentPage: pagination.pageIndex + 1,
         currentItem: pagination.pageSize,
         sort: sorting[0]?.id ?? 'id',
         order: sorting[0]?.desc ? SortOrder.Desc : SortOrder.Asc,
