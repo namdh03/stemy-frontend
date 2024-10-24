@@ -17,7 +17,7 @@ const SelectType: React.FC<SelectTypeProps> = ({ form }) => {
       key='type'
       name='type'
       render={({ field }) => (
-        <FormItem className='flex flex-col w-full my-8'>
+        <FormItem className='flex flex-col w-full'>
           <FormLabel>Category Type</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>

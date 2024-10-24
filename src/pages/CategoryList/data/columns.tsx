@@ -1,8 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 
 import DataTableColumnHeader from '~components/common/DataTableColumnHeader';
-import { Avatar, AvatarFallback, AvatarImage } from '~components/ui/avatar';
-import { Badge } from '~components/ui/badge';
 import { ProductCategory } from '~graphql/graphql';
 
 import DataTableRowActions from '../components/DataTableRowActions';
@@ -27,10 +25,6 @@ export const columns: ColumnDef<ProductCategory>[] = [
 
       return (
         <article className='flex items-center gap-3'>
-          <Avatar className='w-8 h-8'>
-            <AvatarImage src='https://dummyimage.com/32x32' />
-            <AvatarFallback>{name}</AvatarFallback>
-          </Avatar>
           <span className='text-sm font-normal leading-5'>{name}</span>
         </article>
       );

@@ -22,7 +22,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { OrderStatus } from '~graphql/graphql';
 import { useGetOrderDashboardData } from '~hooks/useGetOrderDashboardData';
-import { formatCurrency } from '~utils/formatCurrency';
 
 const statusColors: Record<OrderStatus, string> = {
   [OrderStatus.Delivering]: 'text-yellow-500',
@@ -107,6 +106,27 @@ export default function OrderDashboard() {
     return <div>Error loading dashboard data. Please try again later.</div>;
   }
 
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
+  const formatShortCurrency = (value: number) => {
+    // 1000000 -> 1M, 1000000000 -> 1B, 100000 -> 100K
+    if (value >= 1000000000) {
+      return `${Math.floor(value / 1000000000)}B`;
+    } else if (value >= 1000000) {
+      return `${Math.floor(value / 1000000)}M`;
+    } else if (value >= 100000) {
+      return `${Math.floor(value / 100000)}K`;
+    }
+    return formatCurrency(value);
+  };
+
   return (
     <div className='flex-1 space-y-4 p-8 pt-6'>
       <div className='flex items-center justify-between space-y-2'>
@@ -174,8 +194,13 @@ export default function OrderDashboard() {
                   <LineChart data={revenueOverTime}>
                     <CartesianGrid strokeDasharray='3 3' />
                     <XAxis dataKey='date' />
-                    <YAxis />
-                    <Tooltip />
+                    <YAxis
+                      tickFormatter={formatShortCurrency}
+                      domain={[0, 'dataMax']}
+                      allowDataOverflow={true}
+                      tick={{ fontSize: 12 }} // Adjust the font size of the ticks
+                    />
+                    <Tooltip formatter={(value) => formatCurrency(value as number)} />
                     <Legend />
                     <Line type='monotone' dataKey='revenue' name='Revenue' stroke='#8884d8' activeDot={{ r: 8 }} />
                   </LineChart>
@@ -192,8 +217,13 @@ export default function OrderDashboard() {
                   <BarChart data={topProducts}>
                     <CartesianGrid strokeDasharray='3 3' />
                     <XAxis dataKey='name' />
-                    <YAxis />
-                    <Tooltip />
+                    <YAxis
+                      tickFormatter={formatShortCurrency}
+                      domain={[0, 'dataMax']}
+                      tick={{ fontSize: 12 }}
+                      allowDataOverflow={true}
+                    />
+                    <Tooltip formatter={(value) => formatCurrency(value as number)} />
                     <Legend />
                     <Bar dataKey='revenue' name='Revenue' fill='#8884d8' />
                   </BarChart>

@@ -49,7 +49,9 @@ export const columns: ColumnDef<Product>[] = [
 
       return (
         <article className='flex items-center gap-2'>
-          <span className='text-sm font-normal leading-5'>{price} VNĐ</span>
+          <span className='text-sm font-normal leading-5'>
+            {price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+          </span>
         </article>
       );
     },

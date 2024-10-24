@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiEdit3 } from 'react-icons/fi';
 import { toast } from 'sonner';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,8 +25,9 @@ import SelectType from './SelectType';
 
 interface UpdateCategoryModalProps {
   productCategoryId: number;
+  children: React.ReactNode;
 }
-const UpdateCategoryModal = ({ productCategoryId }: UpdateCategoryModalProps) => {
+const UpdateCategoryModal = ({ productCategoryId, children }: UpdateCategoryModalProps) => {
   const { updateCategoryFormData: formData } = useCategoryListStore();
   const { data: productCategory } = useGetProductCategoryById(productCategoryId);
   const { mutate: updateProductCategory } = useUpdateProductCategory();
@@ -65,31 +65,18 @@ const UpdateCategoryModal = ({ productCategoryId }: UpdateCategoryModalProps) =>
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant='outline' className='w-full hidden h-8 lg:flex'>
-          <FiEdit3 size={16} />
-          Edit
-        </Button>
-      </DialogTrigger>
-      <DialogContent className='max-w-[calc(100%-48px)] max-h-[calc(100%-48px)] overflow-y-scroll'>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
-          <DialogTitle className='mb-3'>Update Category</DialogTitle>
+          <DialogTitle className='text-2xl font-bold'>Update Category</DialogTitle>
         </DialogHeader>
         <DialogDescription>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center'>
-              <div className='flex flex-row justify-between gap-24'>
-                <div className='flex-1 flex-col gap-2'>
-                  <h2 className='text-2xl font-bold text-primary'>Category Information</h2>
-                  <InputName form={form} />
-                  <SelectType form={form} />
-                </div>
-                <div className='flex-1'>
-                  <div className='mb-14'>
-                    <h2 className='text-2xl font-bold text-primary mb-7'>Category</h2>
-                    <InputTitle form={form} />
-                  </div>
-                </div>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+              <div className='space-y-6'>
+                <InputName form={form} />
+                <SelectType form={form} />
+                <InputTitle form={form} />
               </div>
               <Button type='submit' className='mt-4'>
                 Update Category

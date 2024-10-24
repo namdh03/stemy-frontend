@@ -20,6 +20,15 @@ import { useTicketDashboardData } from '~hooks/useTicketDashboardData';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+};
+
 const TicketDashboard: React.FC = () => {
   const { data, isLoading } = useTicketDashboardData();
 

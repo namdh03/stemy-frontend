@@ -1,14 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
-import { ProductCategory } from '~graphql/graphql';
-import { LayoutBody } from '~layouts/AdminLayout/components/Layout';
-import DataTableToolbar from './components/DataTableToolbar';
-import useDocumentTitle from '~hooks/useDocumentTitle';
+import { useCallback, useState } from 'react';
+
 import { ColumnFiltersState, SortingState, Table, VisibilityState } from '@tanstack/react-table';
-import useDebounce from '~hooks/useDebounce';
+
 import DataTable from '~components/common/DataTable';
-import { columns } from './data/columns';
+import { ProductCategory } from '~graphql/graphql';
+import useDebounce from '~hooks/useDebounce';
+import useDocumentTitle from '~hooks/useDocumentTitle';
 import useProductCategories from '~hooks/useProductCategories';
+import { LayoutBody } from '~layouts/AdminLayout/components/Layout';
 import { DEFAULT_DEBOUNCE_TIME } from '~utils/constants';
+
+import DataTableToolbar from './components/DataTableToolbar';
+import { columns } from './data/columns';
 
 const CategoryList = () => {
   useDocumentTitle('Stemy | Category List');
@@ -19,18 +22,12 @@ const CategoryList = () => {
   // column filters state of the table
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const debouncedColumnFilters: ColumnFiltersState = useDebounce(columnFilters, DEFAULT_DEBOUNCE_TIME);
-  
+
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     title: true,
-    name: true
+    name: true,
   });
   const { data, isLoading } = useProductCategories();
-
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-  }, [data]);
 
   const handleRenderToolbar = useCallback((table: Table<ProductCategory>) => <DataTableToolbar table={table} />, []);
 
@@ -45,7 +42,7 @@ const CategoryList = () => {
       <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
         <DataTable
           isTableDataLoading={isLoading}
-          paginatedTableData={{data}}
+          paginatedTableData={{ data }}
           columns={columns}
           sorting={sorting}
           setSorting={setSorting}
@@ -58,6 +55,6 @@ const CategoryList = () => {
       </div>
     </LayoutBody>
   );
-}
+};
 
 export default CategoryList;

@@ -32,11 +32,11 @@ export default function DataTableViewOptions<TData>({ table, className }: DataTa
       <DropdownMenuTrigger asChild>
         <Button variant='outline' size='sm' className='ml-auto hidden h-8 lg:flex'>
           <MixerHorizontalIcon className='mr-2 h-4 w-4' />
-          Xem
+          View
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className={cn('w-[150px]', className)}>
-        <DropdownMenuLabel>Hiển thị cột</DropdownMenuLabel>
+        <DropdownMenuLabel>Display columns</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()

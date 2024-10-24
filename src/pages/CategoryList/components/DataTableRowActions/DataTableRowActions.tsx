@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { RiDeleteBinLine } from 'react-icons/ri';
+import { RiDeleteBinLine, RiEdit2Line } from 'react-icons/ri';
 import { toast } from 'sonner';
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
@@ -88,13 +88,14 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<ProductCategory>)
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end' className='w-[160px]'>
-          <DropdownMenuItem className='cursor-pointer'>
-            {/* <DropdownMenuShortcut className='ml-0 mr-2'>
-              <FiEdit3 size={16} />
-            </DropdownMenuShortcut>
-            Edit */}
-            <UpdateCategoryModal productCategoryId={productCategoryId} />
-          </DropdownMenuItem>
+          <UpdateCategoryModal productCategoryId={productCategoryId}>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()} className='cursor-pointer'>
+              <DropdownMenuShortcut className='ml-0 mr-2'>
+                <RiEdit2Line size={16} />
+              </DropdownMenuShortcut>
+              Edit
+            </DropdownMenuItem>
+          </UpdateCategoryModal>
 
           <DropdownMenuSeparator />
 
