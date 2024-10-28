@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 import { ColumnDef } from '@tanstack/react-table';
 
 import DataTableColumnHeader from '~components/common/DataTableColumnHeader';
@@ -57,7 +59,9 @@ export const columns: ColumnDef<Order>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title='Created At' />,
     cell: ({ row }) => {
       const createdAt = row.original.createdAt;
-      return <span className='text-sm font-normal leading-5'>{createdAt}</span>;
+      return (
+        <span className='text-sm font-normal leading-5'>{format(new Date(createdAt), 'dd/MM/yyyy hh:mm:ss')}</span>
+      );
     },
     meta: {
       title: 'Created At',

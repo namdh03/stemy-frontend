@@ -33,14 +33,14 @@ const statusColors: Record<OrderStatus, string> = {
 };
 
 export default function OrderDashboard() {
-  const { data: orders, isLoading, error } = useGetOrderDashboardData();
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-      endDate: new Date(),
-      key: 'selection',
-    },
-  ]);
+  const { data: orders, isLoading } = useGetOrderDashboardData();
+  // const [dateRange, setDateRange] = useState([
+  //   {
+  //     startDate: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+  //     endDate: new Date(),
+  //     key: 'selection',
+  //   },
+  // ]);
   const [showAllOrders, setShowAllOrders] = useState(false);
 
   const { totalRevenue, orderStatusDistribution, revenueOverTime, topProducts } = useMemo(() => {
@@ -96,14 +96,10 @@ export default function OrderDashboard() {
       revenueOverTime,
       topProducts,
     };
-  }, [orders, dateRange]);
+  }, [orders]);
 
   if (isLoading) {
     return <Skeleton className='w-full h-screen' />;
-  }
-
-  if (error) {
-    return <div>Error loading dashboard data. Please try again later.</div>;
   }
 
   const formatCurrency = (value: number) => {
