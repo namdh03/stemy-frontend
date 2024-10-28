@@ -119,7 +119,7 @@ const Modal = ({ open, onOpen, onClose, ticketId }: ModalProps) => {
                       <img
                         key={index}
                         src={image.url}
-                        alt={image.alt}
+                        alt='this is an image'
                         width={200}
                         height={200}
                         className='rounded-md object-cover'

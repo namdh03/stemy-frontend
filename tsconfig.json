@@ -11,6 +11,8 @@
   "compilerOptions": {
     /* Paths */
     "baseUrl": ".",
+    "skipLibCheck": true,
+    "noEmit": true,
     "paths": {
       "~*": [
         "./src/*"

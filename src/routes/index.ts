@@ -23,37 +23,6 @@ const router = createBrowserRouter([
           Component: (await import('~pages/Login')).default,
         }),
       },
-      {
-        path: configs.routes.register,
-        lazy: async () => ({
-          Component: (await import('~pages/Register')).default,
-        }),
-      },
-      {
-        path: configs.routes.forgotPassword,
-        lazy: async () => ({
-          Component: (await import('~pages/ForgotPassword')).default,
-        }),
-      },
-      {
-        lazy: async () => ({
-          Component: (await import('~guards/ResetPasswordGuard')).default,
-        }),
-        children: [
-          {
-            path: configs.routes.resetPassword,
-            lazy: async () => ({
-              Component: (await import('~pages/ResetPassword')).default,
-            }),
-          },
-        ],
-      },
-      {
-        path: configs.routes.appResetPassword,
-        lazy: async () => ({
-          Component: (await import('~pages/AppResetPassword')).default,
-        }),
-      },
     ],
   },
 
