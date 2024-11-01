@@ -37,6 +37,7 @@ const TicketDashboard: React.FC = () => {
   }
 
   const { ticketCategoryData, ticketTrendData, ticketStatusData, replierPerformanceData, averageRating } = data!;
+  console.log(averageRating);
 
   return (
     <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'>
@@ -44,7 +45,7 @@ const TicketDashboard: React.FC = () => {
         <CardHeader>
           <CardTitle>Average Rating</CardTitle>
         </CardHeader>
-        <CardContent className='text-center text-4xl font-bold'>{averageRating}</CardContent>
+        <CardContent className='text-center text-4xl font-bold'>{parseFloat(averageRating) || 0}</CardContent>
       </Card>
       <Card className='col-span-4'>
         <CardHeader>

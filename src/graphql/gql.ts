@@ -22,7 +22,7 @@ const documents = {
     "\n  query GetProductById($id: Float!) {\n    product(id: $id) {\n      id\n      name\n      price\n      description\n      rating\n      sold\n      images {\n        id\n        url\n      }\n      categories {\n        id\n        name\n      }\n      lab {\n        id\n        price\n        url\n      }\n    }\n  }\n": types.GetProductByIdDocument,
     "\n  mutation DeleteProduct($id: Float!) {\n    deleteProduct(id: $id) {\n      id\n    }\n  }\n": types.DeleteProductDocument,
     "\n  mutation UpdateProduct($id: Float!, $input: ProductInput!, $images: [File!]!, $lab: File) {\n    updateProduct(id: $id, input: $input, images: $images, lab: $lab) {\n      id\n      name\n      price\n      description\n      categories {\n        id\n        name\n      }\n    }\n  }\n": types.UpdateProductDocument,
-    "\n  query GetProductCategoriesQuery {\n    productCategories {\n      id\n      name\n      title\n      type\n    }\n  }\n": types.GetProductCategoriesQueryDocument,
+    "\n  query GetProductCategoriesQuery {\n    productCategories {\n      id\n      name\n      title\n      type\n      isDelete\n    }\n  }\n": types.GetProductCategoriesQueryDocument,
     "\n  query GetProductCategoryById($categoryId: Float!) {\n    productCategory(id: $categoryId) {\n      id\n      name\n      title\n      type\n    }\n  }\n": types.GetProductCategoryByIdDocument,
     "\n  mutation CreateProductCategory($input: ProductCategoryInput!) {\n    createProductCategory(input: $input) {\n      id\n      name\n      title\n      type\n    }\n  }\n": types.CreateProductCategoryDocument,
     "\n  mutation UpdateProductCategory($id: Float!, $input: ProductCategoryInput!) {\n    updateProductCategory(id: $id, input: $input) {\n      id\n    }\n  }\n": types.UpdateProductCategoryDocument,
@@ -69,7 +69,7 @@ export function graphql(source: "\n  mutation UpdateProduct($id: Float!, $input:
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetProductCategoriesQuery {\n    productCategories {\n      id\n      name\n      title\n      type\n    }\n  }\n"): typeof import('./graphql').GetProductCategoriesQueryDocument;
+export function graphql(source: "\n  query GetProductCategoriesQuery {\n    productCategories {\n      id\n      name\n      title\n      type\n      isDelete\n    }\n  }\n"): typeof import('./graphql').GetProductCategoriesQueryDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -131,7 +131,9 @@ export default function OrderDetailModal({
 
             <div className='flex items-center justify-between border-t pt-4'>
               <span className='font-semibold text-lg'>Total Price:</span>
-              <span className='text-lg text-green-600 font-bold'>${order!.totalPrice.toFixed(2)}</span>
+              <span className='text-lg text-green-600 font-bold'>
+                {order!.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+              </span>
             </div>
           </div>
         </ScrollArea>

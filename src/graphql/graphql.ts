@@ -28,8 +28,10 @@ export type AccessTokenResponse = {
 export type Cart = {
   __typename?: 'Cart';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   hasLab: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   product: Product;
   quantity: Scalars['Int']['output'];
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -77,8 +79,10 @@ export type CreateFeedbackInput = {
 export type Feedback = {
   __typename?: 'Feedback';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id: Scalars['ID']['output'];
   images?: Maybe<Array<FeedbackImage>>;
+  isDelete: Scalars['Boolean']['output'];
   note?: Maybe<Scalars['String']['output']>;
   orderItem: OrderItem;
   product: Product;
@@ -90,7 +94,9 @@ export type Feedback = {
 export type FeedbackImage = {
   __typename?: 'FeedbackImage';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   url: Scalars['String']['output'];
 };
@@ -104,6 +110,7 @@ export type Mutation = {
   createProduct: Product;
   createProductCategory: ProductCategory;
   createTicket: Ticket;
+  deactivatePushToken: Scalars['Boolean']['output'];
   deleteCarts: Scalars['String']['output'];
   deleteProduct: Product;
   deleteProductCategory: ProductCategory;
@@ -117,6 +124,7 @@ export type Mutation = {
   repayOrder: Scalars['String']['output'];
   replyTicket: Ticket;
   resetPassword: Scalars['String']['output'];
+  savePushToken: PushToken;
   sendResetPasswordOTP: Scalars['String']['output'];
   updateAvatar: User;
   updateCart: Cart;
@@ -171,6 +179,11 @@ export type MutationCreateTicketArgs = {
   images?: Array<Scalars['File']['input']>;
   orderItemId: Scalars['Float']['input'];
   title: Scalars['String']['input'];
+};
+
+
+export type MutationDeactivatePushTokenArgs = {
+  deviceId: Scalars['String']['input'];
 };
 
 
@@ -248,6 +261,13 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationSavePushTokenArgs = {
+  deviceId: Scalars['String']['input'];
+  platform: Scalars['String']['input'];
+  token: Scalars['String']['input'];
+};
+
+
 export type MutationSendResetPasswordOtpArgs = {
   email: Scalars['String']['input'];
 };
@@ -289,8 +309,10 @@ export type Order = {
   __typename?: 'Order';
   address: Scalars['String']['output'];
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   fullName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   orderItems: Array<OrderItem>;
   payment: OrderPaymentEmbeddable;
   phone: Scalars['String']['output'];
@@ -304,8 +326,10 @@ export type Order = {
 export type OrderItem = {
   __typename?: 'OrderItem';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   hasLab: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   labPrice: Scalars['Int']['output'];
   order: Order;
   product: Product;
@@ -347,10 +371,12 @@ export type Product = {
   __typename?: 'Product';
   categories: Array<ProductCategory>;
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   description: Scalars['String']['output'];
   feedbacks: Array<Feedback>;
   id: Scalars['ID']['output'];
   images: Array<ProductImage>;
+  isDelete: Scalars['Boolean']['output'];
   lab?: Maybe<ProductLab>;
   name: Scalars['String']['output'];
   price: Scalars['Int']['output'];
@@ -362,7 +388,9 @@ export type Product = {
 export type ProductCategory = {
   __typename?: 'ProductCategory';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   products: Array<Product>;
   title: Scalars['String']['output'];
@@ -379,7 +407,9 @@ export type ProductCategoryInput = {
 export type ProductImage = {
   __typename?: 'ProductImage';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   url: Scalars['String']['output'];
 };
@@ -395,7 +425,9 @@ export type ProductInput = {
 export type ProductLab = {
   __typename?: 'ProductLab';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   price: Scalars['Int']['output'];
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   url: Scalars['String']['output'];
@@ -407,11 +439,28 @@ export type ProductsWithPaginationResponse = {
   pageInfo: E;
 };
 
+export type PushToken = {
+  __typename?: 'PushToken';
+  createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  deviceId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  isActive: Scalars['Boolean']['output'];
+  isDelete: Scalars['Boolean']['output'];
+  platform: Scalars['String']['output'];
+  token: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  user: User;
+};
+
 export type Query = {
   __typename?: 'Query';
   carts: Array<Cart>;
   countCart: Scalars['Float']['output'];
   countOrder: CountOrderResponse;
+  getPushToken: PushToken;
+  getPushTokens: Array<PushToken>;
+  listOrders: Array<Order>;
   me: User;
   myTickets: Array<Ticket>;
   order: Order;
@@ -428,6 +477,16 @@ export type Query = {
   user?: Maybe<User>;
   userLabs: Array<UserLab>;
   users: Array<User>;
+};
+
+
+export type QueryGetPushTokenArgs = {
+  deviceId: Scalars['String']['input'];
+};
+
+
+export type QueryListOrdersArgs = {
+  status: OrderStatus;
 };
 
 
@@ -504,7 +563,9 @@ export type QueryUserArgs = {
 export type ReplyTicketImage = {
   __typename?: 'ReplyTicketImage';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   owner: Role;
   ticket: Ticket;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -528,8 +589,10 @@ export type Ticket = {
   category: TicketCategory;
   closedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id: Scalars['ID']['output'];
   images: Array<TicketImage>;
+  isDelete: Scalars['Boolean']['output'];
   orderItem: OrderItem;
   rating?: Maybe<Scalars['Float']['output']>;
   replier: User;
@@ -545,7 +608,9 @@ export type Ticket = {
 export type TicketCategory = {
   __typename?: 'TicketCategory';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   tickets: Array<Ticket>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -554,7 +619,9 @@ export type TicketCategory = {
 export type TicketImage = {
   __typename?: 'TicketImage';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   owner: Role;
   ticket: Ticket;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -577,9 +644,11 @@ export type User = {
   address?: Maybe<Scalars['String']['output']>;
   avatar?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   email: Scalars['String']['output'];
   fullName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  isDelete: Scalars['Boolean']['output'];
   numberOfOpenTicket: Scalars['Float']['output'];
   phone?: Maybe<Scalars['String']['output']>;
   rating: Scalars['Float']['output'];
@@ -591,8 +660,10 @@ export type User = {
 export type UserLab = {
   __typename?: 'UserLab';
   createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
+  isDelete: Scalars['Boolean']['output'];
   orderItem: OrderItem;
   productLab: ProductLab;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -680,7 +751,7 @@ export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: { 
 export type GetProductCategoriesQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProductCategoriesQueryQuery = { __typename?: 'Query', productCategories: Array<{ __typename?: 'ProductCategory', id: string, name: string, title: string, type: CategoryType }> };
+export type GetProductCategoriesQueryQuery = { __typename?: 'Query', productCategories: Array<{ __typename?: 'ProductCategory', id: string, name: string, title: string, type: CategoryType, isDelete: boolean }> };
 
 export type GetProductCategoryByIdQueryVariables = Exact<{
   categoryId: Scalars['Float']['input'];
@@ -950,6 +1021,7 @@ export const GetProductCategoriesQueryDocument = new TypedDocumentString(`
     name
     title
     type
+    isDelete
   }
 }
     `) as unknown as TypedDocumentString<GetProductCategoriesQueryQuery, GetProductCategoriesQueryQueryVariables>;

@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,6 +25,7 @@ const CreateProduct = () => {
   useDocumentTitle('Stemy | Create Product');
   const { formData, isLoading, setImages } = useCreateProductStore();
   const { mutate: handleCreateProduct } = useCreateProduct();
+  const navigate = useNavigate();
 
   // Initialize react-hook-form with Zod resolver and types from schema
   const form = useForm<CreateProductFormType>({
@@ -49,6 +51,7 @@ const CreateProduct = () => {
           toast.success('Product created successfully');
           setImages([]);
           form.reset();
+          navigate('/manager/product-list');
         },
         onError: () => {
           toast.error('Failed to create product');

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CirclePlusIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -17,6 +18,7 @@ import SelectType from './SelectType';
 
 const CreateCategoryModal = () => {
   const { createCategoryFormData: formData } = useCategoryListStore();
+  const [isOpen, setIsOpen] = useState(false);
 
   // Initialize react-hook-form with Zod resolver and types from schema
   const form = useForm<CreateCategoryFormType>({
@@ -24,7 +26,7 @@ const CreateCategoryModal = () => {
     defaultValues: formData,
   });
 
-  const { mutate: createProductCategory } = useCreateProductCategory();
+  const { mutate: createProductCategory, isPending } = useCreateProductCategory();
 
   const onSubmit = (data: CreateCategoryFormType) => {
     createProductCategory(
@@ -34,6 +36,7 @@ const CreateCategoryModal = () => {
       {
         onSuccess: () => {
           toast.success('Category created successfully');
+          setIsOpen(false);
         },
         onError: (error) => {
           toast.error(error.message);
@@ -41,8 +44,9 @@ const CreateCategoryModal = () => {
       },
     );
   };
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='outline' size='sm' className='hidden lg:inline-flex'>
           <CirclePlusIcon className='mr-2 h-4 w-4' />
@@ -61,7 +65,7 @@ const CreateCategoryModal = () => {
               <InputTitle form={form} />
             </div>
             <Button type='submit' className='w-full'>
-              Create Category
+              {isPending ? 'Creating...' : 'Create Category'}
             </Button>
           </form>
         </Form>

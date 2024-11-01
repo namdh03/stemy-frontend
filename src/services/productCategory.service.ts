@@ -7,6 +7,7 @@ export const GetProductCategories = graphql(`
       name
       title
       type
+      isDelete
     }
   }
 `);

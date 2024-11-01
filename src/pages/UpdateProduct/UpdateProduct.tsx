@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,9 +28,11 @@ const UpdateProduct = () => {
   useDocumentTitle('Stemy | Update Product');
 
   const { productId } = useParams();
-  const { formData, isLoading, setImages, setFormData, setLabDocument, labChanged, setLabChanged } = useUpdateProductStore();
+  const { formData, isLoading, setImages, setFormData, setLabDocument, labChanged, setLabChanged } =
+    useUpdateProductStore();
   const { data: product } = useGetProductById(productId ? parseInt(productId) : null);
   const { mutate: updateProduct } = useUpdateProduct();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,6 +88,9 @@ const UpdateProduct = () => {
         onSuccess: () => {
           toast.success('Product updated successfully');
           setLabChanged(false);
+          setImages([]);
+          form.reset();
+          navigate('/manager/product-list');
         },
         onError: () => {
           toast.error('Failed to update product');

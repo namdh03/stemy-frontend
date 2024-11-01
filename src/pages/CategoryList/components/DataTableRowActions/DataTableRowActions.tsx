@@ -3,6 +3,7 @@ import { RiDeleteBinLine, RiEdit2Line } from 'react-icons/ri';
 import { toast } from 'sonner';
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { useQueryClient } from '@tanstack/react-query';
 import { Row } from '@tanstack/react-table';
 
 import {
@@ -23,6 +24,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '~components/ui/dropdown-menu';
+import { GET_PRODUCT_CATEGORIES_QUERY_KEY } from '~constants/user-query-key';
 import { ProductCategory } from '~graphql/graphql';
 import { useDeleteProductCategoryById } from '~hooks/useDeleteProductCategoryById';
 import Button from '~layouts/AdminLayout/components/Button';
@@ -34,13 +36,13 @@ interface DataTableRowActionsProps<TData> {
 }
 
 function DataTableRowActions({ row }: DataTableRowActionsProps<ProductCategory>) {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const productCategoryId = parseInt(row.original.id);
   const [open, setOpen] = useState({
     alert: false,
   });
 
-  const { mutate: deleteProductCategory } = useDeleteProductCategoryById();
+  const { mutate: deleteProductCategory, isPending } = useDeleteProductCategoryById();
 
   const handleOpenDialog = () => setOpen((prev) => ({ ...prev, alert: true }));
   const handleOpenDialogChange = (value: boolean) => setOpen((prev) => ({ ...prev, alert: value }));
@@ -53,6 +55,7 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<ProductCategory>)
       {
         onSuccess: () => {
           toast.success('Category deleted successfully');
+          queryClient.invalidateQueries({ queryKey: [GET_PRODUCT_CATEGORIES_QUERY_KEY] });
           handleOpenDialogChange(false);
         },
         onError: (error) => {
@@ -74,7 +77,7 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<ProductCategory>)
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteCategory}>Tiếp tục</AlertDialogCancel>
+            <AlertDialogCancel onClick={handleDeleteCategory}>{isPending ? 'Deleting' : 'Delete'}</AlertDialogCancel>
             <AlertDialogAction>Cancel</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

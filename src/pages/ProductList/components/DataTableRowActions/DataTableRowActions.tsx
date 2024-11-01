@@ -75,15 +75,14 @@ function DataTableRowActions({ row }: DataTableRowActionsProps<Product>) {
       <AlertDialog open={open.alert} onOpenChange={handleOpenDialogChange}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Bạn có chắc chắn không?</AlertDialogTitle>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              Hành động này không thể hoàn tác. Hành động này sẽ xóa vĩnh viễn{' '}
-              <strong className='text-primary'>công thức</strong> của bạn và xóa dữ liệu của bạn khỏi máy chủ.
+              This action cannot be undone. Are you sure you want to permanently delete this item from our servers?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteProduct}>Tiếp tục</AlertDialogCancel>
-            <AlertDialogAction>Hủy</AlertDialogAction>
+            <AlertDialogCancel onClick={handleDeleteProduct}>Delete</AlertDialogCancel>
+            <AlertDialogAction>Cancel</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -27,7 +27,7 @@ const loginFormDefaultValues: LoginFormType = {
 };
 
 const Login = () => {
-  useDocumentTitle('Stemy | Đăng nhập');
+  useDocumentTitle('Stemy | Login');
   useDispatchAuth();
 
   const form = useForm<LoginFormType>({
@@ -65,8 +65,8 @@ const Login = () => {
           <FormItems form={form} />
 
           <ButtonActionForm
-            mainTitle='Đăng nhập'
-            subTitle='Quên mật khẩu?'
+            mainTitle='Login'
+            subTitle='Forgot password'
             to={configs.routes.forgotPassword}
             loading={isLoginPending}
           />

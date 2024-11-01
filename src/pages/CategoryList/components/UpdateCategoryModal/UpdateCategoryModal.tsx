@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -29,8 +29,10 @@ interface UpdateCategoryModalProps {
 }
 const UpdateCategoryModal = ({ productCategoryId, children }: UpdateCategoryModalProps) => {
   const { updateCategoryFormData: formData } = useCategoryListStore();
+  const [isOpen, setIsOpen] = useState(false);
+
   const { data: productCategory } = useGetProductCategoryById(productCategoryId);
-  const { mutate: updateProductCategory } = useUpdateProductCategory();
+  const { mutate: updateProductCategory, isPending } = useUpdateProductCategory();
 
   // Initialize react-hook-form with Zod resolver and types from schema
   const form = useForm<UpdateCategoryFormType>({
@@ -55,6 +57,7 @@ const UpdateCategoryModal = ({ productCategoryId, children }: UpdateCategoryModa
       {
         onSuccess: () => {
           toast.success('Category updated successfully');
+          setIsOpen(false);
         },
         onError: (error) => {
           toast.error(error.message);
@@ -64,7 +67,7 @@ const UpdateCategoryModal = ({ productCategoryId, children }: UpdateCategoryModa
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
@@ -78,8 +81,8 @@ const UpdateCategoryModal = ({ productCategoryId, children }: UpdateCategoryModa
                 <SelectType form={form} />
                 <InputTitle form={form} />
               </div>
-              <Button type='submit' className='mt-4'>
-                Update Category
+              <Button type='submit' className='mt-4' disabled={isPending}>
+                {isPending ? 'Updating...' : 'Update Category'}
               </Button>
             </form>
           </Form>

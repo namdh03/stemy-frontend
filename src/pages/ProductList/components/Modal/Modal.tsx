@@ -40,7 +40,9 @@ const Modal = ({ row, open, onOpen, onClose }: ModalProps) => {
               <Card>
                 <CardContent className='space-y-4 pt-4'>
                   <div className='flex items-center justify-between'>
-                    <div className='text-3xl font-bold'>${product.price.toLocaleString()}</div>
+                    <div className='text-3xl font-bold'>
+                      {product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                    </div>
                     <div className='flex items-center space-x-2'>
                       <Star className='w-5 h-5 text-yellow-400 fill-current' />
                       <span className='font-semibold'>{product.rating.toFixed(1)}</span>
@@ -74,9 +76,9 @@ const Modal = ({ row, open, onOpen, onClose }: ModalProps) => {
             </TabsContent>
             <TabsContent value='images'>
               <Card>
-                <CardContent className='pt-4'>
+                <CardContent className='flex flex-col items-center justify-center mx-auto pt-4'>
                   <div className='space-y-4'>
-                    <div className='relative aspect-square overflow-hidden rounded-lg'>
+                    <div className='relative aspect-square overflow-hidden rounded-lg w-60 h-60'>
                       <img src={product.images[currentImage]?.url} alt={product.name} />
                     </div>
                     <div className='flex space-x-2 overflow-x-auto pb-2'>

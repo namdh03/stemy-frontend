@@ -1,11 +1,5 @@
-import { ReactNode, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { ReactNode } from 'react';
 
-import configs from '~configs';
-import { useAuthStore } from '~store';
-
-import ButtonLink from './components/ButtonLink';
 
 interface AuthFormProps {
   children: ReactNode;
@@ -13,19 +7,7 @@ interface AuthFormProps {
   loading?: boolean;
 }
 
-// Constants for transition button group login/register
-const SLIDE_LEFT = { x: 0 };
-const SLIDE_RIGHT = { x: 112 };
-
-const AuthForm = ({ children, title, loading }: AuthFormProps) => {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const { authenticate } = useAuthStore();
-
-  const animateCondition = useMemo(
-    () => pathname === configs.routes.register || pathname === configs.routes.login,
-    [pathname],
-  );
+const AuthForm = ({ children, title }: AuthFormProps) => {
 
   // Get code from query params
 
@@ -38,7 +20,7 @@ const AuthForm = ({ children, title, loading }: AuthFormProps) => {
 
   return (
     <main className='relative w-screen h-screen bg-white'>
-      {animateCondition && (
+      {/* {animateCondition && (
         <div className='fixed top-9 right-24 z-10 inline-block h-[50px] bg-white rounded-full transition-colors hover:bg-accent hover:text-accent-foreground'>
           <motion.div
             className='absolute top-0 min-w-28 h-full bg-primary rounded-full shadow'
@@ -49,7 +31,7 @@ const AuthForm = ({ children, title, loading }: AuthFormProps) => {
           <ButtonLink to={configs.routes.login}>Đăng nhập</ButtonLink>
           <ButtonLink to={configs.routes.register}>Đăng ký</ButtonLink>
         </div>
-      )}
+      )} */}
 
       <section className='absolute top-[calc(50%+20px)] left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 pt-10 px-16 pb-10 rounded-[20px] [box-shadow:0px_7.249px_22.411px_0px_rgba(0,_0,_0,_0.21),_0px_3.016px_9.326px_0px_rgba(0,_0,_0,_0.29)]'>
         <div className=' w-[350px] h-[150px] mx-auto flex flex-col justify-center mb-8'>

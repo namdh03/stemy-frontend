@@ -1,7 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 
 import DataTableColumnHeader from '~components/common/DataTableColumnHeader';
-import { Avatar, AvatarFallback, AvatarImage } from '~components/ui/avatar';
 import { Badge } from '~components/ui/badge';
 import { Product } from '~graphql/graphql';
 
@@ -24,13 +23,11 @@ export const columns: ColumnDef<Product>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title='Product Name' />,
     cell: ({ row }) => {
       const name = row.original.name;
+      const imageUrl = row.original.images[0].url;
 
       return (
         <article className='flex items-center gap-3'>
-          <Avatar className='w-8 h-8'>
-            <AvatarImage src='https://dummyimage.com/32x32' />
-            <AvatarFallback>{name}</AvatarFallback>
-          </Avatar>
+          <img src={imageUrl} alt={name} className='w-8 h-8 rounded' />
           <span className='text-sm font-normal leading-5'>{name}</span>
         </article>
       );
@@ -67,7 +64,7 @@ export const columns: ColumnDef<Product>[] = [
 
       return (
         <article className='flex items-center gap-2'>
-          <span className='text-sm font-normal leading-5'>{description}</span>
+          <span className='text-sm font-normal leading-5 truncate w-48'>{description}</span>
         </article>
       );
     },

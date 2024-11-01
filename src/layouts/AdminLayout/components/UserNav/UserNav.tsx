@@ -12,7 +12,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '~components/ui/dropdown-menu';
-import { GET_ME_QUERY_KEY } from '~constants/user-query-key';
 import { useAuthStore } from '~store';
 
 import Button from '../Button';
@@ -23,9 +22,7 @@ export default function UserNav() {
 
   const handleLogout = () => {
     unAuthenticate();
-    queryClient.removeQueries({
-      queryKey: [GET_ME_QUERY_KEY],
-    });
+    queryClient.clear();
   };
 
   return (
@@ -62,7 +59,7 @@ export default function UserNav() {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem onClick={handleLogout} className='cursor-pointer'>
-          Đăng xuất
+          Log out
           <DropdownMenuShortcut>
             <IoMdLogOut size={14} />
           </DropdownMenuShortcut>

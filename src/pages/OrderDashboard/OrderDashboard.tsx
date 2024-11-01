@@ -172,7 +172,7 @@ export default function OrderDashboard() {
               </CardHeader>
               <CardContent>
                 <div className='text-2xl font-bold'>
-                  {((totalRevenue || 0) / (orders?.length || 0)).toLocaleString('vi-VN', {
+                  {(totalRevenue != 0 ? (totalRevenue || 0) / (orders?.length || 0) : 0).toLocaleString('vi-VN', {
                     style: 'currency',
                     currency: 'VND',
                   })}

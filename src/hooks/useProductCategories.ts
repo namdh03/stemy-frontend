@@ -9,7 +9,7 @@ const useProductCategories = () => {
     queryKey: [GET_PRODUCT_CATEGORIES_QUERY_KEY],
     queryFn: () => execute(GetProductCategories),
     refetchOnWindowFocus: false,
-    select: (data) => data.data.productCategories,
+    select: (data) => data.data.productCategories.filter((item) => !item.isDelete),
   });
 
   return { data, isLoading };

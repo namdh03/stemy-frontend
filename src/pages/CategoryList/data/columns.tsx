@@ -50,8 +50,30 @@ export const columns: ColumnDef<ProductCategory>[] = [
       title: 'Title',
     },
   },
+  // {
+  //   accessorKey: 'deleted',
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title='Deleted' />,
+  //   cell: ({ row }) => {
+  //     const isDeleted = row.original.isDelete;
+
+  //     return (
+  //       <article className='flex items-center gap-2'>
+  //         {isDeleted && (
+  //           <Badge variant='destructive'>
+  //             <span className='text-sm font-normal leading-5'>Deleted</span>
+  //           </Badge>
+  //         )}
+  //       </article>
+  //     );
+  //   },
+  //   meta: {
+  //     title: 'Title',
+  //   },
+  // },
   {
     id: 'actions',
-    cell: ({ row }) => <DataTableRowActions row={row} />, enableSorting: false, enableHiding: false,
+    cell: ({ row }) => <DataTableRowActions row={row} />,
+    enableSorting: false,
+    enableHiding: false,
   },
 ];
